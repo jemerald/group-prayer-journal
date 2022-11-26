@@ -1,8 +1,8 @@
-import styles from "./index.module.css";
 import { type NextPage } from "next";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import styles from "./index.module.css";
 
 import { trpc } from "../utils/trpc";
 
@@ -62,7 +62,7 @@ const AuthShowcase: React.FC = () => {
 
   const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
@@ -73,7 +73,7 @@ const AuthShowcase: React.FC = () => {
       </p>
       <button
         className={styles.loginButton}
-        onClick={sessionData ? () => signOut() : () => signIn()}
+        onClick={sessionData ? () => signOut() : () => signIn("google")}
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
