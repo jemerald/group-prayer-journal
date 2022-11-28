@@ -9,6 +9,23 @@ export const journalRouter = router({
       },
     });
   }),
+  byId: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const journal = await ctx.prisma.prayerJournal.findFirst({
+        where: {
+          id: input.id,
+        },
+      });
+      if (journal && journal.userId === ctx.session.user.id) {
+        return journal;
+      }
+      return null;
+    }),
   create: protectedProcedure
     .input(
       z.object({

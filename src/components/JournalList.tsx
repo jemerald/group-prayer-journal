@@ -6,6 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import Link from "next/link";
 import React from "react";
 
 import { trpc } from "../utils/trpc";
@@ -16,7 +17,7 @@ const JournalList: React.FC = () => {
     return (
       <Stack sx={{ alignItems: "center" }}>
         <CircularProgress />
-        <Typography>Loading journals...</Typography>
+        <Typography>Loading your journals...</Typography>
       </Stack>
     );
   }
@@ -27,7 +28,10 @@ const JournalList: React.FC = () => {
     <List>
       {journals.data.map((journal) => (
         <ListItem key={journal.id}>
-          <ListItemButton>
+          <ListItemButton
+            component={Link}
+            href={`/journal/${encodeURIComponent(journal.id)}`}
+          >
             <ListItemText
               primary={journal.name}
               secondary={`created at ${journal.createdAt.toLocaleDateString()}`}
