@@ -18,7 +18,7 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => (
         <AuthButton />
       </Toolbar>
     </AppBar>
-    <Container maxWidth="xl">{children}</Container>
+    <Container maxWidth="md">{children}</Container>
   </CustomThemeProvider>
 );
 

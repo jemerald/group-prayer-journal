@@ -17,10 +17,38 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model PrayerJournal {
+  id        String         @id @default(cuid())
+  userId    String
+  name      String
+  createdAt DateTime       @default(now())
+  targets   PrayerTarget[]
+}
+
+model PrayerTarget {
+  id        String        @id @default(cuid())
+  journalId String
+  name      String
+  createdAt DateTime      @default(now())
+  journal   PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  items     PrayerItem[]
+}
+
+model PrayerItem {
+  id               String       @id @default(cuid())
+  targetId         String
+  description      String
+  dateBegins       DateTime     @default(now())
+  dateAccomplished DateTime?
+  target           PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  prayed           Prayed[]
+}
+
+model Prayed {
+  id     String     @id @default(cuid())
+  itemId String
+  date   DateTime   @default(now())
+  item   PrayerItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth
