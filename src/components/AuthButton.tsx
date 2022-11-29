@@ -1,6 +1,7 @@
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,7 +11,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
 const AuthButton: React.FC = () => {
-  const { data: sessionData } = useSession();
+  const { data: session, status } = useSession();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -26,14 +27,18 @@ const AuthButton: React.FC = () => {
     signOut();
   };
 
-  if (sessionData && sessionData.user) {
+  if (status === "loading") {
+    return <CircularProgress color="inherit" />;
+  }
+
+  if (session && session.user) {
     return (
       <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title={sessionData.user.name}>
+        <Tooltip title={session.user.name}>
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
             <Avatar
-              alt={sessionData.user.name || undefined}
-              src={sessionData.user.image || undefined}
+              alt={session.user.name || undefined}
+              src={session.user.image || undefined}
             />
           </IconButton>
         </Tooltip>
