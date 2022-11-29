@@ -45,7 +45,7 @@ const JournalList: React.FC = () => {
             </ListItemAvatar>
             <ListItemText
               primary={journal.name}
-              secondary={`created at ${journal.createdAt.toLocaleDateString()}`}
+              secondary={`created on ${journal.createdAt.toLocaleDateString()}`}
             />
           </ListItemButton>
         </ListItem>
