@@ -13,7 +13,7 @@ const Journal: NextPage = () => {
   const router = useRouter();
   const { journalId } = router.query;
   if (!journalId || Array.isArray(journalId)) {
-    router.push("/");
+    router.replace("/");
     return null;
   }
   const journal = trpc.journal.byId.useQuery({ id: journalId });

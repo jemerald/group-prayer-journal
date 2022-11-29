@@ -11,7 +11,7 @@ const Target: NextPage = () => {
   const router = useRouter();
   const { targetId } = router.query;
   if (!targetId || Array.isArray(targetId)) {
-    router.push("/");
+    router.replace("/");
     return null;
   }
 
