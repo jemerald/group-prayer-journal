@@ -38,9 +38,7 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
         <ListItem key={target.id}>
           <ListItemButton
             component={Link}
-            href={`/journal/${encodeURIComponent(
-              journalId
-            )}/target/${encodeURIComponent(target.id)}`}
+            href={`/target/${encodeURIComponent(target.id)}`}
           >
             <ListItemText
               primary={target.name}

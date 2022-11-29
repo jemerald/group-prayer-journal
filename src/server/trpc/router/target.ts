@@ -38,6 +38,29 @@ export const targetRouter = router({
         },
       });
     }),
+  byId: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const target = await ctx.prisma.prayerTarget.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          journal: true,
+        },
+      });
+      if (
+        !target ||
+        !(await hasAccessToJournal(ctx.prisma, ctx.session, target.journalId))
+      ) {
+        return null;
+      }
+      return target;
+    }),
   create: protectedProcedure
     .input(
       z.object({
