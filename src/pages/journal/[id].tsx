@@ -3,6 +3,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 
@@ -23,6 +24,9 @@ const Journal: NextPage = () => {
   }
   return (
     <>
+      <Head>
+        <title>{journal.data.name} | Group Prayer Journal</title>
+      </Head>
       <Stack gap={2}>
         <Typography variant="h3">Journal {journal.data.name}</Typography>
       </Stack>
