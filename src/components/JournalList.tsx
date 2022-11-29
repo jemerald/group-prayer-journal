@@ -24,7 +24,7 @@ const JournalList: React.FC = () => {
     );
   }
   if (journals.data.length === 0) {
-    return <Alert severity="info">No journal found</Alert>;
+    return <Alert severity="info">You have not created any journal yet</Alert>;
   }
   return (
     <List>
