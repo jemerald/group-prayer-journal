@@ -39,6 +39,9 @@ const AuthButton: React.FC = () => {
             <Avatar
               alt={session.user.name || undefined}
               src={session.user.image || undefined}
+              imgProps={{
+                referrerPolicy: "no-referrer",
+              }}
             />
           </IconButton>
         </Tooltip>
