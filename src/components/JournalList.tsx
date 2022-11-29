@@ -1,11 +1,13 @@
-import { Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
+import Avatar from "@mui/material/Avatar";
 import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import React from "react";
 
@@ -32,6 +34,15 @@ const JournalList: React.FC = () => {
             component={Link}
             href={`/journal/${encodeURIComponent(journal.id)}`}
           >
+            <ListItemAvatar>
+              <Avatar
+                alt={journal.owner.name || undefined}
+                src={journal.owner.image || undefined}
+                imgProps={{
+                  referrerPolicy: "no-referrer",
+                }}
+              />
+            </ListItemAvatar>
             <ListItemText
               primary={journal.name}
               secondary={`created at ${journal.createdAt.toLocaleDateString()}`}

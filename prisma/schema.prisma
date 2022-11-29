@@ -22,6 +22,7 @@ model PrayerJournal {
   userId    String
   name      String
   createdAt DateTime       @default(now())
+  owner     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   targets   PrayerTarget[]
 }
 
@@ -86,6 +87,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+
+  journals PrayerJournal[]
 }
 
 model VerificationToken {

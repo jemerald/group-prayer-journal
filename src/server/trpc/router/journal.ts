@@ -7,6 +7,9 @@ export const journalRouter = router({
       where: {
         userId: ctx.session.user.id,
       },
+      include: {
+        owner: true,
+      },
     });
   }),
   byId: protectedProcedure
