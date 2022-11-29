@@ -1,13 +1,20 @@
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
 
-const NewJournal: React.FC = () => {
+const NewJournalDialogContent: React.FC<{ closeDialog: () => void }> = ({
+  closeDialog,
+}) => {
   const utils = trpc.useContext();
   const mutation = trpc.journal.create.useMutation({
     onSuccess() {
@@ -23,21 +30,71 @@ const NewJournal: React.FC = () => {
     mutation.mutate({
       name,
     });
+    closeDialog();
   };
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-      <TextField
-        label="Name"
-        value={name}
-        onChange={onNameChange}
-        sx={{ flexGrow: 1 }}
-      />
+    <>
+      <DialogTitle>Create new prayer journal</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          A prayer journal can be shared to other people in your prayer group.
+          Give it a memorable name, e.g. the name of your group.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          fullWidth
+          margin="dense"
+          label="Name"
+          value={name}
+          onChange={onNameChange}
+          sx={{ flexGrow: 1 }}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button aria-label="cancel" onClick={closeDialog}>
+          Cancel
+        </Button>
+        <Button
+          aria-label="create journal"
+          variant="contained"
+          onClick={handleCreate}
+        >
+          Create
+        </Button>
+      </DialogActions>
+    </>
+  );
+};
+
+const NewJournal: React.FC = () => {
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  return (
+    <>
       <Tooltip title="Create new journal">
-        <IconButton aria-label="create journal" onClick={handleCreate}>
-          <AddCircleOutlineIcon />
-        </IconButton>
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            right: 16,
+          }}
+          onClick={() => setShowCreateDialog(true)}
+        >
+          <AddIcon />
+        </Fab>
       </Tooltip>
-    </Box>
+      <Dialog
+        maxWidth="sm"
+        fullWidth
+        open={showCreateDialog}
+        onClose={() => setShowCreateDialog(false)}
+      >
+        <NewJournalDialogContent
+          closeDialog={() => setShowCreateDialog(false)}
+        />
+      </Dialog>
+    </>
   );
 };
 
