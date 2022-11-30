@@ -37,7 +37,10 @@ const Target: NextPage = () => {
       </Head>
       <Stack gap={2}>
         <Typography variant="h3">{target.data.name}</Typography>
-        <Typography variant="h5">Prayer items</Typography>
+        <Stack direction="row" gap={2}>
+          <Typography variant="h5">Prayer items</Typography>
+          {target.isFetching ? <CircularProgress size={24} /> : null}
+        </Stack>
         <ItemList items={target.data.items} />
       </Stack>
       <NewItem target={target.data} />

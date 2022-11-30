@@ -33,21 +33,27 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
     );
   }
   return (
-    <List>
-      {targets.data.map((target) => (
-        <ListItem key={target.id}>
-          <ListItemButton
-            component={Link}
-            href={`/target/${encodeURIComponent(target.id)}`}
-          >
-            <ListItemText
-              primary={target.name}
-              secondary={`created on ${target.createdAt.toLocaleDateString()}`}
-            />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <Stack direction="row" gap={2}>
+        <Typography variant="h5">Prayer targets</Typography>
+        {targets.isFetching ? <CircularProgress size={24} /> : null}
+      </Stack>
+      <List>
+        {targets.data.map((target) => (
+          <ListItem key={target.id}>
+            <ListItemButton
+              component={Link}
+              href={`/target/${encodeURIComponent(target.id)}`}
+            >
+              <ListItemText
+                primary={target.name}
+                secondary={`created on ${target.createdAt.toLocaleDateString()}`}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };
 

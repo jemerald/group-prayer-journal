@@ -27,30 +27,36 @@ const JournalList: React.FC = () => {
     return <Alert severity="info">You have not created any journal yet</Alert>;
   }
   return (
-    <List>
-      {journals.data.map((journal) => (
-        <ListItem key={journal.id}>
-          <ListItemButton
-            component={Link}
-            href={`/journal/${encodeURIComponent(journal.id)}`}
-          >
-            <ListItemAvatar>
-              <Avatar
-                alt={journal.owner.name || undefined}
-                src={journal.owner.image || undefined}
-                imgProps={{
-                  referrerPolicy: "no-referrer",
-                }}
+    <>
+      <Stack direction="row" gap={2}>
+        <Typography variant="h5">Prayer journals</Typography>
+        {journals.isFetching ? <CircularProgress size={24} /> : null}
+      </Stack>
+      <List>
+        {journals.data.map((journal) => (
+          <ListItem key={journal.id}>
+            <ListItemButton
+              component={Link}
+              href={`/journal/${encodeURIComponent(journal.id)}`}
+            >
+              <ListItemAvatar>
+                <Avatar
+                  alt={journal.owner.name || undefined}
+                  src={journal.owner.image || undefined}
+                  imgProps={{
+                    referrerPolicy: "no-referrer",
+                  }}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={journal.name}
+                secondary={`created on ${journal.createdAt.toLocaleDateString()}`}
               />
-            </ListItemAvatar>
-            <ListItemText
-              primary={journal.name}
-              secondary={`created on ${journal.createdAt.toLocaleDateString()}`}
-            />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };
 
