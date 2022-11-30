@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import ItemList from "../../components/ItemList";
+import NewItem from "../../components/NewItem";
 import { trpc } from "../../utils/trpc";
 
 const Target: NextPage = () => {
@@ -35,7 +37,10 @@ const Target: NextPage = () => {
       </Head>
       <Stack gap={2}>
         <Typography variant="h3">{target.data.name}</Typography>
+        <Typography variant="h5">Prayer items</Typography>
+        <ItemList items={target.data.items} />
       </Stack>
+      <NewItem target={target.data} />
     </>
   );
 };

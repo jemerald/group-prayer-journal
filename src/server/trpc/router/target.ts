@@ -1,21 +1,7 @@
-import type { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import type { Session } from "next-auth";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-
-async function hasAccessToJournal(
-  prisma: PrismaClient,
-  session: Session,
-  journalId: string
-) {
-  const journal = await prisma.prayerJournal.findFirst({
-    where: {
-      id: journalId,
-    },
-  });
-  return journal && journal.userId === session.user?.id;
-}
+import { hasAccessToJournal } from "./hasAccessToJournal";
 
 export const targetRouter = router({
   allByJournalId: protectedProcedure
@@ -51,6 +37,11 @@ export const targetRouter = router({
         },
         include: {
           journal: true,
+          items: {
+            include: {
+              prayed: true,
+            },
+          },
         },
       });
       if (

@@ -8,47 +8,47 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import type { PrayerTarget } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
 
-const NewTargetDialogContent: React.FC<{
-  journalId: string;
+const NewItemDialogContent: React.FC<{
+  target: PrayerTarget;
   closeDialog: () => void;
-}> = ({ journalId, closeDialog }) => {
+}> = ({ target, closeDialog }) => {
   const utils = trpc.useContext();
-  const mutation = trpc.target.create.useMutation({
+  const mutation = trpc.item.create.useMutation({
     onSuccess() {
-      utils.target.allByJournalId.invalidate({ journalId });
+      utils.target.byId.invalidate({ id: target.id });
     },
   });
-  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+  const onDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
   };
   const handleCreate = () => {
     mutation.mutate({
-      journalId,
-      name,
+      targetId: target.id,
+      description,
     });
     closeDialog();
   };
   return (
     <>
-      <DialogTitle>Create new prayer target</DialogTitle>
+      <DialogTitle>Create new prayer item</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          A prayer target is usually a person or group of people that you are
-          praying for
+          A prayer item is a definite progress or goal that you want to pray for
         </DialogContentText>
         <TextField
           autoFocus
           fullWidth
           margin="dense"
-          label="Name"
-          value={name}
-          onChange={onNameChange}
+          label="Description"
+          value={description}
+          onChange={onDescriptionChange}
           sx={{ flexGrow: 1 }}
         />
       </DialogContent>
@@ -57,7 +57,7 @@ const NewTargetDialogContent: React.FC<{
           Cancel
         </Button>
         <Button
-          aria-label="create prayer target"
+          aria-label="create prayer item"
           variant="contained"
           onClick={handleCreate}
         >
@@ -68,11 +68,13 @@ const NewTargetDialogContent: React.FC<{
   );
 };
 
-const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
+const NewItem: React.FC<{
+  target: PrayerTarget;
+}> = ({ target }) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   return (
     <>
-      <Tooltip title="Create new prayer target">
+      <Tooltip title="Create new prayer item">
         <Fab
           color="primary"
           aria-label="add"
@@ -92,8 +94,8 @@ const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
         open={showCreateDialog}
         onClose={() => setShowCreateDialog(false)}
       >
-        <NewTargetDialogContent
-          journalId={journalId}
+        <NewItemDialogContent
+          target={target}
           closeDialog={() => setShowCreateDialog(false)}
         />
       </Dialog>
@@ -101,4 +103,4 @@ const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
   );
 };
 
-export default NewTarget;
+export default NewItem;
