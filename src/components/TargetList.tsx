@@ -1,15 +1,29 @@
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import type { PrayerTarget } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
 import { trpc } from "../utils/trpc";
+
+const TargetListItem: React.FC<{ target: PrayerTarget }> = ({ target }) => {
+  return (
+    <ListItemButton
+      component={Link}
+      href={`/target/${encodeURIComponent(target.id)}`}
+    >
+      <ListItemText
+        primary={target.name}
+        secondary={`created on ${target.createdAt.toLocaleDateString()}`}
+      />
+    </ListItemButton>
+  );
+};
 
 const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
   const targets = trpc.target.allByJournalId.useQuery({ journalId });
@@ -40,17 +54,7 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
       </Stack>
       <List>
         {targets.data.map((target) => (
-          <ListItem key={target.id}>
-            <ListItemButton
-              component={Link}
-              href={`/target/${encodeURIComponent(target.id)}`}
-            >
-              <ListItemText
-                primary={target.name}
-                secondary={`created on ${target.createdAt.toLocaleDateString()}`}
-              />
-            </ListItemButton>
-          </ListItem>
+          <TargetListItem key={target.id} target={target} />
         ))}
       </List>
     </>

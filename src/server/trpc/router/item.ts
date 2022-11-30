@@ -1,7 +1,29 @@
+import type { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import type { Session } from "next-auth";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { hasAccessToJournal } from "./hasAccessToJournal";
+
+async function validateTargetAccess(
+  prisma: PrismaClient,
+  session: Session,
+  targetId: string
+) {
+  const target = await prisma.prayerTarget.findUnique({
+    where: {
+      id: targetId,
+    },
+  });
+  if (
+    !target ||
+    !(await hasAccessToJournal(prisma, session, target.journalId))
+  ) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
+}
 
 export const itemRouter = router({
   create: protectedProcedure
@@ -12,19 +34,7 @@ export const itemRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const target = await ctx.prisma.prayerTarget.findUnique({
-        where: {
-          id: input.targetId,
-        },
-      });
-      if (
-        !target ||
-        !(await hasAccessToJournal(ctx.prisma, ctx.session, target.journalId))
-      ) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-        });
-      }
+      await validateTargetAccess(ctx.prisma, ctx.session, input.targetId);
       return ctx.prisma.prayerItem.create({
         data: {
           ...input,

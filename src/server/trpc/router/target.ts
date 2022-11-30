@@ -37,11 +37,7 @@ export const targetRouter = router({
         },
         include: {
           journal: true,
-          items: {
-            include: {
-              prayed: true,
-            },
-          },
+          items: true,
         },
       });
       if (

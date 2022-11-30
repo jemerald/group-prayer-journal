@@ -2,7 +2,6 @@ import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -34,26 +33,25 @@ const JournalList: React.FC = () => {
       </Stack>
       <List>
         {journals.data.map((journal) => (
-          <ListItem key={journal.id}>
-            <ListItemButton
-              component={Link}
-              href={`/journal/${encodeURIComponent(journal.id)}`}
-            >
-              <ListItemAvatar>
-                <Avatar
-                  alt={journal.owner.name || undefined}
-                  src={journal.owner.image || undefined}
-                  imgProps={{
-                    referrerPolicy: "no-referrer",
-                  }}
-                />
-              </ListItemAvatar>
-              <ListItemText
-                primary={journal.name}
-                secondary={`created on ${journal.createdAt.toLocaleDateString()}`}
+          <ListItemButton
+            key={journal.id}
+            component={Link}
+            href={`/journal/${encodeURIComponent(journal.id)}`}
+          >
+            <ListItemAvatar>
+              <Avatar
+                alt={journal.owner.name || undefined}
+                src={journal.owner.image || undefined}
+                imgProps={{
+                  referrerPolicy: "no-referrer",
+                }}
               />
-            </ListItemButton>
-          </ListItem>
+            </ListItemAvatar>
+            <ListItemText
+              primary={journal.name}
+              secondary={`created on ${journal.createdAt.toLocaleDateString()}`}
+            />
+          </ListItemButton>
         ))}
       </List>
     </>
