@@ -1,3 +1,4 @@
+import { AvatarGroup } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
@@ -6,7 +7,9 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import NewTarget from "../../components/NewTarget";
+import { ShareJournalButton } from "../../components/ShareJournalButton";
 import TargetList from "../../components/TargetList";
+import { UserAvatar } from "../../components/UserAvatar";
 import { trpc } from "../../utils/trpc";
 
 const Journal: NextPage = () => {
@@ -34,7 +37,18 @@ const Journal: NextPage = () => {
         <title>{journal.data.name} | Group Prayer Journal</title>
       </Head>
       <Stack gap={2}>
-        <Typography variant="h3">{journal.data.name}</Typography>
+        <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
+          <Typography variant="h3">{journal.data.name}</Typography>
+          <ShareJournalButton journalId={journalId} />
+        </Stack>
+        <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
+          <UserAvatar user={journal.data.owner} />
+          <AvatarGroup>
+            {journal.data.accesses.map((access) => (
+              <UserAvatar key={access.userId} user={access.user} />
+            ))}
+          </AvatarGroup>
+        </Stack>
         <TargetList journalId={journalId} />
       </Stack>
       <NewTarget journalId={journalId} />

@@ -1,5 +1,4 @@
 import Alert from "@mui/material/Alert";
-import Avatar from "@mui/material/Avatar";
 import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -11,6 +10,7 @@ import Link from "next/link";
 import React from "react";
 
 import { trpc } from "../utils/trpc";
+import { UserAvatar } from "./UserAvatar";
 
 const JournalList: React.FC = () => {
   const journals = trpc.journal.all.useQuery();
@@ -39,13 +39,7 @@ const JournalList: React.FC = () => {
             href={`/journal/${encodeURIComponent(journal.id)}`}
           >
             <ListItemAvatar>
-              <Avatar
-                alt={journal.owner.name || undefined}
-                src={journal.owner.image || undefined}
-                imgProps={{
-                  referrerPolicy: "no-referrer",
-                }}
-              />
+              <UserAvatar user={journal.owner} />
             </ListItemAvatar>
             <ListItemText
               primary={journal.name}

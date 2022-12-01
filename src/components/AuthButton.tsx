@@ -1,14 +1,13 @@
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
+import { UserAvatar } from "./UserAvatar";
 
 const AuthButton: React.FC = () => {
   const { data: session, status } = useSession();
@@ -34,17 +33,9 @@ const AuthButton: React.FC = () => {
   if (session && session.user) {
     return (
       <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title={session.user.name}>
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar
-              alt={session.user.name || undefined}
-              src={session.user.image || undefined}
-              imgProps={{
-                referrerPolicy: "no-referrer",
-              }}
-            />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <UserAvatar user={session.user} />
+        </IconButton>
         <Menu
           sx={{ mt: "45px" }}
           id="menu-appbar"

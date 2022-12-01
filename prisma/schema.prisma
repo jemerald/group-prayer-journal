@@ -18,12 +18,13 @@ datasource db {
 }
 
 model PrayerJournal {
-  id        String         @id @default(cuid())
+  id        String                @id @default(cuid())
   userId    String
   name      String
-  createdAt DateTime       @default(now())
-  owner     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime              @default(now())
+  owner     User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   targets   PrayerTarget[]
+  accesses  PrayerJournalAccess[]
 }
 
 model PrayerTarget {
@@ -50,6 +51,16 @@ model Prayed {
   itemId String
   date   DateTime   @default(now())
   item   PrayerItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model PrayerJournalAccess {
+  journalId String
+  userId    String
+
+  journal PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([journalId, userId])
 }
 
 // Necessary for Next auth
@@ -88,7 +99,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  journals PrayerJournal[]
+  journals        PrayerJournal[]
+  journalAccesses PrayerJournalAccess[]
 }
 
 model VerificationToken {
