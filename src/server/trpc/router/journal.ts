@@ -1,12 +1,24 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { hasAccessToJournal } from "./hasAccessToJournal";
 
 export const journalRouter = router({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.prayerJournal.findMany({
       where: {
-        userId: ctx.session.user.id,
+        OR: [
+          {
+            userId: ctx.session.user.id,
+          },
+          {
+            accesses: {
+              some: {
+                userId: ctx.session.user.id,
+              },
+            },
+          },
+        ],
       },
       include: {
         owner: true,
@@ -20,7 +32,10 @@ export const journalRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const journal = await ctx.prisma.prayerJournal.findFirst({
+      if (!(await hasAccessToJournal(ctx.prisma, ctx.session, input.id))) {
+        return null;
+      }
+      return await ctx.prisma.prayerJournal.findFirst({
         where: {
           id: input.id,
         },
@@ -33,10 +48,6 @@ export const journalRouter = router({
           },
         },
       });
-      if (journal && journal.userId === ctx.session.user.id) {
-        return journal;
-      }
-      return null;
     }),
   create: protectedProcedure
     .input(
@@ -60,6 +71,9 @@ export const journalRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      if (!(await hasAccessToJournal(ctx.prisma, ctx.session, input.id))) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
       const user = await ctx.prisma.user.findUnique({
         where: {
           email: input.userEmail,

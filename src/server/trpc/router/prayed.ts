@@ -23,7 +23,7 @@ async function validateItemAccess(
     !(await hasAccessToJournal(prisma, session, item.target.journalId))
   ) {
     throw new TRPCError({
-      code: "UNAUTHORIZED",
+      code: "FORBIDDEN",
     });
   }
 }

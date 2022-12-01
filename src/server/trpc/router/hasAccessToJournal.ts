@@ -10,6 +10,13 @@ export async function hasAccessToJournal(
     where: {
       id: journalId,
     },
+    include: {
+      accesses: true,
+    },
   });
-  return journal && journal.userId === session.user?.id;
+  return (
+    journal &&
+    (journal.userId === session.user?.id ||
+      journal.accesses.some((access) => access.userId === session.user?.id))
+  );
 }

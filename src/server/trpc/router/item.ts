@@ -20,7 +20,7 @@ async function validateTargetAccess(
     !(await hasAccessToJournal(prisma, session, target.journalId))
   ) {
     throw new TRPCError({
-      code: "UNAUTHORIZED",
+      code: "FORBIDDEN",
     });
   }
 }

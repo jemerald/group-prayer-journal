@@ -15,7 +15,7 @@ export const targetRouter = router({
         !(await hasAccessToJournal(ctx.prisma, ctx.session, input.journalId))
       ) {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
+          code: "FORBIDDEN",
         });
       }
       return ctx.prisma.prayerTarget.findMany({
@@ -60,7 +60,7 @@ export const targetRouter = router({
         !(await hasAccessToJournal(ctx.prisma, ctx.session, input.journalId))
       ) {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
+          code: "FORBIDDEN",
         });
       }
       return ctx.prisma.prayerTarget.create({
