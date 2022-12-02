@@ -1,3 +1,4 @@
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Alert from "@mui/material/Alert";
@@ -5,6 +6,7 @@ import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import type { PrayerItem } from "@prisma/client";
@@ -35,6 +37,11 @@ const PrayerItemListItem: React.FC<{
   return (
     <>
       <ListItemButton onClick={() => setOpen((wasOpen) => !wasOpen)}>
+        {item.dateAccomplished != null ? (
+          <ListItemIcon>
+            <CheckCircleOutlineIcon color="success" />
+          </ListItemIcon>
+        ) : null}
         <ListItemText primary={item.description} secondary={secondaryText} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
