@@ -1,29 +1,6 @@
-import type { PrismaClient } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
-import type { Session } from "next-auth";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { hasAccessToJournal } from "./hasAccessToJournal";
-
-async function validateTargetAccess(
-  prisma: PrismaClient,
-  session: Session,
-  targetId: string
-) {
-  const target = await prisma.prayerTarget.findUnique({
-    where: {
-      id: targetId,
-    },
-  });
-  if (
-    !target ||
-    !(await hasAccessToJournal(prisma, session, target.journalId))
-  ) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-    });
-  }
-}
+import { validateItemAccess, validateTargetAccess } from "./accessChecker";
 
 export const itemRouter = router({
   create: protectedProcedure
@@ -38,6 +15,25 @@ export const itemRouter = router({
       return ctx.prisma.prayerItem.create({
         data: {
           ...input,
+        },
+      });
+    }),
+  accomplished: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        notes: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateItemAccess(ctx.prisma, ctx.session, input.id);
+      return ctx.prisma.prayerItem.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          dateAccomplished: new Date(),
+          accomplishedNotes: input.notes,
         },
       });
     }),

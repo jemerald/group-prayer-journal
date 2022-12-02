@@ -1,26 +1,24 @@
 import Button from "@mui/material/Button";
+import type { PrayerItem } from "@prisma/client";
 import isSameDay from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
 
 const PrayedNow: React.FC<{
-  itemId: string;
-}> = ({ itemId }) => {
-  const prayedHistory = trpc.prayed.allByItemId.useQuery({ itemId });
+  item: PrayerItem;
+}> = ({ item }) => {
+  const prayedHistory = trpc.prayed.allByItemId.useQuery({ itemId: item.id });
 
   const utils = trpc.useContext();
   const mutation = trpc.prayed.create.useMutation({
     onSuccess(added) {
       utils.prayed.allByItemId.setData(
         {
-          itemId,
+          itemId: item.id,
         },
-        (currentTarget) =>
-          [...(currentTarget || []), added].sort(
-            (a, b) => a.date.getTime() - b.date.getTime()
-          )
+        (currentTarget) => [added, ...(currentTarget || [])]
       );
-      utils.prayed.allByItemId.invalidate({ itemId });
+      utils.prayed.allByItemId.invalidate({ itemId: item.id });
     },
   });
   if (prayedHistory.isLoading || prayedHistory.data === undefined) {
@@ -30,12 +28,14 @@ const PrayedNow: React.FC<{
   const hasPrayedToday = prayedHistory.data.some((x) => isSameDay(x.date, now));
   const handlePrayedNow = () => {
     mutation.mutate({
-      itemId,
+      itemId: item.id,
     });
   };
   return (
     <Button
-      disabled={hasPrayedToday || mutation.isLoading}
+      disabled={
+        hasPrayedToday || item.dateAccomplished != null || mutation.isLoading
+      }
       onClick={handlePrayedNow}
       aria-label="prayed now"
     >

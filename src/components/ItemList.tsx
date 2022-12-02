@@ -6,9 +6,11 @@ import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
 import type { PrayerItem } from "@prisma/client";
 import React from "react";
 import { trpc } from "../utils/trpc";
+import ItemAccomplished from "./ItemAccomplished";
 import PrayedList from "./PrayedList";
 import PrayedNow from "./PrayedNow";
 
@@ -24,18 +26,24 @@ const PrayerItemListItem: React.FC<{
       : "never";
   }
 
+  let secondaryText = "";
+  if (item.dateAccomplished != null) {
+    secondaryText = `accomplished on ${item.dateAccomplished.toLocaleDateString()}`;
+  } else {
+    secondaryText = `began on ${item.dateBegins.toLocaleDateString()}, last prayed: ${lastPrayed}`;
+  }
   return (
     <>
       <ListItemButton onClick={() => setOpen((wasOpen) => !wasOpen)}>
-        <ListItemText
-          primary={item.description}
-          secondary={`began on ${item.dateBegins.toLocaleDateString()}, last prayed: ${lastPrayed}`}
-        />
+        <ListItemText primary={item.description} secondary={secondaryText} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Box sx={{ ml: 4 }}>
-          <PrayedNow itemId={item.id} />
+          <Stack direction="row">
+            <PrayedNow item={item} />
+            <ItemAccomplished item={item} />
+          </Stack>
           <PrayedList itemId={item.id} />
         </Box>
       </Collapse>

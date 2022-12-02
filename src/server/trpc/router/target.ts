@@ -1,7 +1,6 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { hasAccessToJournal } from "./hasAccessToJournal";
+import { hasAccessToJournal, validateJournalAccess } from "./accessChecker";
 
 export const targetRouter = router({
   allByJournalId: protectedProcedure
@@ -11,13 +10,7 @@ export const targetRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      if (
-        !(await hasAccessToJournal(ctx.prisma, ctx.session, input.journalId))
-      ) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-        });
-      }
+      validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
       return ctx.prisma.prayerTarget.findMany({
         where: {
           journalId: input.journalId,
@@ -37,7 +30,19 @@ export const targetRouter = router({
         },
         include: {
           journal: true,
-          items: true,
+          items: {
+            orderBy: [
+              {
+                dateAccomplished: {
+                  sort: "desc",
+                  nulls: "first",
+                },
+              },
+              {
+                dateBegins: "desc",
+              },
+            ],
+          },
         },
       });
       if (
@@ -56,13 +61,7 @@ export const targetRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (
-        !(await hasAccessToJournal(ctx.prisma, ctx.session, input.journalId))
-      ) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-        });
-      }
+      validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
       return ctx.prisma.prayerTarget.create({
         data: {
           ...input,

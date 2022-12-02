@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { hasAccessToJournal } from "./hasAccessToJournal";
+import { hasAccessToJournal, validateJournalAccess } from "./accessChecker";
 
 export const journalRouter = router({
   all: protectedProcedure.query(({ ctx }) => {
@@ -71,9 +71,7 @@ export const journalRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (!(await hasAccessToJournal(ctx.prisma, ctx.session, input.id))) {
-        throw new TRPCError({ code: "FORBIDDEN" });
-      }
+      validateJournalAccess(ctx.prisma, ctx.session, input.id);
       const user = await ctx.prisma.user.findUnique({
         where: {
           email: input.userEmail,
