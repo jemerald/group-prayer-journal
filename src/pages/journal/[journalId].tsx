@@ -38,7 +38,7 @@ const Journal: NextPage = () => {
       </Head>
       <Stack gap={2}>
         <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
-          <Typography variant="h3">{journal.data.name}</Typography>
+          <Typography variant="h4">{journal.data.name}</Typography>
           <ShareJournalButton journalId={journalId} />
         </Stack>
         <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
