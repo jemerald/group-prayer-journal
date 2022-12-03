@@ -1,16 +1,58 @@
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import CircularProgress from "@mui/material/CircularProgress";
-import List from "@mui/material/List";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import type { PrayerJournal, PrayerJournalAccess, User } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
 import { trpc } from "../utils/trpc";
-import { UserAvatar } from "./UserAvatar";
+import { JournalCoverPhoto } from "./JournalCoverPhoto";
+import { JournalUsers } from "./JournalUsers";
+
+const JournalListItem: React.FC<{
+  journal: PrayerJournal & {
+    owner: User;
+    accesses: (PrayerJournalAccess & {
+      user: User;
+    })[];
+  };
+}> = ({ journal }) => {
+  return (
+    <Card>
+      <CardActionArea
+        LinkComponent={Link}
+        href={`/journal/${encodeURIComponent(journal.id)}`}
+      >
+        <Box sx={{ position: "relative", height: 250, overflow: "hidden" }}>
+          <JournalCoverPhoto journal={journal} />
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              p: 2,
+              background:
+                "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+            }}
+          >
+            <Stack gap={1}>
+              <Typography variant="h4">{journal.name}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {`created on ${journal.createdAt.toLocaleDateString()}`}
+              </Typography>
+              <JournalUsers journalUsers={journal} />
+            </Stack>
+          </Box>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+};
 
 const JournalList: React.FC = () => {
   const journals = trpc.journal.all.useQuery();
@@ -31,23 +73,13 @@ const JournalList: React.FC = () => {
         <Typography variant="h5">Prayer journals</Typography>
         {journals.isFetching ? <CircularProgress size={24} /> : null}
       </Stack>
-      <List>
+      <Grid container spacing={2}>
         {journals.data.map((journal) => (
-          <ListItemButton
-            key={journal.id}
-            component={Link}
-            href={`/journal/${encodeURIComponent(journal.id)}`}
-          >
-            <ListItemAvatar>
-              <UserAvatar user={journal.owner} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={journal.name}
-              secondary={`created on ${journal.createdAt.toLocaleDateString()}`}
-            />
-          </ListItemButton>
+          <Grid item xs={12} sm={6} md={4} key={journal.id}>
+            <JournalListItem journal={journal} />
+          </Grid>
         ))}
-      </List>
+      </Grid>
     </>
   );
 };

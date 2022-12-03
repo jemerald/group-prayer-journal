@@ -1,7 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { hasAccessToJournal, validateJournalAccess } from "./accessChecker";
+import {
+  hasAccessToJournal,
+  validateJournalAccess,
+} from "../utils/accessChecker";
+import { getRandomPhotoUrl } from "../utils/randomPhoto";
 
 export const journalRouter = router({
   all: protectedProcedure.query(({ ctx }) => {
@@ -22,6 +26,14 @@ export const journalRouter = router({
       },
       include: {
         owner: true,
+        accesses: {
+          include: {
+            user: true,
+          },
+        },
+        _count: {
+          select: { targets: true },
+        },
       },
     });
   }),
@@ -55,11 +67,31 @@ export const journalRouter = router({
         name: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const photoUrl = await getRandomPhotoUrl();
       return ctx.prisma.prayerJournal.create({
         data: {
           ...input,
           userId: ctx.session.user.id,
+          coverImageUrl: photoUrl,
+        },
+      });
+    }),
+  changeCover: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      const photoUrl = await getRandomPhotoUrl();
+      return ctx.prisma.prayerJournal.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          coverImageUrl: photoUrl,
         },
       });
     }),

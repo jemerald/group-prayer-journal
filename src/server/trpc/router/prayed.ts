@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { validateItemAccess } from "./accessChecker";
+import { validateItemAccess } from "../utils/accessChecker";
 
 export const prayedRouter = router({
   allByItemId: protectedProcedure

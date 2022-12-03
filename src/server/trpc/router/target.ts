@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { hasAccessToJournal, validateJournalAccess } from "./accessChecker";
+import {
+  hasAccessToJournal,
+  validateJournalAccess,
+} from "../utils/accessChecker";
 
 export const targetRouter = router({
   allByJournalId: protectedProcedure
