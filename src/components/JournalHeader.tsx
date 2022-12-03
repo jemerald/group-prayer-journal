@@ -5,9 +5,13 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import type { PrayerJournal } from "@prisma/client";
+import dynamic from "next/dynamic";
 import { trpc } from "../utils/trpc";
-import { JournalCoverPhoto } from "./JournalCoverPhoto";
 import { ShareJournalButton } from "./ShareJournalButton";
+
+const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
+  ssr: false,
+});
 
 export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
   journal,

@@ -5,7 +5,7 @@ import {
   hasAccessToJournal,
   validateJournalAccess,
 } from "../utils/accessChecker";
-import { getRandomPhotoUrl } from "../utils/randomPhoto";
+import { getRandomPhoto } from "../utils/randomPhoto";
 
 export const journalRouter = router({
   all: protectedProcedure.query(({ ctx }) => {
@@ -68,12 +68,14 @@ export const journalRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const photoUrl = await getRandomPhotoUrl();
+      const photo = await getRandomPhoto();
       return ctx.prisma.prayerJournal.create({
         data: {
           ...input,
           userId: ctx.session.user.id,
-          coverImageUrl: photoUrl,
+          coverImageUrl: photo?.url,
+          coverImageColor: photo?.color,
+          coverImageBlurHash: photo?.blurHash,
         },
       });
     }),
@@ -85,13 +87,15 @@ export const journalRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       validateJournalAccess(ctx.prisma, ctx.session, input.id);
-      const photoUrl = await getRandomPhotoUrl();
+      const photo = await getRandomPhoto();
       return ctx.prisma.prayerJournal.update({
         where: {
           id: input.id,
         },
         data: {
-          coverImageUrl: photoUrl,
+          coverImageUrl: photo?.url,
+          coverImageColor: photo?.color,
+          coverImageBlurHash: photo?.blurHash,
         },
       });
     }),

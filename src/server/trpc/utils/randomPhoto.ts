@@ -1,8 +1,8 @@
 import { env } from "../../../env/server.mjs";
 
-export async function getRandomPhotoUrl(
+export async function getRandomPhoto(
   topic = "nature"
-): Promise<string | null> {
+): Promise<{ url: string; color: string; blurHash: string } | null> {
   const accessKey = env.UNSPLASH_ACCESS_KEY;
   if (accessKey) {
     const resp = await fetch(
@@ -15,7 +15,11 @@ export async function getRandomPhotoUrl(
     );
     if (resp.ok) {
       const data = await resp.json();
-      return data.urls.regular;
+      return {
+        url: data.urls.regular,
+        color: data.color,
+        blurHash: data.blur_hash,
+      };
     }
   }
   return null;

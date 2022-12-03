@@ -2,15 +2,42 @@ import type { PrayerJournal } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
 
-export const JournalCoverPhoto: React.FC<{
+// Pixel GIF code adapted from https://stackoverflow.com/a/33919020/266535
+const keyStr =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+const triplet = (e1: number, e2: number, e3: number) =>
+  keyStr.charAt(e1 >> 2) +
+  keyStr.charAt(((e1 & 3) << 4) | (e2 >> 4)) +
+  keyStr.charAt(((e2 & 15) << 2) | (e3 >> 6)) +
+  keyStr.charAt(e3 & 63);
+
+const rgbDataURL = (r: number, g: number, b: number) =>
+  `data:image/gif;base64,R0lGODlhAQABAPAA${
+    triplet(0, r, g) + triplet(b, 255, 255)
+  }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`;
+
+const colorDataURL = (color: string) =>
+  rgbDataURL(
+    parseInt(color.substring(1, 3), 16),
+    parseInt(color.substring(3, 5), 16),
+    parseInt(color.substring(5, 7), 16)
+  );
+
+const JournalCoverPhoto: React.FC<{
   journal: PrayerJournal;
   isThumbnail?: boolean;
 }> = ({ journal, isThumbnail = false }) => {
+  //   const blurDataUrl = useNextBlurhash(
+  //     journal.coverImageBlurHash ?? "LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+  //   );
   if (journal.coverImageUrl != null) {
     return (
       <Image
         src={journal.coverImageUrl}
         alt={journal.name}
+        placeholder="blur"
+        blurDataURL={colorDataURL(journal.coverImageColor ?? "#000000")}
         fill
         sizes={
           isThumbnail
@@ -27,3 +54,16 @@ export const JournalCoverPhoto: React.FC<{
     />
   );
 };
+
+export default JournalCoverPhoto;
+
+// export const JournalCoverPhoto: React.FC<{
+//   journal: PrayerJournal;
+//   isThumbnail?: boolean;
+// }> = ({ journal, isThumbnail = false }) => {
+//   return (
+//     <NonSSRWrapper>
+//       <JournalCoverPhotoImpl journal={journal} isThumbnail={isThumbnail} />
+//     </NonSSRWrapper>
+//   );
+// };

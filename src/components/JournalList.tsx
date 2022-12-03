@@ -10,9 +10,13 @@ import type { PrayerJournal, PrayerJournalAccess, User } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
+import dynamic from "next/dynamic";
 import { trpc } from "../utils/trpc";
-import { JournalCoverPhoto } from "./JournalCoverPhoto";
 import { JournalUsers } from "./JournalUsers";
+
+const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
+  ssr: false,
+});
 
 const JournalListItem: React.FC<{
   journal: PrayerJournal & {
