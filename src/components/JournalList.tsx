@@ -29,7 +29,7 @@ const JournalListItem: React.FC<{
         href={`/journal/${encodeURIComponent(journal.id)}`}
       >
         <Box sx={{ position: "relative", height: 250, overflow: "hidden" }}>
-          <JournalCoverPhoto journal={journal} />
+          <JournalCoverPhoto journal={journal} isThumbnail />
           <Box
             sx={{
               position: "absolute",
