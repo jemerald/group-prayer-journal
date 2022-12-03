@@ -40,8 +40,10 @@ const JournalListItem: React.FC<{
               bottom: 0,
               width: "100%",
               p: 2,
-              background:
-                "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 100%)"
+                  : "linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%)",
             }}
           >
             <Stack gap={1}>

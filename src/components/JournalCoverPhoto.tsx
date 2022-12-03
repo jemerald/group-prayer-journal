@@ -56,14 +56,3 @@ const JournalCoverPhoto: React.FC<{
 };
 
 export default JournalCoverPhoto;
-
-// export const JournalCoverPhoto: React.FC<{
-//   journal: PrayerJournal;
-//   isThumbnail?: boolean;
-// }> = ({ journal, isThumbnail = false }) => {
-//   return (
-//     <NonSSRWrapper>
-//       <JournalCoverPhotoImpl journal={journal} isThumbnail={isThumbnail} />
-//     </NonSSRWrapper>
-//   );
-// };

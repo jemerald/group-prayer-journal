@@ -57,8 +57,10 @@ export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
           bottom: 0,
           width: "100%",
           p: 2,
-          background:
-            "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+          background: (theme) =>
+            theme.palette.mode === "dark"
+              ? "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
+              : "linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
         }}
       >
         <Stack
@@ -78,11 +80,16 @@ export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
           top: 0,
           right: 0,
           p: 1,
+          borderRadius: "0px 0px 0px 50%",
+          background: (theme) =>
+            theme.palette.mode === "dark"
+              ? "linear-gradient(to bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
+              : "linear-gradient(to bottom left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
         }}
       >
         <Tooltip title="Change cover image">
           <IconButton onClick={handleChangeCover} disabled={mutation.isLoading}>
-            <CachedIcon />
+            <CachedIcon color="inherit" />
           </IconButton>
         </Tooltip>
       </Box>
