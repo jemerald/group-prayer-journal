@@ -1,9 +1,11 @@
 import Alert from "@mui/material/Alert";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { JournalHeader } from "../../components/JournalHeader";
 import { JournalUsers } from "../../components/JournalUsers";
@@ -36,6 +38,12 @@ const Journal: NextPage = () => {
         <title>{journal.data.name} | Group Prayer Journal</title>
       </Head>
       <Stack gap={2}>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" href="/">
+            Home
+          </Link>
+          <Typography color="text.primary">{journal.data.name}</Typography>
+        </Breadcrumbs>
         <JournalHeader journal={journal.data} />
         <JournalUsers journalUsers={journal.data} />
         <TargetList journalId={journalId} />
