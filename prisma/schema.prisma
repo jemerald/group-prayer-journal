@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "orderByNulls"]
+  previewFeatures = ["orderByNulls"]
 }
 
 datasource db {
@@ -29,16 +29,21 @@ model PrayerJournal {
   owner              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   targets            PrayerTarget[]
   accesses           PrayerJournalAccess[]
+
+  @@index([userId])
 }
 
 model PrayerTarget {
-  id         String        @id @default(cuid())
+  id         String    @id @default(cuid())
   journalId  String
   name       String
-  createdAt  DateTime      @default(now())
+  createdAt  DateTime  @default(now())
   archivedAt DateTime?
-  journal    PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
-  items      PrayerItem[]
+
+  journal PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  items   PrayerItem[]
+
+  @@index([journalId])
 }
 
 model PrayerItem {
@@ -50,6 +55,8 @@ model PrayerItem {
   accomplishedNotes String?
   target            PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
   prayed            Prayed[]
+
+  @@index([targetId])
 }
 
 model Prayed {
@@ -57,6 +64,8 @@ model Prayed {
   itemId String
   date   DateTime   @default(now())
   item   PrayerItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId])
 }
 
 model PrayerJournalAccess {
