@@ -1,0 +1,81 @@
+import ArchiveIcon from "@mui/icons-material/Archive";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { trpc } from "../utils/trpc";
+
+const ArchiveJournalDialogContent: React.FC<{
+  journalId: string;
+  closeDialog: () => void;
+}> = ({ journalId, closeDialog }) => {
+  const router = useRouter();
+  const mutation = trpc.journal.archive.useMutation({
+    onSuccess() {
+      closeDialog();
+      router.push("/");
+    },
+  });
+  const handleArchive = () => {
+    mutation.mutate({
+      id: journalId,
+    });
+  };
+  return (
+    <>
+      <DialogTitle>Archive prayer journal</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Archived journal would no longer be visible to anyone by default.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button aria-label="cancel" onClick={closeDialog}>
+          Cancel
+        </Button>
+        <Button
+          aria-label="archive journal"
+          variant="contained"
+          onClick={handleArchive}
+        >
+          Archive
+        </Button>
+      </DialogActions>
+    </>
+  );
+};
+
+export const ArchiveJournalButton: React.FC<{
+  journalId: string;
+}> = ({ journalId }) => {
+  const [showDialog, setShowDialog] = useState(false);
+  const handleClose = () => {
+    setShowDialog(false);
+  };
+  return (
+    <>
+      <Tooltip title="Archive journal">
+        <IconButton onClick={() => setShowDialog(true)}>
+          <ArchiveIcon />
+        </IconButton>
+      </Tooltip>
+      <Dialog
+        open={showDialog}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <ArchiveJournalDialogContent
+          journalId={journalId}
+          closeDialog={handleClose}
+        />
+      </Dialog>
+    </>
+  );
+};

@@ -23,6 +23,7 @@ export const journalRouter = router({
             },
           },
         ],
+        archivedAt: null,
       },
       include: {
         owner: true,
@@ -96,6 +97,23 @@ export const journalRouter = router({
           coverImageUrl: photo?.url,
           coverImageColor: photo?.color,
           coverImageBlurHash: photo?.blurHash,
+        },
+      });
+    }),
+  archive: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      return ctx.prisma.prayerJournal.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          archivedAt: new Date(),
         },
       });
     }),

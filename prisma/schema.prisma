@@ -22,6 +22,7 @@ model PrayerJournal {
   userId             String
   name               String
   createdAt          DateTime              @default(now())
+  archivedAt         DateTime?
   coverImageUrl      String?
   coverImageColor    String?
   coverImageBlurHash String?

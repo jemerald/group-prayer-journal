@@ -6,7 +6,9 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import type { PrayerJournal } from "@prisma/client";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import { trpc } from "../utils/trpc";
+import { ArchiveJournalButton } from "./ArchiveJournalButton";
 import { ShareJournalButton } from "./ShareJournalButton";
 
 const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
@@ -41,6 +43,10 @@ export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
       id: journal.id,
     });
   };
+
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const open = Boolean(menuAnchor);
+
   return (
     <Box
       sx={{
@@ -72,6 +78,7 @@ export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
         >
           <Typography variant="h4">{journal.name}</Typography>
           <ShareJournalButton journalId={journal.id} />
+          <ArchiveJournalButton journalId={journal.id} />
         </Stack>
       </Box>
       <Box
