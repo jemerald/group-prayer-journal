@@ -11,28 +11,29 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 
-const ArchiveJournalDialogContent: React.FC<{
+const ArchiveTargetDialogContent: React.FC<{
+  targetId: string;
   journalId: string;
   closeDialog: () => void;
-}> = ({ journalId, closeDialog }) => {
+}> = ({ targetId, journalId, closeDialog }) => {
   const router = useRouter();
-  const mutation = trpc.journal.archive.useMutation({
+  const mutation = trpc.target.archive.useMutation({
     onSuccess() {
       closeDialog();
-      router.push("/");
+      router.push(`/journal/${journalId}`);
     },
   });
   const handleArchive = () => {
     mutation.mutate({
-      id: journalId,
+      id: targetId,
     });
   };
   return (
     <>
-      <DialogTitle>Archive prayer journal</DialogTitle>
+      <DialogTitle>Archive prayer target</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Archived journal would no longer be visible to anyone by default.
+          Archived target would no longer be visible to anyone by default.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -40,7 +41,7 @@ const ArchiveJournalDialogContent: React.FC<{
           Cancel
         </Button>
         <Button
-          aria-label="archive journal"
+          aria-label="archive target"
           variant="contained"
           onClick={handleArchive}
         >
@@ -51,22 +52,24 @@ const ArchiveJournalDialogContent: React.FC<{
   );
 };
 
-export const ArchiveJournalButton: React.FC<{
+export const ArchiveTargetButton: React.FC<{
+  targetId: string;
   journalId: string;
-}> = ({ journalId }) => {
+}> = ({ targetId, journalId }) => {
   const [showDialog, setShowDialog] = useState(false);
   const handleClose = () => {
     setShowDialog(false);
   };
   return (
     <>
-      <Tooltip title="Archive journal">
+      <Tooltip title="Archive prayer target">
         <IconButton onClick={() => setShowDialog(true)}>
           <ArchiveIcon />
         </IconButton>
       </Tooltip>
       <Dialog open={showDialog} onClose={handleClose}>
-        <ArchiveJournalDialogContent
+        <ArchiveTargetDialogContent
+          targetId={targetId}
           journalId={journalId}
           closeDialog={handleClose}
         />

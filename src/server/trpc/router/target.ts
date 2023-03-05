@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import {
@@ -17,6 +18,7 @@ export const targetRouter = router({
       return ctx.prisma.prayerTarget.findMany({
         where: {
           journalId: input.journalId,
+          archivedAt: null,
         },
       });
     }),
@@ -69,6 +71,32 @@ export const targetRouter = router({
         data: {
           ...input,
           journalId: input.journalId,
+        },
+      });
+    }),
+  archive: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const target = await ctx.prisma.prayerTarget.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!target) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+      validateJournalAccess(ctx.prisma, ctx.session, target.journalId);
+      return ctx.prisma.prayerTarget.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          archivedAt: new Date(),
         },
       });
     }),

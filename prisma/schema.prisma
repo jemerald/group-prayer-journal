@@ -32,12 +32,13 @@ model PrayerJournal {
 }
 
 model PrayerTarget {
-  id        String        @id @default(cuid())
-  journalId String
-  name      String
-  createdAt DateTime      @default(now())
-  journal   PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
-  items     PrayerItem[]
+  id         String        @id @default(cuid())
+  journalId  String
+  name       String
+  createdAt  DateTime      @default(now())
+  archivedAt DateTime?
+  journal    PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  items      PrayerItem[]
 }
 
 model PrayerItem {

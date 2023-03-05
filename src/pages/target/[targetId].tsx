@@ -7,6 +7,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ArchiveTargetButton } from "../../components/ArchiveTargetButton";
 import ItemList from "../../components/ItemList";
 import NewItem from "../../components/NewItem";
 import { trpc } from "../../utils/trpc";
@@ -47,7 +48,13 @@ const Target: NextPage = () => {
           </Link>
           <Typography color="text.primary">{target.data.name}</Typography>
         </Breadcrumbs>
-        <Typography variant="h4">{target.data.name}</Typography>
+        <Stack direction="row" gap={2}>
+          <Typography variant="h4">{target.data.name}</Typography>
+          <ArchiveTargetButton
+            targetId={target.data.id}
+            journalId={target.data.journalId}
+          />
+        </Stack>
         <Stack direction="row" gap={2}>
           <Typography variant="h5">Prayer items</Typography>
           {target.isFetching ? <CircularProgress size={24} /> : null}
