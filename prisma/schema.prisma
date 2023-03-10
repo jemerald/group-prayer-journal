@@ -37,6 +37,7 @@ model PrayerTarget {
   id         String    @id @default(cuid())
   journalId  String
   name       String
+  priority   Int       @default(0)
   createdAt  DateTime  @default(now())
   archivedAt DateTime?
 
@@ -50,6 +51,7 @@ model PrayerItem {
   id                String       @id @default(cuid())
   targetId          String
   description       String
+  priority          Int          @default(0)
   dateBegins        DateTime     @default(now())
   dateAccomplished  DateTime?
   accomplishedNotes String?

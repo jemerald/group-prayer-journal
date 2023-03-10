@@ -1,3 +1,4 @@
+import type { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
@@ -5,6 +6,23 @@ import {
   hasAccessToJournal,
   validateJournalAccess,
 } from "../utils/accessChecker";
+
+function targetList(prisma: PrismaClient, journalId: string) {
+  return prisma.prayerTarget.findMany({
+    where: {
+      journalId,
+      archivedAt: null,
+    },
+    orderBy: [
+      {
+        priority: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+  });
+}
 
 export const targetRouter = router({
   allByJournalId: protectedProcedure
@@ -15,12 +33,7 @@ export const targetRouter = router({
     )
     .query(async ({ ctx, input }) => {
       validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
-      return ctx.prisma.prayerTarget.findMany({
-        where: {
-          journalId: input.journalId,
-          archivedAt: null,
-        },
-      });
+      return targetList(ctx.prisma, input.journalId);
     }),
   byId: protectedProcedure
     .input(
@@ -99,5 +112,43 @@ export const targetRouter = router({
           archivedAt: new Date(),
         },
       });
+    }),
+  prioritize: protectedProcedure
+    .input(
+      z.object({
+        journalId: z.string(),
+        idsInPriorityOrder: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
+      const idToPriorityMap = input.idsInPriorityOrder.reduce(
+        (acc, id, index) => ({
+          ...acc,
+          [id]: input.idsInPriorityOrder.length - index,
+        }),
+        {} as Record<string, number>
+      );
+      const targets = await ctx.prisma.prayerTarget.findMany({
+        where: {
+          journalId: input.journalId,
+        },
+      });
+      return await Promise.all(
+        targets.map(async (target) => {
+          if (idToPriorityMap[target.id]) {
+            return await ctx.prisma.prayerTarget.update({
+              where: {
+                id: target.id,
+              },
+              data: {
+                priority: idToPriorityMap[target.id],
+              },
+            });
+          } else {
+            return target;
+          }
+        })
+      );
     }),
 });
