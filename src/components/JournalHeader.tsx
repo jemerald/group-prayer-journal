@@ -4,9 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import type { PrayerJournal } from "@prisma/client";
+import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import dynamic from "next/dynamic";
-import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { ArchiveJournalButton } from "./ArchiveJournalButton";
 import { ShareJournalButton } from "./ShareJournalButton";
@@ -15,26 +14,14 @@ const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
   ssr: false,
 });
 
-export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
-  journal,
-}) => {
+export const JournalHeader: React.FC<{
+  journal: PrayerJournal & { cover: PrayerJournalCover | null };
+}> = ({ journal }) => {
   const utils = trpc.useContext();
   const mutation = trpc.journal.changeCover.useMutation({
-    onSuccess(data) {
-      utils.journal.byId.setData(
-        {
-          id: data.id,
-        },
-        (current) =>
-          current
-            ? {
-                ...current,
-                coverImageUrl: data.coverImageUrl,
-              }
-            : undefined
-      );
+    onSuccess(data, variable) {
       utils.journal.byId.invalidate({
-        id: data.id,
+        id: variable.id,
       });
     },
   });
@@ -43,9 +30,6 @@ export const JournalHeader: React.FC<{ journal: PrayerJournal }> = ({
       id: journal.id,
     });
   };
-
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const open = Boolean(menuAnchor);
 
   return (
     <Box

@@ -1,4 +1,4 @@
-import type { PrayerJournal } from "@prisma/client";
+import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
 
@@ -25,19 +25,19 @@ const colorDataURL = (color: string) =>
   );
 
 const JournalCoverPhoto: React.FC<{
-  journal: PrayerJournal;
+  journal: PrayerJournal & { cover: PrayerJournalCover | null };
   isThumbnail?: boolean;
 }> = ({ journal, isThumbnail = false }) => {
   //   const blurDataUrl = useNextBlurhash(
   //     journal.coverImageBlurHash ?? "LEHV6nWB2yk8pyo0adR*.7kCMdnj"
   //   );
-  if (journal.coverImageUrl != null) {
+  if (journal.cover != null) {
     return (
       <Image
-        src={journal.coverImageUrl}
+        src={journal.cover.url}
         alt={journal.name}
         placeholder="blur"
-        blurDataURL={colorDataURL(journal.coverImageColor ?? "#000000")}
+        blurDataURL={colorDataURL(journal.cover.color ?? "#000000")}
         fill
         sizes={
           isThumbnail

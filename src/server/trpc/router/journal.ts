@@ -27,6 +27,7 @@ export const journalRouter = router({
       },
       include: {
         owner: true,
+        cover: true,
         accesses: {
           include: {
             user: true,
@@ -54,6 +55,7 @@ export const journalRouter = router({
         },
         include: {
           owner: true,
+          cover: true,
           accesses: {
             include: {
               user: true,
@@ -70,15 +72,22 @@ export const journalRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const photo = await getRandomPhoto();
-      return ctx.prisma.prayerJournal.create({
+      const journal = await ctx.prisma.prayerJournal.create({
         data: {
           ...input,
           userId: ctx.session.user.id,
-          coverImageUrl: photo?.url,
-          coverImageColor: photo?.color,
-          coverImageBlurHash: photo?.blurHash,
         },
       });
+      if (photo) {
+        await ctx.prisma.prayerJournalCover.create({
+          data: {
+            journalId: journal.id,
+            url: photo.url,
+            color: photo.color,
+            blurHash: photo.blurHash,
+          },
+        });
+      }
     }),
   changeCover: protectedProcedure
     .input(
@@ -89,16 +98,24 @@ export const journalRouter = router({
     .mutation(async ({ ctx, input }) => {
       validateJournalAccess(ctx.prisma, ctx.session, input.id);
       const photo = await getRandomPhoto();
-      return ctx.prisma.prayerJournal.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          coverImageUrl: photo?.url,
-          coverImageColor: photo?.color,
-          coverImageBlurHash: photo?.blurHash,
-        },
-      });
+      if (photo) {
+        await ctx.prisma.prayerJournalCover.upsert({
+          where: {
+            journalId: input.id,
+          },
+          create: {
+            journalId: input.id,
+            url: photo.url,
+            color: photo.color,
+            blurHash: photo.blurHash,
+          },
+          update: {
+            url: photo.url,
+            color: photo.color,
+            blurHash: photo.blurHash,
+          },
+        });
+      }
     }),
   archive: protectedProcedure
     .input(

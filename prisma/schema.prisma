@@ -18,19 +18,25 @@ datasource db {
 }
 
 model PrayerJournal {
-  id                 String                @id @default(cuid())
-  userId             String
-  name               String
-  createdAt          DateTime              @default(now())
-  archivedAt         DateTime?
-  coverImageUrl      String?
-  coverImageColor    String?
-  coverImageBlurHash String?
-  owner              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  targets            PrayerTarget[]
-  accesses           PrayerJournalAccess[]
+  id         String                @id @default(cuid())
+  userId     String
+  name       String
+  createdAt  DateTime              @default(now())
+  archivedAt DateTime?
+  cover      PrayerJournalCover?
+  owner      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targets    PrayerTarget[]
+  accesses   PrayerJournalAccess[]
 
   @@index([userId])
+}
+
+model PrayerJournalCover {
+  journalId String        @unique
+  url       String
+  color     String
+  blurHash  String
+  journal   PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
 }
 
 model PrayerTarget {
