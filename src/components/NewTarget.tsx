@@ -1,6 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -11,6 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
+import { FullScreenDialog } from "./FullScreenDialog";
 
 const NewTargetDialogContent: React.FC<{
   journalId: string;
@@ -86,7 +86,7 @@ const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
           <AddIcon />
         </Fab>
       </Tooltip>
-      <Dialog
+      <FullScreenDialog
         maxWidth="sm"
         fullWidth
         open={showCreateDialog}
@@ -96,7 +96,7 @@ const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
           journalId={journalId}
           closeDialog={() => setShowCreateDialog(false)}
         />
-      </Dialog>
+      </FullScreenDialog>
     </>
   );
 };

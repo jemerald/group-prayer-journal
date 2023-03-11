@@ -1,6 +1,5 @@
 import ShareIcon from "@mui/icons-material/Share";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -10,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
+import { FullScreenDialog } from "./FullScreenDialog";
 
 const ShareJournalDialogContent: React.FC<{
   journalId: string;
@@ -80,7 +80,7 @@ export const ShareJournalButton: React.FC<{ journalId: string }> = ({
           <ShareIcon />
         </IconButton>
       </Tooltip>
-      <Dialog
+      <FullScreenDialog
         maxWidth="sm"
         fullWidth
         open={showShareDialog}
@@ -90,7 +90,7 @@ export const ShareJournalButton: React.FC<{ journalId: string }> = ({
           journalId={journalId}
           closeDialog={() => setShowShareDialog(false)}
         />
-      </Dialog>
+      </FullScreenDialog>
     </>
   );
 };

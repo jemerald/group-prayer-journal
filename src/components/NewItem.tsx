@@ -1,7 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -15,6 +14,7 @@ import type { PrayerTarget } from "@prisma/client";
 import React, { useMemo, useState } from "react";
 
 import { trpc } from "../utils/trpc";
+import { FullScreenDialog } from "./FullScreenDialog";
 
 const ProgressivePrayerItems = [
   {
@@ -187,7 +187,7 @@ const NewItem: React.FC<{
           <AddIcon />
         </Fab>
       </Tooltip>
-      <Dialog
+      <FullScreenDialog
         maxWidth="sm"
         fullWidth
         open={showCreateDialog}
@@ -197,7 +197,7 @@ const NewItem: React.FC<{
           target={target}
           closeDialog={() => setShowCreateDialog(false)}
         />
-      </Dialog>
+      </FullScreenDialog>
     </>
   );
 };

@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -9,6 +8,7 @@ import type { PrayerItem } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
+import { FullScreenDialog } from "./FullScreenDialog";
 
 const ItemAccomplishedDialogContent: React.FC<{
   item: PrayerItem;
@@ -81,7 +81,7 @@ const ItemAccomplished: React.FC<{
       >
         Accomplished
       </Button>
-      <Dialog
+      <FullScreenDialog
         maxWidth="sm"
         fullWidth
         open={showDialog}
@@ -91,7 +91,7 @@ const ItemAccomplished: React.FC<{
           item={item}
           closeDialog={() => setShowDialog(false)}
         />
-      </Dialog>
+      </FullScreenDialog>
     </>
   );
 };

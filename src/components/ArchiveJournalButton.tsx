@@ -1,6 +1,5 @@
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -10,6 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
+import { FullScreenDialog } from "./FullScreenDialog";
 
 const ArchiveJournalDialogContent: React.FC<{
   journalId: string;
@@ -65,12 +65,12 @@ export const ArchiveJournalButton: React.FC<{
           <ArchiveIcon />
         </IconButton>
       </Tooltip>
-      <Dialog open={showDialog} onClose={handleClose}>
+      <FullScreenDialog open={showDialog} onClose={handleClose}>
         <ArchiveJournalDialogContent
           journalId={journalId}
           closeDialog={handleClose}
         />
-      </Dialog>
+      </FullScreenDialog>
     </>
   );
 };
