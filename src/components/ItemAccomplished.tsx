@@ -17,7 +17,7 @@ const ItemAccomplishedDialogContent: React.FC<{
   const utils = trpc.useContext();
   const mutation = trpc.item.accomplished.useMutation({
     onSuccess() {
-      utils.target.byId.invalidate({ id: item.targetId });
+      utils.item.allByTargetId.invalidate({ targetId: item.targetId });
     },
   });
   const [notes, setNotes] = useState("");

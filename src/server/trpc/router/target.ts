@@ -48,19 +48,6 @@ export const targetRouter = router({
         },
         include: {
           journal: true,
-          items: {
-            orderBy: [
-              {
-                dateAccomplished: {
-                  sort: "desc",
-                  nulls: "first",
-                },
-              },
-              {
-                dateBegins: "desc",
-              },
-            ],
-          },
         },
       });
       if (

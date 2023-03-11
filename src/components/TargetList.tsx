@@ -1,6 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -91,8 +92,10 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
-      // dropped outside the list
-      if (!result.destination) {
+      if (
+        !result.destination || // dropped outside the list
+        result.source.index === result.destination.index // did not move
+      ) {
         return;
       }
       console.log("drop", result.source.index, result.destination.index);
@@ -108,6 +111,7 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
     },
     [journalId, mutation, targetIds]
   );
+
   if (targets.isLoading) {
     return (
       <Stack sx={{ alignItems: "center" }}>
@@ -135,14 +139,14 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
         {targets.isFetching ? <CircularProgress size={24} /> : null}
       </Stack>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
+        <Droppable droppableId="target-list">
           {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+            <List {...provided.droppableProps} ref={provided.innerRef}>
               {targets.data.map((target, index) => (
                 <TargetListItem key={target.id} target={target} index={index} />
               ))}
               {provided.placeholder}
-            </div>
+            </List>
           )}
         </Droppable>
       </DragDropContext>

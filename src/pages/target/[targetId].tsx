@@ -59,7 +59,7 @@ const Target: NextPage = () => {
           <Typography variant="h5">Prayer items</Typography>
           {target.isFetching ? <CircularProgress size={24} /> : null}
         </Stack>
-        <ItemList items={target.data.items} />
+        <ItemList targetId={target.data.id} />
       </Stack>
       <NewItem target={target.data} />
     </>
