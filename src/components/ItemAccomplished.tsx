@@ -1,13 +1,18 @@
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons/faCircleCheck";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import type { PrayerItem } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
+import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import { FullScreenDialog } from "./FullScreenDialog";
 
 const ItemAccomplishedDialogContent: React.FC<{
@@ -72,12 +77,28 @@ const ItemAccomplishedDialogContent: React.FC<{
 const ItemAccomplished: React.FC<{
   item: PrayerItem;
 }> = ({ item }) => {
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [showDialog, setShowDialog] = useState(false);
   return (
     <>
-      <Button onClick={() => setShowDialog(true)} aria-label="accomplished">
-        Accomplished
-      </Button>
+      {sm ? (
+        <IconButton
+          color="primary"
+          onClick={() => setShowDialog(true)}
+          aria-label="prayer accomplished"
+        >
+          <FontAwesomeSvgIcon icon={faCircleCheck} />
+        </IconButton>
+      ) : (
+        <Button
+          onClick={() => setShowDialog(true)}
+          aria-label="prayer accomplished"
+        >
+          Accomplished
+        </Button>
+      )}
       <FullScreenDialog
         maxWidth="sm"
         fullWidth

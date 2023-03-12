@@ -1,12 +1,17 @@
+import { faFilePen } from "@fortawesome/free-solid-svg-icons/faFilePen";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import type { PrayerItem } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
+import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import { FullScreenDialog } from "./FullScreenDialog";
 
 const ItemAddNoteDialogContent: React.FC<{
@@ -62,12 +67,25 @@ const ItemAddNoteDialogContent: React.FC<{
 const ItemAddNote: React.FC<{
   item: PrayerItem;
 }> = ({ item }) => {
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [showDialog, setShowDialog] = useState(false);
   return (
     <>
-      <Button onClick={() => setShowDialog(true)} aria-label="add note">
-        Add note
-      </Button>
+      {sm ? (
+        <IconButton
+          color="primary"
+          onClick={() => setShowDialog(true)}
+          aria-label="add note"
+        >
+          <FontAwesomeSvgIcon icon={faFilePen} />
+        </IconButton>
+      ) : (
+        <Button onClick={() => setShowDialog(true)} aria-label="add note">
+          Add note
+        </Button>
+      )}
       <FullScreenDialog
         maxWidth="sm"
         fullWidth

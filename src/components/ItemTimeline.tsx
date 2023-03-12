@@ -1,5 +1,5 @@
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons/faCircleCheck";
-import { faNoteSticky } from "@fortawesome/free-solid-svg-icons/faNoteSticky";
+import { faFile } from "@fortawesome/free-solid-svg-icons/faFile";
 import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import Timeline from "@mui/lab/Timeline";
 import TimelineConnector from "@mui/lab/TimelineConnector";
@@ -36,7 +36,7 @@ const TimelineIcon: React.FC<{
             bgcolor: "transparent",
           }}
         >
-          <FontAwesomeSvgIcon icon={faNoteSticky} />
+          <FontAwesomeSvgIcon icon={faFile} />
         </TimelineDot>
       );
     case "ACCOMPLISHED":

@@ -12,7 +12,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import type { PrayerItem } from "@prisma/client";
 import React, { useCallback, useMemo } from "react";
 import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
@@ -25,6 +27,10 @@ import ItemAddNote from "./ItemAddNote";
 import ItemTimeline from "./ItemTimeline";
 import PrayedNow from "./PrayedNow";
 
+const styles = {
+  iconSmallScreen: { minWidth: 32 },
+};
+
 const PrayerListItem = ({
   item,
   provided,
@@ -32,6 +38,9 @@ const PrayerListItem = ({
   item: PrayerItem;
   provided?: DraggableProvided;
 }) => {
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [open, setOpen] = React.useState(false);
   const lastPrayedTimeline = trpc.timeline.lastPrayedForItem.useQuery({
     itemId: item.id,
@@ -54,12 +63,16 @@ const PrayerListItem = ({
     <>
       <ListItem>
         {provided != null ? (
-          <ListItemIcon ref={provided.innerRef} {...provided.dragHandleProps}>
+          <ListItemIcon
+            ref={provided.innerRef}
+            {...provided.dragHandleProps}
+            sx={sm ? styles.iconSmallScreen : undefined}
+          >
             <MenuIcon />
           </ListItemIcon>
         ) : null}
         {item.dateAccomplished != null ? (
-          <ListItemIcon>
+          <ListItemIcon sx={sm ? styles.iconSmallScreen : undefined}>
             <FontAwesomeSvgIcon icon={faCircleCheck} color="success" />
           </ListItemIcon>
         ) : null}
@@ -71,7 +84,7 @@ const PrayerListItem = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Box sx={{ ml: 12 }}>
           {item.dateAccomplished == null ? (
-            <Stack direction="row">
+            <Stack direction="row" gap={1}>
               <PrayedNow item={item} />
               <ItemAddNote item={item} />
               <ItemAccomplished item={item} />
