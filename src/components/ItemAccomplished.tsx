@@ -15,20 +15,21 @@ const ItemAccomplishedDialogContent: React.FC<{
   closeDialog: () => void;
 }> = ({ item, closeDialog }) => {
   const utils = trpc.useContext();
-  const mutation = trpc.item.accomplished.useMutation({
-    onSuccess() {
+  const mutation = trpc.timeline.accomplished.useMutation({
+    onSuccess(data, variable) {
+      utils.timeline.allByItemId.invalidate({ itemId: variable.itemId });
       utils.item.allByTargetId.invalidate({ targetId: item.targetId });
     },
   });
-  const [notes, setNotes] = useState("");
+  const [note, setNote] = useState("");
 
-  const onNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNotes(event.target.value);
+  const onNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNote(event.target.value);
   };
   const handleAccomplished = () => {
     mutation.mutate({
-      id: item.id,
-      notes,
+      itemId: item.id,
+      note,
     });
     closeDialog();
   };
@@ -47,8 +48,8 @@ const ItemAccomplishedDialogContent: React.FC<{
           rows={3}
           margin="dense"
           label="Notes"
-          value={notes}
-          onChange={onNotesChange}
+          value={note}
+          onChange={onNoteChange}
           sx={{ flexGrow: 1 }}
         />
       </DialogContent>

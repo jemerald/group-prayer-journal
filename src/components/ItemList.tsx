@@ -1,4 +1,4 @@
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons/faCircleCheck";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,8 +19,9 @@ import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { reorderArray } from "../utils/reorderArray";
 import { trpc } from "../utils/trpc";
+import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import ItemAccomplished from "./ItemAccomplished";
-import PrayedList from "./PrayedList";
+import ItemTimeline from "./ItemTimeline";
 import PrayedNow from "./PrayedNow";
 
 const PrayerListItem = ({
@@ -58,7 +59,7 @@ const PrayerListItem = ({
         ) : null}
         {item.dateAccomplished != null ? (
           <ListItemIcon>
-            <CheckCircleOutlineIcon color="success" />
+            <FontAwesomeSvgIcon icon={faCircleCheck} color="success" />
           </ListItemIcon>
         ) : null}
         <ListItemButton onClick={() => setOpen((wasOpen) => !wasOpen)}>
@@ -72,7 +73,7 @@ const PrayerListItem = ({
             <PrayedNow item={item} />
             <ItemAccomplished item={item} />
           </Stack>
-          <PrayedList itemId={item.id} />
+          <ItemTimeline itemId={item.id} />
         </Box>
       </Collapse>
     </>

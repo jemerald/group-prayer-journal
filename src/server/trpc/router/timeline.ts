@@ -80,4 +80,33 @@ export const timelineRouter = router({
         },
       });
     }),
+  accomplished: protectedProcedure
+    .input(
+      z.object({
+        itemId: z.string(),
+        note: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const item = await validateItemAccess(
+        ctx.prisma,
+        ctx.session,
+        input.itemId
+      );
+      await ctx.prisma.prayerItem.update({
+        where: {
+          id: input.itemId,
+        },
+        data: {
+          dateAccomplished: new Date(),
+        },
+      });
+      return ctx.prisma.timeline.create({
+        data: {
+          ...input,
+          targetId: item.targetId,
+          type: "ACCOMPLISHED",
+        },
+      });
+    }),
 });

@@ -61,15 +61,14 @@ model PrayerTarget {
 }
 
 model PrayerItem {
-  id                String       @id @default(cuid())
-  targetId          String
-  description       String
-  priority          Int          @default(0)
-  dateBegins        DateTime     @default(now())
-  dateAccomplished  DateTime?
-  accomplishedNotes String?
-  target            PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
-  timeline          Timeline[]
+  id               String       @id @default(cuid())
+  targetId         String
+  description      String
+  priority         Int          @default(0)
+  dateBegins       DateTime     @default(now())
+  dateAccomplished DateTime?
+  target           PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  timeline         Timeline[]
 
   @@index([targetId])
 }
@@ -92,6 +91,7 @@ model Timeline {
 enum TimelineType {
   PRAYED
   NOTE
+  ACCOMPLISHED
 }
 
 model PrayerJournalAccess {
