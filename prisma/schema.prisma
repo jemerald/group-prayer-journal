@@ -6,6 +6,12 @@ generator client {
   previewFeatures = ["orderByNulls"]
 }
 
+// The ERD generator doesn't work in Vercel pipeline
+// To update the ERD, uncomment on local, run and comment out again
+// generator erd {
+//   provider = "prisma-erd-generator"
+// }
+
 datasource db {
   // provider = "sqlite"
   provider     = "mysql"
