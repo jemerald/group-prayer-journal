@@ -21,6 +21,7 @@ import { reorderArray } from "../utils/reorderArray";
 import { trpc } from "../utils/trpc";
 import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import ItemAccomplished from "./ItemAccomplished";
+import ItemAddNote from "./ItemAddNote";
 import ItemTimeline from "./ItemTimeline";
 import PrayedNow from "./PrayedNow";
 
@@ -69,10 +70,13 @@ const PrayerListItem = ({
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Box sx={{ ml: 12 }}>
-          <Stack direction="row">
-            <PrayedNow item={item} />
-            <ItemAccomplished item={item} />
-          </Stack>
+          {item.dateAccomplished == null ? (
+            <Stack direction="row">
+              <PrayedNow item={item} />
+              <ItemAddNote item={item} />
+              <ItemAccomplished item={item} />
+            </Stack>
+          ) : null}
           <ItemTimeline itemId={item.id} />
         </Box>
       </Collapse>

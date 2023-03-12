@@ -7,7 +7,9 @@ import { trpc } from "../utils/trpc";
 const PrayedNow: React.FC<{
   item: PrayerItem;
 }> = ({ item }) => {
-  const prayedHistory = trpc.timeline.allByItemId.useQuery({ itemId: item.id });
+  const lastPrayed = trpc.timeline.lastPrayedForItem.useQuery({
+    itemId: item.id,
+  });
 
   const utils = trpc.useContext();
   const mutation = trpc.timeline.prayedNow.useMutation({
@@ -21,11 +23,12 @@ const PrayedNow: React.FC<{
       utils.timeline.allByItemId.invalidate({ itemId: item.id });
     },
   });
-  if (prayedHistory.isLoading || prayedHistory.data === undefined) {
+  if (lastPrayed.isLoading || lastPrayed.data === undefined) {
     return null;
   }
   const now = new Date();
-  const hasPrayedToday = prayedHistory.data.some((x) => isSameDay(x.date, now));
+  const hasPrayedToday =
+    lastPrayed.data && isSameDay(lastPrayed.data.date, now);
   const handlePrayedNow = () => {
     mutation.mutate({
       itemId: item.id,
@@ -33,9 +36,7 @@ const PrayedNow: React.FC<{
   };
   return (
     <Button
-      disabled={
-        hasPrayedToday || item.dateAccomplished != null || mutation.isLoading
-      }
+      disabled={hasPrayedToday || mutation.isLoading}
       onClick={handlePrayedNow}
       aria-label="prayed now"
     >

@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import type { PrayerItem } from "@prisma/client";
@@ -10,15 +9,14 @@ import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
 
-const ItemAccomplishedDialogContent: React.FC<{
+const ItemAddNoteDialogContent: React.FC<{
   item: PrayerItem;
   closeDialog: () => void;
 }> = ({ item, closeDialog }) => {
   const utils = trpc.useContext();
-  const mutation = trpc.timeline.accomplished.useMutation({
+  const mutation = trpc.timeline.addNote.useMutation({
     onSuccess(data, variable) {
       utils.timeline.allByItemId.invalidate({ itemId: variable.itemId });
-      utils.item.allByTargetId.invalidate({ targetId: item.targetId });
     },
   });
   const [note, setNote] = useState("");
@@ -26,7 +24,7 @@ const ItemAccomplishedDialogContent: React.FC<{
   const onNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
   };
-  const handleAccomplished = () => {
+  const handleAddNote = () => {
     mutation.mutate({
       itemId: item.id,
       note,
@@ -35,12 +33,8 @@ const ItemAccomplishedDialogContent: React.FC<{
   };
   return (
     <>
-      <DialogTitle>Prayer item accomplished</DialogTitle>
+      <DialogTitle>Add note to prayer item</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          You can add some optional notes about how the prayer item was
-          accomplished
-        </DialogContentText>
         <TextField
           autoFocus
           fullWidth
@@ -57,11 +51,7 @@ const ItemAccomplishedDialogContent: React.FC<{
         <Button aria-label="cancel" onClick={closeDialog}>
           Cancel
         </Button>
-        <Button
-          aria-label="save"
-          variant="contained"
-          onClick={handleAccomplished}
-        >
+        <Button aria-label="save" variant="contained" onClick={handleAddNote}>
           Save
         </Button>
       </DialogActions>
@@ -69,14 +59,14 @@ const ItemAccomplishedDialogContent: React.FC<{
   );
 };
 
-const ItemAccomplished: React.FC<{
+const ItemAddNote: React.FC<{
   item: PrayerItem;
 }> = ({ item }) => {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <>
-      <Button onClick={() => setShowDialog(true)} aria-label="accomplished">
-        Accomplished
+      <Button onClick={() => setShowDialog(true)} aria-label="add note">
+        Add note
       </Button>
       <FullScreenDialog
         maxWidth="sm"
@@ -84,7 +74,7 @@ const ItemAccomplished: React.FC<{
         open={showDialog}
         onClose={() => setShowDialog(false)}
       >
-        <ItemAccomplishedDialogContent
+        <ItemAddNoteDialogContent
           item={item}
           closeDialog={() => setShowDialog(false)}
         />
@@ -93,4 +83,4 @@ const ItemAccomplished: React.FC<{
   );
 };
 
-export default ItemAccomplished;
+export default ItemAddNote;
