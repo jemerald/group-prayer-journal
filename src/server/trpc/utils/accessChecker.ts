@@ -69,4 +69,5 @@ export async function validateItemAccess(
   ) {
     throw new TRPCError({ code: "FORBIDDEN" });
   }
+  return item;
 }

@@ -31,11 +31,13 @@ const PrayerListItem = ({
   provided?: DraggableProvided;
 }) => {
   const [open, setOpen] = React.useState(false);
-  const prayedHistory = trpc.prayed.allByItemId.useQuery({ itemId: item.id });
+  const lastPrayedTimeline = trpc.timeline.lastPrayedForItem.useQuery({
+    itemId: item.id,
+  });
   let lastPrayed = "";
-  if (prayedHistory.data != null) {
-    lastPrayed = prayedHistory.data[0]
-      ? prayedHistory.data[0].date.toLocaleDateString()
+  if (lastPrayedTimeline.data !== undefined) {
+    lastPrayed = lastPrayedTimeline.data
+      ? lastPrayedTimeline.data.date.toLocaleDateString()
       : "never";
   }
 

@@ -47,8 +47,9 @@ model PrayerTarget {
   createdAt  DateTime  @default(now())
   archivedAt DateTime?
 
-  journal PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
-  items   PrayerItem[]
+  journal  PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  items    PrayerItem[]
+  timeline Timeline[]
 
   @@index([journalId])
 }
@@ -62,18 +63,29 @@ model PrayerItem {
   dateAccomplished  DateTime?
   accomplishedNotes String?
   target            PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
-  prayed            Prayed[]
+  timeline          Timeline[]
 
   @@index([targetId])
 }
 
-model Prayed {
-  id     String     @id @default(cuid())
-  itemId String
-  date   DateTime   @default(now())
-  item   PrayerItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+model Timeline {
+  id       String       @id @default(cuid())
+  targetId String
+  itemId   String
+  date     DateTime     @default(now())
+  type     TimelineType @default(PRAYED)
+  note     String?
 
+  target PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  item   PrayerItem   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([targetId])
   @@index([itemId])
+}
+
+enum TimelineType {
+  PRAYED
+  NOTE
 }
 
 model PrayerJournalAccess {

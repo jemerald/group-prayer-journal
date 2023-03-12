@@ -9,16 +9,16 @@ import { trpc } from "../utils/trpc";
 const PrayedList: React.FC<{
   itemId: string;
 }> = ({ itemId }) => {
-  const prayedHistory = trpc.prayed.allByItemId.useQuery({ itemId });
-  if (prayedHistory.isLoading || !prayedHistory.data) {
+  const timeline = trpc.timeline.allByItemId.useQuery({ itemId });
+  if (timeline.isLoading || !timeline.data) {
     return <CircularProgress />;
   }
 
   return (
     <List component="div" disablePadding>
-      {prayedHistory.data.map((prayed) => (
-        <ListItem key={prayed.id}>
-          <ListItemText primary={formatRelative(prayed.date, new Date())} />
+      {timeline.data.map((event) => (
+        <ListItem key={event.id}>
+          <ListItemText primary={formatRelative(event.date, new Date())} />
         </ListItem>
       ))}
     </List>

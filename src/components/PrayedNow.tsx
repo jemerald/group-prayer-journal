@@ -7,18 +7,18 @@ import { trpc } from "../utils/trpc";
 const PrayedNow: React.FC<{
   item: PrayerItem;
 }> = ({ item }) => {
-  const prayedHistory = trpc.prayed.allByItemId.useQuery({ itemId: item.id });
+  const prayedHistory = trpc.timeline.allByItemId.useQuery({ itemId: item.id });
 
   const utils = trpc.useContext();
-  const mutation = trpc.prayed.create.useMutation({
+  const mutation = trpc.timeline.prayedNow.useMutation({
     onSuccess(added) {
-      utils.prayed.allByItemId.setData(
+      utils.timeline.allByItemId.setData(
         {
           itemId: item.id,
         },
         (currentTarget) => [added, ...(currentTarget || [])]
       );
-      utils.prayed.allByItemId.invalidate({ itemId: item.id });
+      utils.timeline.allByItemId.invalidate({ itemId: item.id });
     },
   });
   if (prayedHistory.isLoading || prayedHistory.data === undefined) {
