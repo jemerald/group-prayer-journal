@@ -8,6 +8,7 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import type { TimelineType } from "@prisma/client";
 import formatRelative from "date-fns/formatRelative";
@@ -21,33 +22,39 @@ const TimelineIcon: React.FC<{
   switch (type) {
     case "PRAYED":
       return (
-        <TimelineDot
-          sx={{
-            bgcolor: "transparent",
-          }}
-        >
-          <FontAwesomeSvgIcon icon={faPrayingHands} color="info" />
-        </TimelineDot>
+        <Tooltip title="Prayed">
+          <TimelineDot
+            sx={{
+              bgcolor: "transparent",
+            }}
+          >
+            <FontAwesomeSvgIcon icon={faPrayingHands} color="info" />
+          </TimelineDot>
+        </Tooltip>
       );
     case "NOTE":
       return (
-        <TimelineDot
-          sx={{
-            bgcolor: "transparent",
-          }}
-        >
-          <FontAwesomeSvgIcon icon={faFile} />
-        </TimelineDot>
+        <Tooltip title="Note">
+          <TimelineDot
+            sx={{
+              bgcolor: "transparent",
+            }}
+          >
+            <FontAwesomeSvgIcon icon={faFile} />
+          </TimelineDot>
+        </Tooltip>
       );
     case "ACCOMPLISHED":
       return (
-        <TimelineDot
-          sx={{
-            bgcolor: "transparent",
-          }}
-        >
-          <FontAwesomeSvgIcon icon={faCircleCheck} color="success" />
-        </TimelineDot>
+        <Tooltip title="Prayer accomplished">
+          <TimelineDot
+            sx={{
+              bgcolor: "transparent",
+            }}
+          >
+            <FontAwesomeSvgIcon icon={faCircleCheck} color="success" />
+          </TimelineDot>
+        </Tooltip>
       );
   }
 };
