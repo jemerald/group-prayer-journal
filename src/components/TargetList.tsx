@@ -21,6 +21,9 @@ const TargetListItem: React.FC<{ target: PrayerTarget; index: number }> = ({
   target,
   index,
 }) => {
+  const lastPrayed = trpc.timeline.lastPrayedForTarget.useQuery({
+    targetId: target.id,
+  });
   return (
     <Draggable key={target.id} draggableId={target.id} index={index}>
       {(provided, snapshot) => (
@@ -40,7 +43,11 @@ const TargetListItem: React.FC<{ target: PrayerTarget; index: number }> = ({
           >
             <ListItemText
               primary={target.name}
-              secondary={`created on ${target.createdAt.toLocaleDateString()}`}
+              secondary={
+                lastPrayed.data
+                  ? `last prayed on ${lastPrayed.data.date.toLocaleDateString()}`
+                  : `created on ${target.createdAt.toLocaleDateString()}`
+              }
             />
           </ListItemButton>
         </ListItem>
