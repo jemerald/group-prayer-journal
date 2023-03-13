@@ -29,6 +29,8 @@ import PrayedNow from "./PrayedNow";
 
 const styles = {
   iconSmallScreen: { minWidth: 32 },
+  timeline: { ml: 12 },
+  timelineSmallScreen: { ml: 8 },
 };
 
 const PrayerListItem = ({
@@ -82,7 +84,7 @@ const PrayerListItem = ({
         </ListItemButton>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <Box sx={{ ml: 12 }}>
+        <Box sx={sm ? styles.timelineSmallScreen : styles.timeline}>
           {item.dateAccomplished == null ? (
             <Stack direction="row" gap={1}>
               <PrayedNow item={item} />
