@@ -23,6 +23,26 @@ export const timelineRouter = router({
         },
       });
     }),
+  allByTargetId: protectedProcedure
+    .input(
+      z.object({
+        targetId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      await validateTargetAccess(ctx.prisma, ctx.session, input.targetId);
+      return ctx.prisma.timeline.findMany({
+        where: {
+          targetId: input.targetId,
+        },
+        include: {
+          item: true,
+        },
+        orderBy: {
+          date: "desc",
+        },
+      });
+    }),
   lastPrayedForItem: protectedProcedure
     .input(
       z.object({

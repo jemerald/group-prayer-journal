@@ -2,23 +2,23 @@ import Alert from "@mui/material/Alert";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import type { SyntheticEvent } from "react";
+import { useState } from "react";
 import { ArchiveTargetButton } from "../../components/ArchiveTargetButton";
 import ItemList from "../../components/ItemList";
 import NewItem from "../../components/NewItem";
+import TargetTimeline from "../../components/TargetTimeline";
 import { trpc } from "../../utils/trpc";
 
-const Target: NextPage = () => {
-  const router = useRouter();
-  const { targetId } = router.query;
-  if (!targetId || Array.isArray(targetId)) {
-    router.replace("/");
-    return null;
-  }
+const Target: React.FC<{ targetId: string }> = ({ targetId }) => {
+  const [currentTab, setCurrentTab] = useState<"items" | "timeline">("items");
 
   const target = trpc.target.byId.useQuery({ id: targetId });
   if (target.isLoading) {
@@ -32,6 +32,14 @@ const Target: NextPage = () => {
   if (!target.data) {
     return <Alert severity="error">Prayer target not found</Alert>;
   }
+
+  const handleTabChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: typeof currentTab
+  ) => {
+    console.log("value", value);
+    setCurrentTab(value);
+  };
 
   return (
     <>
@@ -55,15 +63,39 @@ const Target: NextPage = () => {
             journalId={target.data.journalId}
           />
         </Stack>
-        <Stack direction="row" gap={2}>
-          <Typography variant="h5">Prayer items</Typography>
-          {target.isFetching ? <CircularProgress size={24} /> : null}
-        </Stack>
-        <ItemList targetId={target.data.id} />
+        <Tabs value={currentTab} onChange={handleTabChange}>
+          <Tab label="Prayer items" value="items" />
+          <Tab label="Timeline" value="timeline" />
+        </Tabs>
+        <div
+          style={{
+            display: currentTab === "items" ? "block" : "none",
+          }}
+        >
+          <ItemList targetId={target.data.id} />
+        </div>
+        <div
+          style={{
+            display: currentTab === "timeline" ? "block" : "none",
+          }}
+        >
+          <TargetTimeline targetId={target.data.id} />
+        </div>
       </Stack>
       <NewItem target={target.data} />
     </>
   );
 };
 
-export default Target;
+const TargetPage: NextPage = () => {
+  const router = useRouter();
+  const { targetId } = router.query;
+  if (!targetId || Array.isArray(targetId)) {
+    router.replace("/");
+    return null;
+  }
+
+  return <Target targetId={targetId} />;
+};
+
+export default TargetPage;

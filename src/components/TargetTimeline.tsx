@@ -4,16 +4,18 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import formatRelative from "date-fns/formatRelative";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import TimelineIcon from "./TimelineIcon";
 
-const ItemTimeline: React.FC<{
-  itemId: string;
-}> = ({ itemId }) => {
-  const timeline = trpc.timeline.allByItemId.useQuery({ itemId });
+const TargetTimeline: React.FC<{
+  targetId: string;
+}> = ({ targetId }) => {
+  const theme = useTheme();
+  const timeline = trpc.timeline.allByTargetId.useQuery({ targetId });
   if (timeline.isLoading || !timeline.data) {
     return <CircularProgress />;
   }
@@ -22,6 +24,7 @@ const ItemTimeline: React.FC<{
   return (
     <Timeline
       sx={{
+        m: 0,
         [`& .${timelineItemClasses.root}:before`]: {
           flex: 0,
           padding: 0,
@@ -34,22 +37,19 @@ const ItemTimeline: React.FC<{
             <TimelineIcon type={event.type} />
             {index < timelineLength - 1 ? <TimelineConnector /> : null}
           </TimelineSeparator>
-          {event.note ? (
-            <TimelineContent>
+          <TimelineContent sx={{ p: "8px 16px" }}>
+            <Typography>{event.item.description}</Typography>
+            {event.note ? (
               <Typography component="span">{event.note}</Typography>
-              <Typography variant="body2">
-                {formatRelative(event.date, new Date())}
-              </Typography>
-            </TimelineContent>
-          ) : (
-            <TimelineContent sx={{ m: "11.5px 0" }}>
+            ) : null}
+            <Typography variant="body2" color={theme.palette.text.secondary}>
               {formatRelative(event.date, new Date())}
-            </TimelineContent>
-          )}
+            </Typography>
+          </TimelineContent>
         </TimelineItem>
       ))}
     </Timeline>
   );
 };
 
-export default ItemTimeline;
+export default TargetTimeline;
