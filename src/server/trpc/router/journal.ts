@@ -89,6 +89,24 @@ export const journalRouter = router({
         });
       }
     }),
+  rename: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      await ctx.prisma.prayerJournal.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+        },
+      });
+    }),
   changeCover: protectedProcedure
     .input(
       z.object({
@@ -96,7 +114,7 @@ export const journalRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      await validateJournalAccess(ctx.prisma, ctx.session, input.id);
       const photo = await getRandomPhoto();
       if (photo) {
         await ctx.prisma.prayerJournalCover.upsert({
@@ -124,7 +142,7 @@ export const journalRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      await validateJournalAccess(ctx.prisma, ctx.session, input.id);
       return ctx.prisma.prayerJournal.update({
         where: {
           id: input.id,
@@ -142,7 +160,7 @@ export const journalRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      await validateJournalAccess(ctx.prisma, ctx.session, input.id);
       const user = await ctx.prisma.user.findUnique({
         where: {
           email: input.userEmail,

@@ -1,3 +1,4 @@
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons/faPenToSquare";
 import CachedIcon from "@mui/icons-material/Cached";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -6,8 +7,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { ArchiveJournalButton } from "./ArchiveJournalButton";
+import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import JournalNameChange from "./JournalNameChange";
 import { ShareJournalButton } from "./ShareJournalButton";
 
 const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
@@ -17,6 +21,8 @@ const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
 export const JournalHeader: React.FC<{
   journal: PrayerJournal & { cover: PrayerJournalCover | null };
 }> = ({ journal }) => {
+  const [editMode, setEditMode] = useState(false);
+
   const utils = trpc.useContext();
   const mutation = trpc.journal.changeCover.useMutation({
     onSuccess(data, variable) {
@@ -60,9 +66,25 @@ export const JournalHeader: React.FC<{
             alignItems: "center",
           }}
         >
-          <Typography variant="h4">{journal.name}</Typography>
-          <ShareJournalButton journalId={journal.id} />
-          <ArchiveJournalButton journalId={journal.id} />
+          {editMode ? (
+            <JournalNameChange
+              journal={journal}
+              onComplete={() => setEditMode(false)}
+            />
+          ) : (
+            <>
+              <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                {journal.name}
+              </Typography>
+              <Tooltip title="Edit name">
+                <IconButton onClick={() => setEditMode(true)} color="primary">
+                  <FontAwesomeSvgIcon icon={faPenToSquare} />
+                </IconButton>
+              </Tooltip>
+              <ShareJournalButton journalId={journal.id} />
+              <ArchiveJournalButton journalId={journal.id} />
+            </>
+          )}
         </Stack>
       </Box>
       <Box
