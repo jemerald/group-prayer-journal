@@ -42,6 +42,7 @@ const ArchiveJournalDialogContent: React.FC<{
         <Button
           aria-label="archive journal"
           variant="contained"
+          color="warning"
           onClick={handleArchive}
         >
           Archive
@@ -61,7 +62,7 @@ export const ArchiveJournalButton: React.FC<{
   return (
     <>
       <Tooltip title="Archive journal">
-        <IconButton onClick={() => setShowDialog(true)}>
+        <IconButton onClick={() => setShowDialog(true)} color="warning">
           <ArchiveIcon />
         </IconButton>
       </Tooltip>

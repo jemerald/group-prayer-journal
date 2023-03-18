@@ -43,6 +43,7 @@ const ArchiveTargetDialogContent: React.FC<{
         <Button
           aria-label="archive target"
           variant="contained"
+          color="warning"
           onClick={handleArchive}
         >
           Archive
@@ -63,7 +64,7 @@ export const ArchiveTargetButton: React.FC<{
   return (
     <>
       <Tooltip title="Archive prayer target">
-        <IconButton onClick={() => setShowDialog(true)}>
+        <IconButton onClick={() => setShowDialog(true)} color="warning">
           <ArchiveIcon />
         </IconButton>
       </Tooltip>
