@@ -27,9 +27,6 @@ export const journalRouter = router({
       },
       include: {
         cover: true,
-        _count: {
-          select: { targets: true },
-        },
       },
     });
   }),
