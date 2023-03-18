@@ -3,10 +3,8 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
-import { useTheme } from "@mui/material/styles";
+import type { SxProps, Theme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import type { PrayerItem, Timeline } from "@prisma/client";
 import React, { useState } from "react";
 
@@ -14,35 +12,35 @@ import { trpc } from "../utils/trpc";
 import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import { FullScreenDialog } from "./FullScreenDialog";
 
-const ItemAddNoteDialogContent: React.FC<{
-  itemId: string;
+const TargetAddNoteDialogContent: React.FC<{
+  targetId: string;
   closeDialog: () => void;
-}> = ({ itemId, closeDialog }) => {
+}> = ({ targetId, closeDialog }) => {
   const utils = trpc.useContext();
-  const mutation = trpc.timeline.addItemNote.useMutation({
+  const mutation = trpc.timeline.addTargetNote.useMutation({
     onMutate(variable) {
       // perform optimistic update
-      utils.timeline.allByItemId.cancel({ itemId: variable.itemId });
+      utils.timeline.allByTargetId.cancel({ targetId: variable.targetId });
       const tempTimelineItem: Timeline & {
         item: PrayerItem | null;
       } = {
         id: "dummy",
-        targetId: "dummy",
-        itemId: variable.itemId,
+        targetId: variable.targetId,
+        itemId: null,
         type: "NOTE",
         date: new Date(),
         note: variable.note,
         item: null,
       };
-      utils.timeline.allByItemId.setData(
+      utils.timeline.allByTargetId.setData(
         {
-          itemId: variable.itemId,
+          targetId: variable.targetId,
         },
         (oldData) => [tempTimelineItem, ...(oldData ?? [])]
       );
     },
-    onSuccess(data, variable) {
-      utils.timeline.allByItemId.invalidate({ itemId: variable.itemId });
+    onSuccess(_data, variable) {
+      utils.timeline.allByTargetId.invalidate({ targetId: variable.targetId });
     },
   });
   const [note, setNote] = useState("");
@@ -52,14 +50,14 @@ const ItemAddNoteDialogContent: React.FC<{
   };
   const handleAddNote = () => {
     mutation.mutate({
-      itemId,
+      targetId,
       note,
     });
     closeDialog();
   };
   return (
     <>
-      <DialogTitle>Add note to prayer item</DialogTitle>
+      <DialogTitle>Add note to prayer target</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -85,36 +83,29 @@ const ItemAddNoteDialogContent: React.FC<{
   );
 };
 
-const ItemAddNote: React.FC<{
-  itemId: string;
-}> = ({ itemId }) => {
-  const theme = useTheme();
-  const sm = useMediaQuery(theme.breakpoints.down("sm"));
-
+const TargetAddNote: React.FC<{
+  targetId: string;
+  sx?: SxProps<Theme>;
+}> = ({ targetId, sx }) => {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <>
-      {sm ? (
-        <IconButton
-          color="primary"
-          onClick={() => setShowDialog(true)}
-          aria-label="add note"
-        >
-          <FontAwesomeSvgIcon icon={faFilePen} />
-        </IconButton>
-      ) : (
-        <Button onClick={() => setShowDialog(true)} aria-label="add note">
-          Add note
-        </Button>
-      )}
+      <Button
+        onClick={() => setShowDialog(true)}
+        aria-label="add note"
+        startIcon={<FontAwesomeSvgIcon icon={faFilePen} />}
+        sx={sx}
+      >
+        Add note
+      </Button>
       <FullScreenDialog
         maxWidth="sm"
         fullWidth
         open={showDialog}
         onClose={() => setShowDialog(false)}
       >
-        <ItemAddNoteDialogContent
-          itemId={itemId}
+        <TargetAddNoteDialogContent
+          targetId={targetId}
           closeDialog={() => setShowDialog(false)}
         />
       </FullScreenDialog>
@@ -122,4 +113,4 @@ const ItemAddNote: React.FC<{
   );
 };
 
-export default ItemAddNote;
+export default TargetAddNote;

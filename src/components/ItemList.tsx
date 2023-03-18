@@ -88,7 +88,7 @@ const PrayerListItem = ({
           {item.dateAccomplished == null ? (
             <Stack direction="row" gap={1}>
               <PrayedNow item={item} />
-              <ItemAddNote item={item} />
+              <ItemAddNote itemId={item.id} />
               <ItemAccomplished item={item} />
             </Stack>
           ) : null}
@@ -98,7 +98,7 @@ const PrayerListItem = ({
     </>
   );
 };
-const PrayerItemListItem: React.FC<{
+const DraggablePrayerListItem: React.FC<{
   item: PrayerItem;
   index: number;
 }> = ({ item, index }) => {
@@ -209,7 +209,11 @@ const ItemList: React.FC<{
         {(provided) => (
           <List {...provided.droppableProps} ref={provided.innerRef}>
             {items.data.map((item, index) => (
-              <PrayerItemListItem key={item.id} item={item} index={index} />
+              <DraggablePrayerListItem
+                key={item.id}
+                item={item}
+                index={index}
+              />
             ))}
             {provided.placeholder}
           </List>

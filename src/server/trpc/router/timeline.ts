@@ -100,7 +100,24 @@ export const timelineRouter = router({
         },
       });
     }),
-  addNote: protectedProcedure
+  addTargetNote: protectedProcedure
+    .input(
+      z.object({
+        targetId: z.string(),
+        note: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateTargetAccess(ctx.prisma, ctx.session, input.targetId);
+
+      return await ctx.prisma.timeline.create({
+        data: {
+          ...input,
+          type: "NOTE",
+        },
+      });
+    }),
+  addItemNote: protectedProcedure
     .input(
       z.object({
         itemId: z.string(),
