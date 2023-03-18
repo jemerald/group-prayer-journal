@@ -105,7 +105,7 @@ const PrayerItemListItem: React.FC<{
   if (item.dateAccomplished == null) {
     return (
       <Draggable draggableId={item.id} index={index}>
-        {(provided, snapshot) => (
+        {(provided) => (
           <div
             {...provided.draggableProps}
             style={{
@@ -206,7 +206,7 @@ const ItemList: React.FC<{
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="item-list">
-        {(provided, snapshot) => (
+        {(provided) => (
           <List {...provided.droppableProps} ref={provided.innerRef}>
             {items.data.map((item, index) => (
               <PrayerItemListItem key={item.id} item={item} index={index} />

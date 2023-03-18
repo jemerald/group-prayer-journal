@@ -26,7 +26,7 @@ const TargetListItem: React.FC<{ target: PrayerTarget; index: number }> = ({
   });
   return (
     <Draggable key={target.id} draggableId={target.id} index={index}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <ListItem
           {...provided.draggableProps}
           style={{
@@ -147,7 +147,7 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
       </Stack>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="target-list">
-          {(provided, snapshot) => (
+          {(provided) => (
             <List {...provided.droppableProps} ref={provided.innerRef}>
               {targets.data.map((target, index) => (
                 <TargetListItem key={target.id} target={target} index={index} />

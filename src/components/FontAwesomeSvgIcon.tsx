@@ -1,10 +1,11 @@
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
 import SvgIcon from "@mui/material/SvgIcon";
 import * as React from "react";
 
 type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
 type FontAwesomeSvgIconProps = {
-  icon: any;
+  icon: IconDefinition;
   color?: PropType<SvgIconProps, "color">;
 };
 
