@@ -6,12 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import type {
-  PrayerJournal,
-  PrayerJournalAccess,
-  PrayerJournalCover,
-  User,
-} from "@prisma/client";
+import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
@@ -25,11 +20,7 @@ const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
 
 const JournalListItem: React.FC<{
   journal: PrayerJournal & {
-    owner: User;
     cover: PrayerJournalCover | null;
-    accesses: (PrayerJournalAccess & {
-      user: User;
-    })[];
   };
 }> = ({ journal }) => {
   return (
@@ -57,7 +48,7 @@ const JournalListItem: React.FC<{
               <Typography variant="body2" color="text.secondary">
                 {`created on ${journal.createdAt.toLocaleDateString()}`}
               </Typography>
-              <JournalUsers journalUsers={journal} />
+              <JournalUsers journalId={journal.id} />
             </Stack>
           </Box>
         </Box>

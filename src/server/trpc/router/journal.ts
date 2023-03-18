@@ -26,13 +26,7 @@ export const journalRouter = router({
         archivedAt: null,
       },
       include: {
-        owner: true,
         cover: true,
-        accesses: {
-          include: {
-            user: true,
-          },
-        },
         _count: {
           select: { targets: true },
         },
@@ -54,8 +48,24 @@ export const journalRouter = router({
           id: input.id,
         },
         include: {
-          owner: true,
           cover: true,
+        },
+      });
+    }),
+  usersOfJournal: protectedProcedure
+    .input(
+      z.object({
+        journalId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
+      return await ctx.prisma.prayerJournal.findFirst({
+        where: {
+          id: input.journalId,
+        },
+        select: {
+          owner: true,
           accesses: {
             include: {
               user: true,

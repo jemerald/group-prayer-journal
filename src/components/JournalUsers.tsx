@@ -1,26 +1,42 @@
 import AvatarGroup from "@mui/material/AvatarGroup";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-import type { PrayerJournalAccess, User } from "@prisma/client";
 import React from "react";
+import { trpc } from "../utils/trpc";
 
 import { UserAvatar } from "./UserAvatar";
 
 export const JournalUsers: React.FC<{
-  journalUsers: {
-    owner: User;
-    accesses: (PrayerJournalAccess & {
-      user: User;
-    })[];
-  };
-}> = ({ journalUsers }) => {
+  journalId: string;
+}> = ({ journalId }) => {
+  const journalUsers = trpc.journal.usersOfJournal.useQuery({
+    journalId: journalId,
+  });
   return (
     <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
-      <UserAvatar user={journalUsers.owner} tooltipPrefix="Created by: " />
-      <AvatarGroup>
-        {journalUsers.accesses.map((access) => (
-          <UserAvatar key={access.userId} user={access.user} />
-        ))}
-      </AvatarGroup>
+      {journalUsers.isLoading || !journalUsers.data ? (
+        <>
+          <Skeleton variant="circular" width={40} height={40} />
+          <Skeleton
+            variant="circular"
+            width={40}
+            height={40}
+            sx={{ m: "2px" }}
+          />
+        </>
+      ) : (
+        <>
+          <UserAvatar
+            user={journalUsers.data.owner}
+            tooltipPrefix="Created by: "
+          />
+          <AvatarGroup>
+            {journalUsers.data.accesses.map((access) => (
+              <UserAvatar key={access.userId} user={access.user} />
+            ))}
+          </AvatarGroup>
+        </>
+      )}
     </Stack>
   );
 };

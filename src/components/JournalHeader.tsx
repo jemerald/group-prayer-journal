@@ -5,12 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import type {
-  PrayerJournal,
-  PrayerJournalAccess,
-  PrayerJournalCover,
-  User,
-} from "@prisma/client";
+import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
@@ -27,10 +22,6 @@ const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
 export const JournalHeader: React.FC<{
   journal: PrayerJournal & {
     cover: PrayerJournalCover | null;
-    owner: User;
-    accesses: (PrayerJournalAccess & {
-      user: User;
-    })[];
   };
 }> = ({ journal }) => {
   const [editMode, setEditMode] = useState(false);
@@ -129,7 +120,7 @@ export const JournalHeader: React.FC<{
           alignItems: "center",
         }}
       >
-        <JournalUsers journalUsers={journal} />
+        <JournalUsers journalId={journal.id} />
         <ShareJournalButton journalId={journal.id} />
       </Stack>
     </Stack>
