@@ -4,14 +4,13 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
-
-import { Skeleton } from "@mui/material";
-import dynamic from "next/dynamic";
 import { trpc } from "../utils/trpc";
 import { JournalUsers } from "./JournalUsers";
 
