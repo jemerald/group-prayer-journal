@@ -30,11 +30,13 @@ export const JournalUsers: React.FC<{
             user={journalUsers.data.owner}
             tooltipPrefix="Created by: "
           />
-          <AvatarGroup>
-            {journalUsers.data.accesses.map((access) => (
-              <UserAvatar key={access.userId} user={access.user} />
-            ))}
-          </AvatarGroup>
+          {journalUsers.data.accesses.length > 0 ? (
+            <AvatarGroup>
+              {journalUsers.data.accesses.map((access) => (
+                <UserAvatar key={access.userId} user={access.user} />
+              ))}
+            </AvatarGroup>
+          ) : null}
         </>
       )}
     </Stack>
