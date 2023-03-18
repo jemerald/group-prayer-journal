@@ -5,6 +5,7 @@ import { protectedProcedure, router } from "../trpc";
 import {
   hasAccessToJournal,
   validateJournalAccess,
+  validateTargetAccess,
 } from "../utils/accessChecker";
 
 function targetList(prisma: PrismaClient, journalId: string) {
@@ -32,7 +33,7 @@ export const targetRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
+      await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
       return targetList(ctx.prisma, input.journalId);
     }),
   byId: protectedProcedure
@@ -66,11 +67,29 @@ export const targetRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
+      await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
       return ctx.prisma.prayerTarget.create({
         data: {
           ...input,
           journalId: input.journalId,
+        },
+      });
+    }),
+  rename: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateTargetAccess(ctx.prisma, ctx.session, input.id);
+      await ctx.prisma.prayerTarget.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
         },
       });
     }),
@@ -90,7 +109,7 @@ export const targetRouter = router({
       if (!target) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      validateJournalAccess(ctx.prisma, ctx.session, target.journalId);
+      await validateJournalAccess(ctx.prisma, ctx.session, target.journalId);
       return ctx.prisma.prayerTarget.update({
         where: {
           id: input.id,
@@ -108,7 +127,7 @@ export const targetRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
+      await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
       const idToPriorityMap = input.idsInPriorityOrder.reduce(
         (acc, id, index) => ({
           ...acc,
