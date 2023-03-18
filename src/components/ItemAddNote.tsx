@@ -96,14 +96,19 @@ const ItemAddNote: React.FC<{
     <>
       {sm ? (
         <IconButton
-          color="primary"
+          color="inherit"
           onClick={() => setShowDialog(true)}
           aria-label="add note"
         >
           <FontAwesomeSvgIcon icon={faFilePen} />
         </IconButton>
       ) : (
-        <Button onClick={() => setShowDialog(true)} aria-label="add note">
+        <Button
+          onClick={() => setShowDialog(true)}
+          aria-label="add note"
+          startIcon={<FontAwesomeSvgIcon icon={faFilePen} />}
+          color="inherit"
+        >
           Add note
         </Button>
       )}

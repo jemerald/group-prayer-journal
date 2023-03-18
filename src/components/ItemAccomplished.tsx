@@ -85,7 +85,7 @@ const ItemAccomplished: React.FC<{
     <>
       {sm ? (
         <IconButton
-          color="primary"
+          color="success"
           onClick={() => setShowDialog(true)}
           aria-label="prayer accomplished"
         >
@@ -95,6 +95,8 @@ const ItemAccomplished: React.FC<{
         <Button
           onClick={() => setShowDialog(true)}
           aria-label="prayer accomplished"
+          startIcon={<FontAwesomeSvgIcon icon={faCircleCheck} />}
+          color="success"
         >
           Accomplished
         </Button>

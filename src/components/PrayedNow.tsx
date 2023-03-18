@@ -1,8 +1,10 @@
+import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import Button from "@mui/material/Button";
 import type { PrayerItem, Timeline } from "@prisma/client";
 import isSameDay from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
+import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 
 const PrayedNow: React.FC<{
   item: PrayerItem;
@@ -67,6 +69,7 @@ const PrayedNow: React.FC<{
       disabled={hasPrayedToday || mutation.isLoading}
       onClick={handlePrayedNow}
       aria-label="prayed now"
+      startIcon={<FontAwesomeSvgIcon icon={faPrayingHands} />}
     >
       Prayed now
     </Button>

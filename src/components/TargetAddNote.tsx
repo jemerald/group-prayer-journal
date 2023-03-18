@@ -94,6 +94,7 @@ const TargetAddNote: React.FC<{
         onClick={() => setShowDialog(true)}
         aria-label="add note"
         startIcon={<FontAwesomeSvgIcon icon={faFilePen} />}
+        color="inherit"
         sx={sx}
       >
         Add note
