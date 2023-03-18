@@ -15,6 +15,8 @@ import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import type { PrayerItem } from "@prisma/client";
+import { useRouter } from "next/router";
+import type { ParsedUrlQuery } from "querystring";
 import React, { useCallback, useMemo } from "react";
 import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -32,6 +34,17 @@ const styles = {
   timelineSmallScreen: { ml: 8 },
 };
 
+function getExpandedItemFromQuery(query: ParsedUrlQuery): string[] {
+  const { expandedItem } = query;
+  if (!expandedItem) {
+    return [];
+  }
+  if (typeof expandedItem === "string") {
+    return [expandedItem];
+  }
+  return expandedItem;
+}
+
 const PrayerListItem = ({
   item,
   provided,
@@ -42,10 +55,25 @@ const PrayerListItem = ({
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [open, setOpen] = React.useState(false);
   const lastPrayedTimeline = trpc.timeline.lastPrayedForItem.useQuery({
     itemId: item.id,
   });
+
+  const router = useRouter();
+  const expandedItem = getExpandedItemFromQuery(router.query);
+  const open = expandedItem.indexOf(item.id) >= 0;
+
+  const handleItemToggle = () => {
+    router.replace({
+      query: {
+        ...router.query,
+        expandedItem: open
+          ? expandedItem.filter((x) => x !== item.id)
+          : [...expandedItem, item.id],
+      },
+    });
+  };
+
   let lastPrayed = "";
   if (lastPrayedTimeline.data !== undefined) {
     lastPrayed = lastPrayedTimeline.data
@@ -77,7 +105,7 @@ const PrayerListItem = ({
             <FontAwesomeSvgIcon icon={faCircleCheck} color="success" />
           </ListItemIcon>
         ) : null}
-        <ListItemButton onClick={() => setOpen((wasOpen) => !wasOpen)}>
+        <ListItemButton onClick={handleItemToggle}>
           <ListItemText primary={item.description} secondary={secondaryText} />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
