@@ -44,7 +44,13 @@ const JournalListItem: React.FC<{
             }}
           >
             <Stack gap={1}>
-              <Typography variant="h4">{journal.name}</Typography>
+              <Typography
+                variant="h4"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
+                {journal.name}
+              </Typography>
               <Typography variant="body2" color="text.secondary">
                 {`created on ${journal.createdAt.toLocaleDateString()}`}
               </Typography>
@@ -78,7 +84,7 @@ const JournalList: React.FC = () => {
       </Stack>
       <Grid container spacing={2}>
         {journals.data.map((journal) => (
-          <Grid item xs={12} sm={6} md={4} key={journal.id}>
+          <Grid item xs={12} sm={6} key={journal.id}>
             <JournalListItem journal={journal} />
           </Grid>
         ))}

@@ -77,7 +77,12 @@ export const JournalHeader: React.FC<{
               />
             ) : (
               <>
-                <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                <Typography
+                  variant="h4"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  sx={{ flexGrow: 1 }}
+                >
                   {journal.name}
                 </Typography>
                 <Tooltip title="Edit name">
