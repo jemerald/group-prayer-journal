@@ -8,7 +8,6 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { JournalHeader } from "../../components/JournalHeader";
-import { JournalUsers } from "../../components/JournalUsers";
 import NewTarget from "../../components/NewTarget";
 import TargetList from "../../components/TargetList";
 import { trpc } from "../../utils/trpc";
@@ -45,7 +44,6 @@ const Journal: NextPage = () => {
           <Typography color="text.primary">{journal.data.name}</Typography>
         </Breadcrumbs>
         <JournalHeader journal={journal.data} />
-        <JournalUsers journalUsers={journal.data} />
         <TargetList journalId={journalId} />
       </Stack>
       <NewTarget journalId={journalId} />

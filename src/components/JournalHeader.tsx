@@ -5,13 +5,19 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
+import type {
+  PrayerJournal,
+  PrayerJournalAccess,
+  PrayerJournalCover,
+  User,
+} from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { ArchiveJournalButton } from "./ArchiveJournalButton";
 import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import JournalNameChange from "./JournalNameChange";
+import { JournalUsers } from "./JournalUsers";
 import { ShareJournalButton } from "./ShareJournalButton";
 
 const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
@@ -19,7 +25,13 @@ const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
 });
 
 export const JournalHeader: React.FC<{
-  journal: PrayerJournal & { cover: PrayerJournalCover | null };
+  journal: PrayerJournal & {
+    cover: PrayerJournalCover | null;
+    owner: User;
+    accesses: (PrayerJournalAccess & {
+      user: User;
+    })[];
+  };
 }> = ({ journal }) => {
   const [editMode, setEditMode] = useState(false);
 
@@ -38,74 +50,88 @@ export const JournalHeader: React.FC<{
   };
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        height: 200,
-        borderRadius: "15px 15px 0px 0px",
-        overflow: "hidden",
-      }}
-    >
-      <JournalCoverPhoto journal={journal} />
+    <Stack gap={2}>
       <Box
         sx={{
-          position: "absolute",
-          bottom: 0,
-          width: "100%",
-          p: 2,
-          background: (theme) =>
-            theme.palette.mode === "dark"
-              ? "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
-              : "linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
+          position: "relative",
+          height: 200,
+          borderRadius: "15px 15px 0px 0px",
+          overflow: "hidden",
         }}
       >
-        <Stack
-          direction="row"
-          gap={2}
+        <JournalCoverPhoto journal={journal} />
+        <Box
           sx={{
-            alignItems: "center",
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            p: 2,
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
+                : "linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
           }}
         >
-          {editMode ? (
-            <JournalNameChange
-              journal={journal}
-              onComplete={() => setEditMode(false)}
-            />
-          ) : (
-            <>
-              <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                {journal.name}
-              </Typography>
-              <Tooltip title="Edit name">
-                <IconButton onClick={() => setEditMode(true)} color="primary">
-                  <FontAwesomeSvgIcon icon={faPenToSquare} />
-                </IconButton>
-              </Tooltip>
-              <ShareJournalButton journalId={journal.id} />
-              <ArchiveJournalButton journalId={journal.id} />
-            </>
-          )}
-        </Stack>
+          <Stack
+            direction="row"
+            gap={2}
+            sx={{
+              alignItems: "center",
+            }}
+          >
+            {editMode ? (
+              <JournalNameChange
+                journal={journal}
+                onComplete={() => setEditMode(false)}
+              />
+            ) : (
+              <>
+                <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                  {journal.name}
+                </Typography>
+                <Tooltip title="Edit name">
+                  <IconButton onClick={() => setEditMode(true)} color="primary">
+                    <FontAwesomeSvgIcon icon={faPenToSquare} />
+                  </IconButton>
+                </Tooltip>
+                <ArchiveJournalButton journalId={journal.id} />
+              </>
+            )}
+          </Stack>
+        </Box>
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            p: 1,
+            borderRadius: "0px 0px 0px 50%",
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "linear-gradient(to bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
+                : "linear-gradient(to bottom left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
+          }}
+        >
+          <Tooltip title="Change cover image">
+            <IconButton
+              onClick={handleChangeCover}
+              disabled={mutation.isLoading}
+            >
+              <CachedIcon color="inherit" />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
-      <Box
+      <Stack
+        direction="row"
+        gap={2}
         sx={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          p: 1,
-          borderRadius: "0px 0px 0px 50%",
-          background: (theme) =>
-            theme.palette.mode === "dark"
-              ? "linear-gradient(to bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
-              : "linear-gradient(to bottom left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
+          alignItems: "center",
         }}
       >
-        <Tooltip title="Change cover image">
-          <IconButton onClick={handleChangeCover} disabled={mutation.isLoading}>
-            <CachedIcon color="inherit" />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    </Box>
+        <JournalUsers journalUsers={journal} />
+        <ShareJournalButton journalId={journal.id} />
+      </Stack>
+    </Stack>
   );
 };
