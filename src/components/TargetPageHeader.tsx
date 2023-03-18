@@ -19,7 +19,7 @@ const TargetPageHeader: React.FC<{
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <>
+    <Stack gap={2}>
       <Breadcrumbs aria-label="breadcrumb">
         <Link color="inherit" href="/">
           Home
@@ -52,7 +52,7 @@ const TargetPageHeader: React.FC<{
           </>
         )}
       </Stack>
-    </>
+    </Stack>
   );
 };
 

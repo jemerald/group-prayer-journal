@@ -42,7 +42,7 @@ const TargetPageContent: React.FC<{ targetId: string }> = ({ targetId }) => {
       <Head>
         <title>{target.data.name} | Group Prayer Journal</title>
       </Head>
-      <Stack gap={2}>
+      <Stack>
         <TargetPageHeader target={target.data} />
         <Tabs value={currentTab} onChange={handleTabChange}>
           <Tab label="Prayer items" value="items" />
