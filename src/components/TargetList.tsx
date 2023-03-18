@@ -6,6 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { PrayerTarget } from "@prisma/client";
@@ -119,19 +120,7 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
     [journalId, mutation, targetIds]
   );
 
-  if (targets.isLoading) {
-    return (
-      <Stack sx={{ alignItems: "center" }}>
-        <CircularProgress />
-        <Typography>Loading...</Typography>
-      </Stack>
-    );
-  }
-  if (targets.data == null) {
-    return <Alert severity="error">Journal not found</Alert>;
-  }
-
-  if (targets.data.length === 0) {
+  if (targets.data?.length === 0) {
     return (
       <Alert severity="info">
         You have not added any prayer target to the journal
@@ -145,18 +134,29 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
         <Typography variant="h5">Prayer targets</Typography>
         {targets.isFetching ? <CircularProgress size={24} /> : null}
       </Stack>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="target-list">
-          {(provided) => (
-            <List {...provided.droppableProps} ref={provided.innerRef}>
-              {targets.data.map((target, index) => (
-                <TargetListItem key={target.id} target={target} index={index} />
-              ))}
-              {provided.placeholder}
-            </List>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {targets.isLoading || targets.data === undefined ? (
+        <Stack gap={2} sx={{ mt: 2 }}>
+          <Skeleton variant="rectangular" height={72} />
+          <Skeleton variant="rectangular" height={72} />
+        </Stack>
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="target-list">
+            {(provided) => (
+              <List {...provided.droppableProps} ref={provided.innerRef}>
+                {targets.data.map((target, index) => (
+                  <TargetListItem
+                    key={target.id}
+                    target={target}
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+              </List>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </>
   );
 };

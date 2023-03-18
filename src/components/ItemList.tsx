@@ -2,9 +2,9 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons/faCircleCheck";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Skeleton } from "@mui/lab";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -13,7 +13,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import type { PrayerItem } from "@prisma/client";
 import React, { useCallback, useMemo } from "react";
@@ -185,17 +184,15 @@ const ItemList: React.FC<{
     [itemIds, mutation, targetId]
   );
 
-  if (items.isLoading) {
+  if (items.isLoading || items.data === undefined) {
     return (
-      <Stack sx={{ alignItems: "center" }}>
-        <CircularProgress />
-        <Typography>Loading...</Typography>
+      <Stack gap={2} sx={{ mt: 2 }}>
+        <Skeleton variant="rectangular" height={72} />
+        <Skeleton variant="rectangular" height={72} />
       </Stack>
     );
   }
-  if (items.data == null) {
-    return <Alert severity="error">Prayer target not found</Alert>;
-  }
+
   if (items.data.length === 0) {
     return (
       <Alert severity="info">

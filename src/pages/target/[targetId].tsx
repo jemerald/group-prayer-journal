@@ -1,8 +1,8 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import TargetPageContent from "../../components/TargetPageContent";
+import TargetPage from "../../components/TargetPage";
 
-const TargetPage: NextPage = () => {
+const Target: NextPage = () => {
   const router = useRouter();
   const { targetId } = router.query;
   if (!targetId || Array.isArray(targetId)) {
@@ -10,7 +10,7 @@ const TargetPage: NextPage = () => {
     return null;
   }
 
-  return <TargetPageContent targetId={targetId} />;
+  return <TargetPage targetId={targetId} />;
 };
 
-export default TargetPage;
+export default Target;

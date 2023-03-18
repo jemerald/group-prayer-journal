@@ -1,9 +1,7 @@
 import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import Head from "next/head";
 import type { SyntheticEvent } from "react";
 import { useState } from "react";
@@ -13,19 +11,11 @@ import NewItem from "./NewItem";
 import TargetPageHeader from "./TargetPageHeader";
 import TargetTimeline from "./TargetTimeline";
 
-const TargetPageContent: React.FC<{ targetId: string }> = ({ targetId }) => {
+const TargetPage: React.FC<{ targetId: string }> = ({ targetId }) => {
   const [currentTab, setCurrentTab] = useState<"items" | "timeline">("items");
 
   const target = trpc.target.byId.useQuery({ id: targetId });
-  if (target.isLoading) {
-    return (
-      <Stack sx={{ alignItems: "center" }}>
-        <CircularProgress />
-        <Typography>Loading...</Typography>
-      </Stack>
-    );
-  }
-  if (!target.data) {
+  if (target.data === null) {
     return <Alert severity="error">Prayer target not found</Alert>;
   }
 
@@ -40,10 +30,10 @@ const TargetPageContent: React.FC<{ targetId: string }> = ({ targetId }) => {
   return (
     <>
       <Head>
-        <title>{target.data.name} | Group Prayer Journal</title>
+        <title>{target.data?.name ?? ""} | Group Prayer Journal</title>
       </Head>
       <Stack>
-        <TargetPageHeader target={target.data} />
+        <TargetPageHeader targetId={targetId} />
         <Tabs value={currentTab} onChange={handleTabChange}>
           <Tab label="Prayer items" value="items" />
           <Tab label="Timeline" value="timeline" />
@@ -53,19 +43,19 @@ const TargetPageContent: React.FC<{ targetId: string }> = ({ targetId }) => {
             display: currentTab === "items" ? "block" : "none",
           }}
         >
-          <ItemList targetId={target.data.id} />
+          <ItemList targetId={targetId} />
         </div>
         <div
           style={{
             display: currentTab === "timeline" ? "block" : "none",
           }}
         >
-          <TargetTimeline targetId={target.data.id} />
+          <TargetTimeline targetId={targetId} />
         </div>
       </Stack>
-      <NewItem target={target.data} />
+      <NewItem targetId={targetId} />
     </>
   );
 };
 
-export default TargetPageContent;
+export default TargetPage;

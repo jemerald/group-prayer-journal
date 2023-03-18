@@ -3,7 +3,6 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -12,17 +11,14 @@ import React from "react";
 import { trpc } from "../utils/trpc";
 import TargetAddNote from "./TargetAddNote";
 import TimelineIcon from "./TimelineIcon";
+import TimelineSkeleton from "./TimelineSkeleton";
 
 const TargetTimeline: React.FC<{
   targetId: string;
 }> = ({ targetId }) => {
   const theme = useTheme();
   const timeline = trpc.timeline.allByTargetId.useQuery({ targetId });
-  if (timeline.isLoading || !timeline.data) {
-    return <CircularProgress />;
-  }
 
-  const timelineLength = timeline.data.length;
   return (
     <Stack>
       <TargetAddNote targetId={targetId} sx={{ alignSelf: "center" }} />
@@ -35,25 +31,34 @@ const TargetTimeline: React.FC<{
           },
         }}
       >
-        {timeline.data.map((event, index) => (
-          <TimelineItem key={event.id}>
-            <TimelineSeparator>
-              <TimelineIcon type={event.type} />
-              {index < timelineLength - 1 ? <TimelineConnector /> : null}
-            </TimelineSeparator>
-            <TimelineContent sx={{ p: "8px 16px" }}>
-              {event.item != null ? (
-                <Typography variant="caption">
-                  {event.item.description}
+        {timeline.isLoading || timeline.data === undefined ? (
+          <TimelineSkeleton />
+        ) : (
+          timeline.data.map((event, index) => (
+            <TimelineItem key={event.id}>
+              <TimelineSeparator>
+                <TimelineIcon type={event.type} />
+                {index < timeline.data.length - 1 ? (
+                  <TimelineConnector />
+                ) : null}
+              </TimelineSeparator>
+              <TimelineContent sx={{ p: "8px 16px" }}>
+                {event.item != null ? (
+                  <Typography variant="caption">
+                    {event.item.description}
+                  </Typography>
+                ) : null}
+                {event.note ? <Typography>{event.note}</Typography> : null}
+                <Typography
+                  variant="body2"
+                  color={theme.palette.text.secondary}
+                >
+                  {formatRelative(event.date, new Date())}
                 </Typography>
-              ) : null}
-              {event.note ? <Typography>{event.note}</Typography> : null}
-              <Typography variant="body2" color={theme.palette.text.secondary}>
-                {formatRelative(event.date, new Date())}
-              </Typography>
-            </TimelineContent>
-          </TimelineItem>
-        ))}
+              </TimelineContent>
+            </TimelineItem>
+          ))
+        )}
       </Timeline>
     </Stack>
   );

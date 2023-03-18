@@ -10,7 +10,6 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import type { PrayerTarget } from "@prisma/client";
 import React, { useMemo, useState } from "react";
 
 import { trpc } from "../utils/trpc";
@@ -80,13 +79,13 @@ type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 const NewItemDialogContent: React.FC<{
-  target: PrayerTarget;
+  targetId: string;
   closeDialog: () => void;
-}> = ({ target, closeDialog }) => {
+}> = ({ targetId, closeDialog }) => {
   const utils = trpc.useContext();
   const mutation = trpc.item.create.useMutation({
-    onSuccess() {
-      utils.item.allByTargetId.invalidate({ targetId: target.id });
+    onSuccess(variable) {
+      utils.item.allByTargetId.invalidate({ targetId: variable.id });
     },
   });
 
@@ -106,7 +105,7 @@ const NewItemDialogContent: React.FC<{
   const handleCreate = () => {
     if (description) {
       mutation.mutate({
-        targetId: target.id,
+        targetId,
         description,
       });
       closeDialog();
@@ -168,8 +167,8 @@ const NewItemDialogContent: React.FC<{
 };
 
 const NewItem: React.FC<{
-  target: PrayerTarget;
-}> = ({ target }) => {
+  targetId: string;
+}> = ({ targetId }) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   return (
     <>
@@ -194,7 +193,7 @@ const NewItem: React.FC<{
         onClose={() => setShowCreateDialog(false)}
       >
         <NewItemDialogContent
-          target={target}
+          targetId={targetId}
           closeDialog={() => setShowCreateDialog(false)}
         />
       </FullScreenDialog>

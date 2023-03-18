@@ -10,6 +10,7 @@ import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
+import { Skeleton } from "@mui/material";
 import dynamic from "next/dynamic";
 import { trpc } from "../utils/trpc";
 import { JournalUsers } from "./JournalUsers";
@@ -65,15 +66,7 @@ const JournalListItem: React.FC<{
 
 const JournalList: React.FC = () => {
   const journals = trpc.journal.all.useQuery();
-  if (journals.isLoading || journals.data == null) {
-    return (
-      <Stack sx={{ alignItems: "center" }}>
-        <CircularProgress />
-        <Typography>Loading your journals...</Typography>
-      </Stack>
-    );
-  }
-  if (journals.data.length === 0) {
+  if (journals.data?.length === 0) {
     return <Alert severity="info">You have not created any journal yet</Alert>;
   }
   return (
@@ -83,11 +76,22 @@ const JournalList: React.FC = () => {
         {journals.isFetching ? <CircularProgress size={24} /> : null}
       </Stack>
       <Grid container spacing={2}>
-        {journals.data.map((journal) => (
-          <Grid item xs={12} sm={6} key={journal.id}>
-            <JournalListItem journal={journal} />
-          </Grid>
-        ))}
+        {journals.isLoading || journals.data === undefined ? (
+          <>
+            <Grid item xs={12} sm={6}>
+              <Skeleton variant="rectangular" height={250} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Skeleton variant="rectangular" height={250} />
+            </Grid>
+          </>
+        ) : (
+          journals.data.map((journal) => (
+            <Grid item xs={12} sm={6} key={journal.id}>
+              <JournalListItem journal={journal} />
+            </Grid>
+          ))
+        )}
       </Grid>
     </>
   );
