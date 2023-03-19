@@ -1,55 +1,50 @@
 import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import Button from "@mui/material/Button";
-import type { PrayerItem, Timeline } from "@prisma/client";
+import type { Timeline } from "@prisma/client";
 import isSameDay from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 
 const PrayedNow: React.FC<{
-  item: PrayerItem;
-}> = ({ item }) => {
-  const lastPrayed = trpc.timeline.lastPrayedForItem.useQuery({
-    itemId: item.id,
-  });
+  itemId: string;
+}> = ({ itemId }) => {
+  const lastPrayed = trpc.timeline.lastPrayedForItem.useQuery({ itemId });
 
   const utils = trpc.useContext();
   const mutation = trpc.timeline.prayedNow.useMutation({
     onMutate(variable) {
       // perform optimistic update
       utils.timeline.allByItemId.cancel({
-        itemId: item.id,
+        itemId: variable.itemId,
       });
       const tempTimelineItem: Timeline = {
         id: "dummy",
         itemId: variable.itemId,
-        targetId: item.targetId,
+        targetId: "dummy",
         type: "PRAYED",
         date: new Date(),
         note: null,
       };
       utils.timeline.allByItemId.setData(
         {
-          itemId: item.id,
+          itemId: variable.itemId,
         },
         (oldData) => [tempTimelineItem, ...(oldData ?? [])]
       );
       utils.timeline.lastPrayedForItem.setData(
-        { itemId: item.id },
-        () => tempTimelineItem
-      );
-      utils.timeline.lastPrayedForTarget.setData(
-        {
-          targetId: item.targetId,
-        },
+        { itemId: variable.itemId },
         () => tempTimelineItem
       );
     },
-    onSuccess() {
-      utils.timeline.allByItemId.invalidate({ itemId: item.id });
-      utils.timeline.lastPrayedForItem.invalidate({ itemId: item.id });
+    onSuccess(data) {
+      if (data.itemId) {
+        utils.timeline.allByItemId.invalidate({ itemId: data.itemId });
+        utils.timeline.lastPrayedForItem.invalidate({ itemId: data.itemId });
+      }
+      utils.timeline.allByTargetId.invalidate({ targetId: data.targetId });
       utils.timeline.lastPrayedForTarget.invalidate({
-        targetId: item.targetId,
+        targetId: data.targetId,
       });
     },
   });
@@ -60,9 +55,7 @@ const PrayedNow: React.FC<{
   const hasPrayedToday =
     lastPrayed.data && isSameDay(lastPrayed.data.date, now);
   const handlePrayedNow = () => {
-    mutation.mutate({
-      itemId: item.id,
-    });
+    mutation.mutate({ itemId });
   };
   return (
     <Button

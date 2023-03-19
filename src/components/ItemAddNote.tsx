@@ -41,8 +41,11 @@ const ItemAddNoteDialogContent: React.FC<{
         (oldData) => [tempTimelineItem, ...(oldData ?? [])]
       );
     },
-    onSuccess(data, variable) {
-      utils.timeline.allByItemId.invalidate({ itemId: variable.itemId });
+    onSuccess(data) {
+      if (data.itemId) {
+        utils.timeline.allByItemId.invalidate({ itemId: data.itemId });
+      }
+      utils.timeline.allByTargetId.invalidate({ targetId: data.targetId });
     },
   });
   const [note, setNote] = useState("");

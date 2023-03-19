@@ -114,9 +114,9 @@ const PrayerListItem = ({
         <Box sx={sm ? styles.timelineSmallScreen : styles.timeline}>
           {item.dateAccomplished == null ? (
             <Stack direction="row" gap={1}>
-              <PrayedNow item={item} />
+              <PrayedNow itemId={item.id} />
               <ItemAddNote itemId={item.id} />
-              <ItemAccomplished item={item} />
+              <ItemAccomplished itemId={item.id} />
             </Stack>
           ) : null}
           <ItemTimeline itemId={item.id} />

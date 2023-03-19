@@ -8,7 +8,6 @@ import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import type { PrayerItem } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
@@ -16,14 +15,17 @@ import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import { FullScreenDialog } from "./FullScreenDialog";
 
 const ItemAccomplishedDialogContent: React.FC<{
-  item: PrayerItem;
+  itemId: string;
   closeDialog: () => void;
-}> = ({ item, closeDialog }) => {
+}> = ({ itemId, closeDialog }) => {
   const utils = trpc.useContext();
   const mutation = trpc.timeline.accomplished.useMutation({
-    onSuccess(data, variable) {
-      utils.timeline.allByItemId.invalidate({ itemId: variable.itemId });
-      utils.item.allByTargetId.invalidate({ targetId: item.targetId });
+    onSuccess(data) {
+      if (data.itemId) {
+        utils.timeline.allByItemId.invalidate({ itemId: data.itemId });
+      }
+      utils.timeline.allByTargetId.invalidate({ targetId: data.targetId });
+      utils.item.allByTargetId.invalidate({ targetId: data.targetId });
     },
   });
   const [note, setNote] = useState("");
@@ -33,7 +35,7 @@ const ItemAccomplishedDialogContent: React.FC<{
   };
   const handleAccomplished = () => {
     mutation.mutate({
-      itemId: item.id,
+      itemId,
       note,
     });
     closeDialog();
@@ -75,8 +77,8 @@ const ItemAccomplishedDialogContent: React.FC<{
 };
 
 const ItemAccomplished: React.FC<{
-  item: PrayerItem;
-}> = ({ item }) => {
+  itemId: string;
+}> = ({ itemId }) => {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -108,7 +110,7 @@ const ItemAccomplished: React.FC<{
         onClose={() => setShowDialog(false)}
       >
         <ItemAccomplishedDialogContent
-          item={item}
+          itemId={itemId}
           closeDialog={() => setShowDialog(false)}
         />
       </FullScreenDialog>
