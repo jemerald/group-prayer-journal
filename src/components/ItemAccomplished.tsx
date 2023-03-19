@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import type { PrayerItem, Timeline } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
@@ -20,6 +21,27 @@ const ItemAccomplishedDialogContent: React.FC<{
 }> = ({ itemId, closeDialog }) => {
   const utils = trpc.useContext();
   const mutation = trpc.timeline.accomplished.useMutation({
+    onMutate(variable) {
+      // perform optimistic update
+      utils.timeline.allByItemId.cancel({ itemId: variable.itemId });
+      const tempTimelineItem: Timeline & {
+        item: PrayerItem | null;
+      } = {
+        id: "dummy",
+        targetId: "dummy",
+        itemId: variable.itemId,
+        type: "ACCOMPLISHED",
+        date: new Date(),
+        note: variable.note ?? null,
+        item: null,
+      };
+      utils.timeline.allByItemId.setData(
+        {
+          itemId: variable.itemId,
+        },
+        (oldData) => [tempTimelineItem, ...(oldData ?? [])]
+      );
+    },
     onSuccess(data) {
       if (data.itemId) {
         utils.timeline.allByItemId.invalidate({ itemId: data.itemId });
@@ -28,6 +50,7 @@ const ItemAccomplishedDialogContent: React.FC<{
       utils.item.allByTargetId.invalidate({ targetId: data.targetId });
     },
   });
+
   const [note, setNote] = useState("");
 
   const onNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
