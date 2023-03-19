@@ -85,7 +85,7 @@ const NewItemDialogContent: React.FC<{
   const utils = trpc.useContext();
   const mutation = trpc.item.create.useMutation({
     onSuccess(variable) {
-      utils.item.allByTargetId.invalidate({ targetId: variable.id });
+      utils.item.allByTargetId.invalidate({ targetId: variable.targetId });
     },
   });
 
