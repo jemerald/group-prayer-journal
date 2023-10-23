@@ -1,9 +1,9 @@
-import Skeleton from "@mui/lab/Skeleton";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import Skeleton from "@mui/material/Skeleton";
 import React from "react";
 
 const TimelineSkeleton: React.FC = () => (
