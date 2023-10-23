@@ -10,3 +10,17 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+      trpc:
+        patterns:
+          - "@trpc/*"
+      fortawesome:
+        patterns:
+          - "@fortawesome/*"
+      emotion:
+        patterns:
+          - "@emotion/*"
