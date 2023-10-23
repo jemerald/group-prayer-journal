@@ -14,7 +14,7 @@
     "@emotion/styled": "^11.10.5",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
-    "@mui/icons-material": "^5.10.15",
+    "@mui/icons-material": "^5.14.14",
     "@mui/lab": "^5.0.0-alpha.123",
     "@mui/material": "^5.11.13",
     "@next-auth/prisma-adapter": "^1.0.7",
