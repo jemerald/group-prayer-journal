@@ -42,7 +42,7 @@
     "@types/react-dom": "^18.2.14",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
-    "eslint": "^8.36.0",
+    "eslint": "^8.52.0",
     "eslint-config-next": "^14.0.0",
     "prisma": "^5.5.2",
     "prisma-erd-generator": "^1.11.1",
