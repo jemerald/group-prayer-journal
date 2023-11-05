@@ -58,7 +58,11 @@ const TargetAddNoteDialogContent: React.FC<{
   return (
     <>
       <DialogTitle>Add note to prayer target</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          flexGrow: 0,
+        }}
+      >
         <TextField
           autoFocus
           fullWidth

@@ -35,7 +35,11 @@ const NewJournalDialogContent: React.FC<{ closeDialog: () => void }> = ({
   return (
     <>
       <DialogTitle>Create new prayer journal</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          flexGrow: 0,
+        }}
+      >
         <DialogContentText>
           A prayer journal can be shared to other people in your prayer group.
           Give it a memorable name, e.g. the name of your group.
