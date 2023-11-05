@@ -14,7 +14,7 @@ const JournalNameChange: React.FC<{
 }> = ({ journal, onComplete }) => {
   const [name, setName] = useState(journal.name);
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.journal.rename.useMutation({
     onMutate(variable) {
       // perform optimistic update

@@ -18,7 +18,7 @@ const ItemAddNoteDialogContent: React.FC<{
   itemId: string;
   closeDialog: () => void;
 }> = ({ itemId, closeDialog }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.timeline.addItemNote.useMutation({
     onMutate(variable) {
       // perform optimistic update

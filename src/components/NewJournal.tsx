@@ -15,7 +15,7 @@ import { FullScreenDialog } from "./FullScreenDialog";
 const NewJournalDialogContent: React.FC<{ closeDialog: () => void }> = ({
   closeDialog,
 }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.journal.create.useMutation({
     onSuccess() {
       utils.journal.all.invalidate();
