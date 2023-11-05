@@ -66,7 +66,11 @@ const ItemAccomplishedDialogContent: React.FC<{
   return (
     <>
       <DialogTitle>Prayer item accomplished</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          flexGrow: 0,
+        }}
+      >
         <DialogContentText>
           You can add some optional notes about how the prayer item was
           accomplished

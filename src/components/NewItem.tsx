@@ -114,7 +114,11 @@ const NewItemDialogContent: React.FC<{
   return (
     <>
       <DialogTitle>Create new prayer item</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          flexGrow: 0,
+        }}
+      >
         <DialogContentText>
           A prayer item is a definite progress or goal that you want to pray for
         </DialogContentText>

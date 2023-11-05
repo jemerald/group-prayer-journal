@@ -36,7 +36,11 @@ const ShareJournalDialogContent: React.FC<{
   return (
     <>
       <DialogTitle>Share prayer journal with</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          flexGrow: 0,
+        }}
+      >
         <DialogContentText>
           Enter the email address of the user you want to share this journal
           with

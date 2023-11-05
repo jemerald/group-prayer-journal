@@ -37,7 +37,11 @@ const NewTargetDialogContent: React.FC<{
   return (
     <>
       <DialogTitle>Create new prayer target</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          flexGrow: 0,
+        }}
+      >
         <DialogContentText>
           A prayer target is usually a person or group of people that you are
           praying for
