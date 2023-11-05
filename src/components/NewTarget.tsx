@@ -16,7 +16,7 @@ const NewTargetDialogContent: React.FC<{
   journalId: string;
   closeDialog: () => void;
 }> = ({ journalId, closeDialog }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.target.create.useMutation({
     onSuccess() {
       utils.target.allByJournalId.invalidate({ journalId });

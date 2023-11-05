@@ -14,7 +14,7 @@ const TargetNameChange: React.FC<{
 }> = ({ target, onComplete }) => {
   const [name, setName] = useState(target.name);
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.target.rename.useMutation({
     onMutate(variable) {
       // perform optimistic update

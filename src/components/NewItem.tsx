@@ -126,7 +126,7 @@ const NewItemDialogContent: React.FC<{
   targetId: string;
   closeDialog: () => void;
 }> = ({ targetId, closeDialog }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.item.create.useMutation({
     onSuccess(variable) {
       utils.item.allByTargetId.invalidate({ targetId: variable.targetId });

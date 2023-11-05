@@ -25,7 +25,7 @@ export const JournalHeader: React.FC<{
   const journal = trpc.journal.byId.useQuery({ id: journalId });
   const [editMode, setEditMode] = useState(false);
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.journal.changeCover.useMutation({
     onSuccess(data, variable) {
       utils.journal.byId.invalidate({

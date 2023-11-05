@@ -64,7 +64,7 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
     [targets]
   );
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.target.prioritize.useMutation({
     onMutate(variable) {
       utils.target.allByJournalId.cancel({

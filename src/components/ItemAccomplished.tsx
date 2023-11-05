@@ -19,7 +19,7 @@ const ItemAccomplishedDialogContent: React.FC<{
   itemId: string;
   closeDialog: () => void;
 }> = ({ itemId, closeDialog }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.timeline.accomplished.useMutation({
     onMutate(variable) {
       // perform optimistic update

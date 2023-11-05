@@ -11,7 +11,7 @@ const PrayedNow: React.FC<{
 }> = ({ itemId }) => {
   const lastPrayed = trpc.timeline.lastPrayedForItem.useQuery({ itemId });
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.timeline.prayedNow.useMutation({
     onMutate(variable) {
       // perform optimistic update

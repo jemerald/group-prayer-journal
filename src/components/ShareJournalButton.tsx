@@ -15,7 +15,7 @@ const ShareJournalDialogContent: React.FC<{
   journalId: string;
   closeDialog: () => void;
 }> = ({ journalId, closeDialog }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.journal.shareWith.useMutation({
     onSuccess() {
       utils.journal.byId.invalidate({ id: journalId });

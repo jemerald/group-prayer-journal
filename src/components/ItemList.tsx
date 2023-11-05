@@ -156,7 +156,7 @@ const ItemList: React.FC<{
   const items = trpc.item.allByTargetId.useQuery({ targetId });
   const itemIds = useMemo(() => items.data?.map((x) => x.id) ?? [], [items]);
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const mutation = trpc.item.prioritize.useMutation({
     onMutate(variable) {
       // perform optimistic update
