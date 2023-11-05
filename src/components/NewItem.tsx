@@ -1,19 +1,21 @@
 import AddIcon from "@mui/icons-material/Add";
-import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
 import Fab from "@mui/material/Fab";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
+import { ListItem, Typography } from "@mui/material";
 
 const ProgressivePrayerItems = [
   {
@@ -68,15 +70,57 @@ const ProgressivePrayerItems = [
   },
 ];
 
-const ProgressivePrayerItemsFlatList = ProgressivePrayerItems.flatMap((stage) =>
-  stage.items.map((item) => ({
-    stage: stage.stage,
-    description: item,
-  }))
-);
-
-type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+const PrayerItemSuggestion: React.FC<{
+  onSelect: (description: string) => void;
+}> = ({ onSelect }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (description: string) => {
+    setAnchorEl(null);
+    onSelect(description);
+  };
+  return (
+    <>
+      <Stack direction="row-reverse">
+        <Button
+          id="suggestion-button"
+          aria-controls={open ? "suggestion-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+        >
+          Suggestion
+        </Button>
+      </Stack>
+      <Menu
+        id="suggestion-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "suggestion-button",
+        }}
+      >
+        {ProgressivePrayerItems.map((stage, index) => (
+          <>
+            {index !== 0 ? <Divider /> : null}
+            <ListItem>
+              <Typography variant="caption">{stage.stage}</Typography>
+            </ListItem>
+            {stage.items.map((item) => (
+              <MenuItem key={item} onClick={() => handleClose(item)}>
+                {item}
+              </MenuItem>
+            ))}
+          </>
+        ))}
+      </Menu>
+    </>
+  );
+};
 
 const NewItemDialogContent: React.FC<{
   targetId: string;
@@ -89,18 +133,10 @@ const NewItemDialogContent: React.FC<{
     },
   });
 
-  const [mode, setMode] = useState<"custom" | "preset">("custom");
-  const [customDescription, setCustomDescription] = useState("");
-  const [selection, setSelection] = useState<ArrayElement<
-    typeof ProgressivePrayerItemsFlatList
-  > | null>(null);
-  const description = useMemo(
-    () => (mode === "custom" ? customDescription : selection?.description),
-    [customDescription, mode, selection?.description]
-  );
+  const [description, setDescription] = useState("");
 
   const onDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomDescription(event.target.value);
+    setDescription(event.target.value);
   };
   const handleCreate = () => {
     if (description) {
@@ -122,36 +158,16 @@ const NewItemDialogContent: React.FC<{
         <DialogContentText>
           A prayer item is a definite progress or goal that you want to pray for
         </DialogContentText>
-        <Tabs
-          value={mode}
-          onChange={(e, newValue) => setMode(newValue)}
-          aria-label="item description edit mode"
-        >
-          <Tab value="custom" label="Define your own" />
-          <Tab value="preset" label="Suggested" />
-        </Tabs>
-        {mode === "custom" ? (
-          <TextField
-            autoFocus
-            fullWidth
-            margin="dense"
-            label="Description"
-            value={customDescription}
-            onChange={onDescriptionChange}
-            sx={{ flexGrow: 1 }}
-          />
-        ) : (
-          <Autocomplete
-            value={selection}
-            onChange={(e, newSelection) => setSelection(newSelection)}
-            options={ProgressivePrayerItemsFlatList}
-            groupBy={(option) => option.stage}
-            getOptionLabel={(option) => option.description}
-            renderInput={(params) => (
-              <TextField {...params} label="Description" />
-            )}
-          />
-        )}
+        <PrayerItemSuggestion onSelect={setDescription} />
+        <TextField
+          autoFocus
+          fullWidth
+          margin="dense"
+          label="Description"
+          value={description}
+          onChange={onDescriptionChange}
+          sx={{ flexGrow: 1 }}
+        />
       </DialogContent>
       <DialogActions>
         <Button aria-label="cancel" onClick={closeDialog}>
