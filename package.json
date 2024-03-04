@@ -45,7 +45,7 @@
     "eslint-config-next": "^14.0.1",
     "prisma": "^5.5.2",
     "prisma-erd-generator": "^1.11.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "ct3aMetadata": {
     "initVersion": "6.10.2"
