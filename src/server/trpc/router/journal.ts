@@ -9,6 +9,9 @@ import { getRandomPhoto } from "../utils/randomPhoto";
 
 export const journalRouter = router({
   all: protectedProcedure.query(({ ctx }) => {
+    if (!ctx.session.user.id) {
+      return [];
+    }
     return ctx.prisma.prayerJournal.findMany({
       where: {
         OR: [

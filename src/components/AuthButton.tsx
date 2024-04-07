@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import React from "react";
 import { UserAvatar } from "./UserAvatar";
 
@@ -60,8 +60,18 @@ const AuthButton: React.FC = () => {
     );
   }
 
+  const doSignin = async () => {
+    const providers = await getProviders();
+    const configuredProviders = Object.keys(providers ?? {});
+    if (configuredProviders.length === 1) {
+      await signIn(configuredProviders[0]);
+    } else {
+      await signIn();
+    }
+  };
+
   return (
-    <Button color="inherit" onClick={() => signIn("google")}>
+    <Button color="inherit" onClick={doSignin}>
       Sign in
     </Button>
   );
