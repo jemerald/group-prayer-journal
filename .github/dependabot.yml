@@ -24,3 +24,8 @@ updates:
       emotion:
         patterns:
           - "@emotion/*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: daily
