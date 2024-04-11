@@ -34,7 +34,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "^10.6.0",
+    "@mermaid-js/mermaid-cli": "^10.8.0",
     "@types/node": "^20.12.5",
     "@types/react": "^18.2.34",
     "@types/react-beautiful-dnd": "^13.1.8",
