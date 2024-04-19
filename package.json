@@ -31,7 +31,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "superjson": "2.2.1",
-    "zod": "^3.22.4"
+    "zod": "^3.22.5"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.8.0",
