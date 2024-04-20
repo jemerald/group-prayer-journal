@@ -1,7 +1,7 @@
 import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import Button from "@mui/material/Button";
 import type { Timeline } from "@prisma/client";
-import isSameDay from "date-fns/isSameDay";
+import { isSameDay } from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
