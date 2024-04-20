@@ -1,4 +1,4 @@
-import { type Page, expect } from "@playwright/test";
+import { type Page, expect, test } from "@playwright/test";
 import { JournalPage } from "./journal";
 
 export class JournalListPage {
@@ -9,9 +9,7 @@ export class JournalListPage {
   }
 
   async verifyIsOnPage() {
-    await expect(
-      this.page.getByRole("heading", { name: "Prayer journals" })
-    ).toBeVisible();
+    await expect(this.pageHeader).toBeVisible();
   }
 
   async verifyHasJournal(name: string) {
@@ -23,29 +21,44 @@ export class JournalListPage {
   }
 
   async showArchivedJournals() {
-    await this.page.getByRole("button", { name: "Show archived" }).click();
+    await test.step(`show archived journals`, async () => {
+      await this.page.getByRole("button", { name: "Show archived" }).click();
+    });
   }
 
   async createNewJournal(name: string) {
-    await this.addButton.click();
-    await expect(
-      this.page.getByRole("heading", { name: "Create new prayer journal" })
-    ).toBeVisible();
+    await test.step(`create journal ${name}`, async () => {
+      await this.addButton.click();
+      await expect(
+        this.page.getByRole("heading", { name: "Create new prayer journal" })
+      ).toBeVisible();
 
-    await expect(this.nameInput).toBeVisible();
-    await this.nameInput.fill(name);
+      await expect(this.nameInput).toBeVisible();
+      await this.nameInput.fill(name);
 
-    await this.createButton.click();
+      await this.createButton.click();
+    });
   }
 
   async selectJournal(name: string): Promise<JournalPage> {
-    await this.journal(name).click();
-    await this.page.waitForURL((url) => url.pathname.startsWith("/journal/"));
-    return new JournalPage(this.page, name);
+    return await test.step(`select journal ${name}`, async () => {
+      await this.journal(name).click();
+      await Promise.all([
+        this.page.waitForURL((url) => url.pathname.startsWith("/journal/")),
+        expect(this.pageHeader).not.toBeVisible(),
+      ]);
+      const journalPage = new JournalPage(this.page, name);
+      await journalPage.verifyIsOnPage();
+      return journalPage;
+    });
   }
 
   private journal(name: string) {
     return this.page.getByRole("heading", { name, exact: true }).first();
+  }
+
+  get pageHeader() {
+    return this.page.getByRole("heading", { name: "Prayer journals" });
   }
 
   get addButton() {

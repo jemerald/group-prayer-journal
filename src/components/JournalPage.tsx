@@ -34,7 +34,9 @@ const JournalPage: React.FC<{ journalId: string }> = ({ journalId }) => {
         <JournalHeader journalId={journalId} />
         <TargetList journalId={journalId} />
       </Stack>
-      <NewTarget journalId={journalId} />
+      {journal.data?.archivedAt === null ? (
+        <NewTarget journalId={journalId} />
+      ) : null}
     </>
   );
 };

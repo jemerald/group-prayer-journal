@@ -26,13 +26,12 @@ test.describe.serial("journal management", () => {
 
     const journalPage = await journalListPage.selectJournal(journalName);
 
-    await journalPage.verifyIsOnPage();
     await journalPage.archiveJournal();
 
     await journalListPage.verifyIsOnPage();
   });
 
-  test("should be able to delete journal", async ({ page }) => {
+  test("should be able to unarchive journal", async ({ page }) => {
     const homePage = new HomePage(page);
     await homePage.goto();
 
@@ -44,7 +43,33 @@ test.describe.serial("journal management", () => {
 
     const journalPage = await journalListPage.selectJournal(journalName);
 
-    await journalPage.verifyIsOnPage();
+    await journalPage.unarchiveJournal();
+    await journalPage.goHome();
+
+    await journalListPage.verifyIsOnPage();
+    await journalListPage.verifyHasJournal(journalName);
+  });
+
+  test("should be able to archive and delete journal", async ({ page }) => {
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    const journalListPage = await homePage.signInWithTestUser();
+
+    await journalListPage.verifyHasJournal(journalName);
+
+    const journalPage = await journalListPage.selectJournal(journalName);
+
+    await journalPage.archiveJournal();
+
+    await journalListPage.verifyIsOnPage();
+
+    await journalListPage.verifyNotHasJournal(journalName);
+    await journalListPage.showArchivedJournals();
+    await journalListPage.verifyHasJournal(journalName);
+
+    await journalListPage.selectJournal(journalName);
+
     await journalPage.deleteJournal();
 
     await journalListPage.verifyIsOnPage();

@@ -172,6 +172,26 @@ export const journalRouter = router({
         },
       });
     }),
+  unarchive: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      return ctx.prisma.prayerJournal.update({
+        where: {
+          id: input.id,
+          NOT: {
+            archivedAt: null,
+          },
+        },
+        data: {
+          archivedAt: null,
+        },
+      });
+    }),
   delete: protectedProcedure
     .input(
       z.object({

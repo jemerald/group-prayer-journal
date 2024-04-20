@@ -15,6 +15,7 @@ import JournalNameChange from "./JournalNameChange";
 import { JournalUsers } from "./JournalUsers";
 import { ShareJournalButton } from "./ShareJournalButton";
 import { DeleteJournalButton } from "./DeleteJournalButton";
+import { UnarchiveJournalButton } from "./UnarchiveJournalButton";
 
 const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
   ssr: false,
@@ -88,45 +89,52 @@ export const JournalHeader: React.FC<{
                   >
                     {journal.data.name}
                   </Typography>
-                  <Tooltip title="Edit name">
-                    <IconButton
-                      onClick={() => setEditMode(true)}
-                      color="primary"
-                    >
-                      <FontAwesomeSvgIcon icon={faPenToSquare} />
-                    </IconButton>
-                  </Tooltip>
                   {journal.data.archivedAt == null ? (
-                    <ArchiveJournalButton journalId={journalId} />
+                    <>
+                      <Tooltip title="Edit name">
+                        <IconButton
+                          onClick={() => setEditMode(true)}
+                          color="primary"
+                        >
+                          <FontAwesomeSvgIcon icon={faPenToSquare} />
+                        </IconButton>
+                      </Tooltip>
+                      <ArchiveJournalButton journalId={journalId} />
+                    </>
                   ) : (
-                    <DeleteJournalButton journalId={journalId} />
+                    <>
+                      <UnarchiveJournalButton journalId={journalId} />
+                      <DeleteJournalButton journalId={journalId} />
+                    </>
                   )}
                 </>
               )}
             </Stack>
           </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              p: 1,
-              borderRadius: "0px 0px 0px 50%",
-              background: (theme) =>
-                theme.palette.mode === "dark"
-                  ? "linear-gradient(to bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
-                  : "linear-gradient(to bottom left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
-            }}
-          >
-            <Tooltip title="Change cover image">
-              <IconButton
-                onClick={handleChangeCover}
-                disabled={mutation.isLoading}
-              >
-                <CachedIcon color="inherit" />
-              </IconButton>
-            </Tooltip>
-          </Box>
+          {journal.data.archivedAt == null ? (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                p: 1,
+                borderRadius: "0px 0px 0px 50%",
+                background: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "linear-gradient(to bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)"
+                    : "linear-gradient(to bottom left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
+              }}
+            >
+              <Tooltip title="Change cover image">
+                <IconButton
+                  onClick={handleChangeCover}
+                  disabled={mutation.isLoading}
+                >
+                  <CachedIcon color="inherit" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          ) : null}
         </Box>
       )}
       <Stack
@@ -137,7 +145,9 @@ export const JournalHeader: React.FC<{
         }}
       >
         <JournalUsers journalId={journalId} />
-        <ShareJournalButton journalId={journalId} />
+        {journal.data?.archivedAt === null ? (
+          <ShareJournalButton journalId={journalId} />
+        ) : null}
       </Stack>
     </Stack>
   );
