@@ -4,7 +4,7 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import Typography from "@mui/material/Typography";
-import formatRelative from "date-fns/formatRelative";
+import { formatRelative } from "date-fns/formatRelative";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import TimelineIcon from "./TimelineIcon";

@@ -6,7 +6,7 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import formatRelative from "date-fns/formatRelative";
+import { formatRelative } from "date-fns/formatRelative";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import TargetAddNote from "./TargetAddNote";
