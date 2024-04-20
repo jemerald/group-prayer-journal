@@ -36,9 +36,7 @@ const ArchiveJournalDialogContent: React.FC<{
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
+        <Button onClick={closeDialog}>Cancel</Button>
         <Button variant="contained" color="warning" onClick={handleArchive}>
           Confirm
         </Button>

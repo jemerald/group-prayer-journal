@@ -57,15 +57,9 @@ const NewTargetDialogContent: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
-        <Button
-          aria-label="create prayer target"
-          variant="contained"
-          onClick={handleCreate}
-        >
-          Create
+        <Button onClick={closeDialog}>Cancel</Button>
+        <Button variant="contained" onClick={handleCreate}>
+          Confirm
         </Button>
       </DialogActions>
     </>
@@ -79,7 +73,7 @@ const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
       <Tooltip title="Create new prayer target">
         <Fab
           color="primary"
-          aria-label="add"
+          aria-label="Create new prayer target"
           sx={{
             position: "fixed",
             bottom: 16,

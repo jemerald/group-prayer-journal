@@ -44,7 +44,7 @@ export const SortOrderSelection: React.FC<{
       <Tooltip title="Order by">
         <IconButton
           onClick={(e) => setAnchorElement(e.currentTarget)}
-          color="primary"
+          color="default"
         >
           <FontAwesomeSvgIcon icon={SortOrders[order].icon} />
         </IconButton>

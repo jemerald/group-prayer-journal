@@ -57,7 +57,7 @@ const TargetPageHeader: React.FC<{
                 {target.data.name}
               </Typography>
               <Tooltip title="Edit name">
-                <IconButton onClick={() => setEditMode(true)} color="primary">
+                <IconButton onClick={() => setEditMode(true)} color="default">
                   <FontAwesomeSvgIcon icon={faPenToSquare} />
                 </IconButton>
               </Tooltip>

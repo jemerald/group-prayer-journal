@@ -16,7 +16,7 @@ export class JournalListPage {
     await expect(this.journal(name)).toBeVisible();
   }
 
-  async verifyNotHasJournal(name: string) {
+  async verifyHasNoJournal(name: string) {
     await expect(this.journal(name)).not.toBeVisible();
   }
 
@@ -62,7 +62,7 @@ export class JournalListPage {
   }
 
   get addButton() {
-    return this.page.getByRole("button", { name: "add" });
+    return this.page.getByRole("button", { name: "Create new journal" });
   }
 
   get nameInput() {

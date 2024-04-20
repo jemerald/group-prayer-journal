@@ -88,14 +88,8 @@ const ItemAccomplishedDialogContent: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
-        <Button
-          aria-label="save"
-          variant="contained"
-          onClick={handleAccomplished}
-        >
+        <Button onClick={closeDialog}>Cancel</Button>
+        <Button variant="contained" onClick={handleAccomplished}>
           Save
         </Button>
       </DialogActions>
@@ -116,14 +110,13 @@ const ItemAccomplished: React.FC<{
         <IconButton
           color="success"
           onClick={() => setShowDialog(true)}
-          aria-label="prayer accomplished"
+          aria-label="Accomplished"
         >
           <FontAwesomeSvgIcon icon={faCircleCheck} />
         </IconButton>
       ) : (
         <Button
           onClick={() => setShowDialog(true)}
-          aria-label="prayer accomplished"
           startIcon={<FontAwesomeSvgIcon icon={faCircleCheck} />}
           color="success"
         >

@@ -21,7 +21,7 @@ export const UnarchiveJournalButton: React.FC<{
   };
   return (
     <Tooltip title="Unarchive journal">
-      <IconButton onClick={handleUnarchive} color="warning">
+      <IconButton onClick={handleUnarchive} color="default">
         <UnarchiveIcon />
       </IconButton>
     </Tooltip>

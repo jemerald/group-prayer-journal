@@ -11,53 +11,103 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { PrayerTarget } from "@prisma/client";
 import Link from "next/link";
-import React, { useCallback, useMemo } from "react";
-import type { DropResult } from "react-beautiful-dnd";
+import React, { useCallback, useMemo, useState } from "react";
+import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { reorderArray } from "../utils/reorderArray";
 
 import { trpc } from "../utils/trpc";
+import { SortOrder, SortOrderSelection } from "./SortOrderSelection";
+import Box from "@mui/material/Box";
 
-const TargetListItem: React.FC<{ target: PrayerTarget; index: number }> = ({
-  target,
-  index,
-}) => {
-  const lastPrayed = trpc.timeline.lastPrayedForTarget.useQuery({
-    targetId: target.id,
-  });
+const TargetListItem: React.FC<{
+  target: PrayerTarget;
+  provided?: DraggableProvided;
+}> = ({ target, provided }) => {
+  return (
+    <ListItem>
+      {provided != null ? (
+        <ListItemIcon ref={provided.innerRef} {...provided.dragHandleProps}>
+          <MenuIcon />
+        </ListItemIcon>
+      ) : null}
+      <ListItemButton
+        component={Link}
+        href={`/target/${encodeURIComponent(target.id)}`}
+      >
+        <ListItemText
+          primary={target.name}
+          secondary={
+            target.lastPrayed != null
+              ? `last prayed on ${target.lastPrayed.toLocaleDateString()}`
+              : `created on ${target.createdAt.toLocaleDateString()}`
+          }
+        />
+      </ListItemButton>
+    </ListItem>
+  );
+};
+
+const DraggableTargetListItem: React.FC<{
+  target: PrayerTarget;
+  index: number;
+}> = ({ target, index }) => {
   return (
     <Draggable key={target.id} draggableId={target.id} index={index}>
       {(provided) => (
-        <ListItem
+        <div
           {...provided.draggableProps}
           style={{
             ...provided.draggableProps.style,
             width: "100%",
           }}
         >
-          <ListItemIcon ref={provided.innerRef} {...provided.dragHandleProps}>
-            <MenuIcon />
-          </ListItemIcon>
-          <ListItemButton
-            component={Link}
-            href={`/target/${encodeURIComponent(target.id)}`}
-          >
-            <ListItemText
-              primary={target.name}
-              secondary={
-                lastPrayed.data
-                  ? `last prayed on ${lastPrayed.data.date.toLocaleDateString()}`
-                  : `created on ${target.createdAt.toLocaleDateString()}`
-              }
-            />
-          </ListItemButton>
-        </ListItem>
+          <TargetListItem target={target} provided={provided} />
+        </div>
       )}
     </Draggable>
   );
 };
 
+function prayerTargetSorter(
+  sortOrder: Exclude<SortOrder, "priority">
+): (a: PrayerTarget, b: PrayerTarget) => number {
+  return (a, b) => {
+    // accomplished item alway sorted to the bottom by its date in descending order
+    if (a.archivedAt != null) {
+      if (b.archivedAt != null) {
+        return a.archivedAt.getTime() - b.archivedAt.getTime();
+      }
+      return 1;
+    } else if (b.archivedAt != null) {
+      return -1;
+    }
+
+    let prayedOrder = 0;
+    if (a.lastPrayed != null) {
+      if (b.lastPrayed != null) {
+        prayedOrder = a.lastPrayed.getTime() - b.lastPrayed.getTime();
+      } else {
+        prayedOrder = 1;
+      }
+    } else {
+      if (b.lastPrayed != null) {
+        prayedOrder = -1;
+      } else {
+        prayedOrder = a.createdAt.getTime() - b.createdAt.getTime();
+      }
+    }
+
+    if (sortOrder === "lastPrayedDesc") {
+      prayedOrder = -prayedOrder;
+    }
+    return prayedOrder;
+  };
+}
+
 const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
+  const [sortOrder, setSortOrder] = useState<SortOrder>("priority");
+
   const targets = trpc.target.allByJournalId.useQuery({ journalId });
   const targetIds = useMemo(
     () => targets.data?.map((x) => x.id) ?? [],
@@ -130,22 +180,29 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
 
   return (
     <>
-      <Stack direction="row" gap={2}>
-        <Typography variant="h5">Prayer targets</Typography>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h5" sx={{ flexGrow: 1 }}>
+          Prayer targets
+        </Typography>
         {targets.isFetching ? <CircularProgress size={24} /> : null}
-      </Stack>
+        <SortOrderSelection order={sortOrder} onChange={setSortOrder} />
+      </Box>
       {targets.isLoading || targets.data === undefined ? (
         <Stack gap={2} sx={{ mt: 2 }}>
           <Skeleton variant="rectangular" height={72} />
           <Skeleton variant="rectangular" height={72} />
         </Stack>
-      ) : (
+      ) : sortOrder === "priority" ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="target-list">
             {(provided) => (
-              <List {...provided.droppableProps} ref={provided.innerRef}>
+              <List
+                aria-label="prayer targets"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
                 {targets.data.map((target, index) => (
-                  <TargetListItem
+                  <DraggableTargetListItem
                     key={target.id}
                     target={target}
                     index={index}
@@ -156,6 +213,12 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
             )}
           </Droppable>
         </DragDropContext>
+      ) : (
+        <List aria-label="prayer targets">
+          {targets.data.sort(prayerTargetSorter(sortOrder)).map((target) => (
+            <TargetListItem key={target.id} target={target} />
+          ))}
+        </List>
       )}
     </>
   );
