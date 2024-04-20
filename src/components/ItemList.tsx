@@ -27,7 +27,7 @@ import ItemAccomplished from "./ItemAccomplished";
 import ItemAddNote from "./ItemAddNote";
 import ItemTimeline from "./ItemTimeline";
 import PrayedNow from "./PrayedNow";
-import { SortOrder } from "./SortOrderSelection";
+import type { SortOrder } from "./SortOrderSelection";
 
 const styles = {
   iconSmallScreen: { minWidth: 32 },
