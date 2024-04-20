@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "playwright test"
   },
   "keywords": [],
@@ -13,5 +14,8 @@
     "@playwright/test": "^1.43.0",
     "@types/node": "^20.12.5",
     "dotenv": "^16.4.5"
+  },
+  "dependencies": {
+    "eslint": "^8.57.0"
   }
 }
