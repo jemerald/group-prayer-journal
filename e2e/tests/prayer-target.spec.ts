@@ -1,6 +1,6 @@
-import { Page, test } from "@playwright/test";
+import { type Page, test } from "@playwright/test";
 import { HomePage } from "../pages/home";
-import { JournalListPage } from "../pages/journal-list";
+import { deleteJournal, setupBlankJournal } from "../utils/db";
 
 test.describe.serial("prayer target", () => {
   const journalName = "prayer target test";
@@ -24,10 +24,12 @@ test.describe.serial("prayer target", () => {
     return await journalListPage.selectJournal(journalName);
   };
 
-  test("prepare journal", async ({ page }) => {
-    const journalListPage = await login(page);
+  test.beforeAll("prepare journal", async () => {
+    await setupBlankJournal(journalName);
+  });
 
-    await journalListPage.createNewJournal(journalName);
+  test.afterAll("clean up journal", async () => {
+    await deleteJournal(journalName);
   });
 
   test("can create new prayer target", async ({ page }) => {
@@ -36,18 +38,5 @@ test.describe.serial("prayer target", () => {
     await journalPage.verifyHasNoTarget(target1);
     await journalPage.createTarget(target1);
     await journalPage.verifyHasTarget(target1);
-  });
-
-  test("delete journal", async ({ page }) => {
-    const journalPage = await loginAndSelectJournal(page);
-    await journalPage.archiveJournal();
-
-    const journalListPage = new JournalListPage(page);
-    await journalListPage.verifyIsOnPage();
-
-    await journalListPage.showArchivedJournals();
-
-    await journalListPage.selectJournal(journalName);
-    await journalPage.deleteJournal();
   });
 });
