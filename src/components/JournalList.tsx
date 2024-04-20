@@ -71,9 +71,6 @@ const JournalList: React.FC = () => {
   };
 
   const journals = trpc.journal.all.useQuery({ includeArchived: showArchived });
-  if (journals.data?.length === 0) {
-    return <Alert severity="info">You have not created any journal yet</Alert>;
-  }
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -96,7 +93,7 @@ const JournalList: React.FC = () => {
               <Skeleton variant="rectangular" height={250} />
             </Grid>
           </>
-        ) : (
+        ) : journals.data.some((j) => j.archivedAt == null) ? (
           journals.data
             .filter((j) => j.archivedAt == null)
             .map((journal) => (
@@ -104,6 +101,8 @@ const JournalList: React.FC = () => {
                 <JournalListItem journal={journal} />
               </Grid>
             ))
+        ) : (
+          <Alert severity="info">You have not created any journal yet</Alert>
         )}
       </Grid>
       {showArchived && journals.data != null ? (
