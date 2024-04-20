@@ -46,6 +46,9 @@ const PrayedNow: React.FC<{
       utils.timeline.lastPrayedForTarget.invalidate({
         targetId: data.targetId,
       });
+      utils.item.allByTargetId.invalidate({
+        targetId: data.targetId,
+      });
     },
   });
   if (lastPrayed.isLoading || lastPrayed.data === undefined) {

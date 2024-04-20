@@ -4,12 +4,14 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import type { SyntheticEvent } from "react";
+import { useState, type SyntheticEvent } from "react";
 import { trpc } from "../utils/trpc";
 import ItemList from "./ItemList";
 import NewItem from "./NewItem";
 import TargetPageHeader from "./TargetPageHeader";
 import TargetTimeline from "./TargetTimeline";
+import { SortOrder, SortOrderSelection } from "./SortOrderSelection";
+import Box from "@mui/material/Box";
 
 const tabs = {
   items: "Prayer items",
@@ -22,6 +24,8 @@ const TargetPage: React.FC<{ targetId: string }> = ({ targetId }) => {
   if (typeof tab !== "string" || Object.keys(tabs).indexOf(tab) < 0) {
     tab = "items";
   }
+
+  const [sortOrder, setSortOrder] = useState<SortOrder>("priority");
 
   const target = trpc.target.byId.useQuery({ id: targetId });
   if (target.data === null) {
@@ -47,17 +51,22 @@ const TargetPage: React.FC<{ targetId: string }> = ({ targetId }) => {
       </Head>
       <Stack>
         <TargetPageHeader targetId={targetId} />
-        <Tabs value={tab} onChange={handleTabChange}>
-          {Object.entries(tabs).map(([value, label]) => (
-            <Tab key={value} label={label} value={value} />
-          ))}
-        </Tabs>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Tabs value={tab} onChange={handleTabChange} sx={{ flexGrow: 1 }}>
+            {Object.entries(tabs).map(([value, label]) => (
+              <Tab key={value} label={label} value={value} />
+            ))}
+          </Tabs>
+          {tab === "items" ? (
+            <SortOrderSelection order={sortOrder} onChange={setSortOrder} />
+          ) : null}
+        </Box>
         <div
           style={{
             display: tab === "timeline" ? "none" : "block",
           }}
         >
-          <ItemList targetId={targetId} />
+          <ItemList targetId={targetId} sortOrder={sortOrder} />
         </div>
         <div
           style={{
