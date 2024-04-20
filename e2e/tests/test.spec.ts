@@ -1,52 +1,15 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
+import { HomePage } from "../pages/home";
 
-const testUserSecret = process.env["TEST_USER_SECRET"] ?? "";
+test("should be able to sign in and sign out", async ({ page }) => {
+  const homePage = new HomePage(page);
+  await homePage.goto();
 
-test.describe.serial("the app", () => {
-  test("has correct title", async ({ page }) => {
-    await page.goto("/");
+  await homePage.verifyNotLoggedIn();
 
-    await expect(page).toHaveTitle("Group Prayer Journal");
-    await expect(
-      page.getByText("Sign in to use the application")
-    ).toBeVisible();
-  });
+  await homePage.signInWithTestUser();
+  await homePage.verifyIsLoggedIn();
 
-  test("can sign in and sign out", async ({ page }) => {
-    await page.goto("/");
-
-    const signInButton = page.getByRole("button", { name: "Sign in" });
-    await expect(signInButton).toBeVisible();
-    await signInButton.click();
-
-    await expect(page).toHaveTitle("Sign In");
-
-    const testUserSecretInput = page.getByRole("textbox", {
-      name: "Test user secret",
-    });
-    const testUserSecretSignInButton = page.getByRole("button", {
-      name: "Sign in with Test user secret",
-    });
-    await expect(testUserSecretInput).toBeVisible();
-    await expect(testUserSecretSignInButton).toBeVisible();
-
-    await testUserSecretInput.fill(testUserSecret);
-    await testUserSecretSignInButton.click();
-
-    await expect(page).toHaveTitle("Group Prayer Journal");
-    await expect(signInButton).not.toBeVisible();
-
-    const avatar = page.getByLabel("Test User");
-    await expect(avatar).toBeVisible();
-    await avatar.click();
-
-    const signOutMenuItem = page.getByRole("menuitem", { name: "Sign out" });
-    await expect(signOutMenuItem).toBeVisible();
-    await signOutMenuItem.click();
-
-    await expect(
-      page.getByText("Sign in to use the application")
-    ).toBeVisible();
-    await expect(signInButton).toBeVisible();
-  });
+  await homePage.signOut();
+  await homePage.verifyNotLoggedIn();
 });
