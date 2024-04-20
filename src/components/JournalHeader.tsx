@@ -94,7 +94,7 @@ export const JournalHeader: React.FC<{
                       <Tooltip title="Edit name">
                         <IconButton
                           onClick={() => setEditMode(true)}
-                          color="primary"
+                          color="default"
                         >
                           <FontAwesomeSvgIcon icon={faPenToSquare} />
                         </IconButton>

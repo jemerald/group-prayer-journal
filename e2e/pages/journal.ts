@@ -32,6 +32,14 @@ export class JournalPage {
     });
   }
 
+  async verifyHasTarget(name: string) {
+    await expect(this.target(name)).toBeVisible();
+  }
+
+  async verifyHasNoTarget(name: string) {
+    await expect(this.target(name)).not.toBeVisible();
+  }
+
   async archiveJournal() {
     await test.step("archive journal", async () => {
       await expect(this.archiveButton).toBeVisible();
@@ -63,6 +71,19 @@ export class JournalPage {
     });
   }
 
+  async createTarget(name: string) {
+    await test.step("create target", async () => {
+      await this.createTargetButton.click();
+      await expect(
+        this.page.getByRole("heading", {
+          name: "Create new prayer target",
+        })
+      ).toBeVisible();
+      await this.nameInput.fill(name);
+      await this.confirmButton.click();
+    });
+  }
+
   private get homeLink() {
     return this.page
       .getByRole("navigation")
@@ -83,5 +104,21 @@ export class JournalPage {
 
   private get confirmButton() {
     return this.page.getByRole("button", { name: "Confirm" });
+  }
+
+  private get createTargetButton() {
+    return this.page.getByRole("button", { name: "Create new prayer target" });
+  }
+
+  private get nameInput() {
+    return this.page.getByRole("textbox", { name: "Name" });
+  }
+
+  private get targetList() {
+    return this.page.getByRole("list", { name: "prayer targets" });
+  }
+
+  private target(name: string) {
+    return this.targetList.getByRole("link", { name });
   }
 }

@@ -50,6 +50,7 @@ model PrayerTarget {
   name       String
   priority   Int       @default(0)
   createdAt  DateTime  @default(now())
+  lastPrayed DateTime?
   archivedAt DateTime?
 
   journal  PrayerJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)

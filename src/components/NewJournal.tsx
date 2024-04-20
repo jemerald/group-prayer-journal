@@ -58,11 +58,7 @@ const NewJournalDialogContent: React.FC<{ closeDialog: () => void }> = ({
         <Button aria-label="cancel" onClick={closeDialog}>
           Cancel
         </Button>
-        <Button
-          aria-label="create journal"
-          variant="contained"
-          onClick={handleCreate}
-        >
+        <Button variant="contained" onClick={handleCreate}>
           Create
         </Button>
       </DialogActions>
@@ -77,7 +73,7 @@ const NewJournal: React.FC = () => {
       <Tooltip title="Create new journal">
         <Fab
           color="primary"
-          aria-label="add"
+          aria-label="Create new journal"
           sx={{
             position: "fixed",
             bottom: 16,

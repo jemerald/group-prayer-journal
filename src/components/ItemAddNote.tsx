@@ -81,10 +81,8 @@ const ItemAddNoteDialogContent: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
-        <Button aria-label="save" variant="contained" onClick={handleAddNote}>
+        <Button onClick={closeDialog}>Cancel</Button>
+        <Button variant="contained" onClick={handleAddNote}>
           Save
         </Button>
       </DialogActions>
@@ -105,14 +103,13 @@ const ItemAddNote: React.FC<{
         <IconButton
           color="inherit"
           onClick={() => setShowDialog(true)}
-          aria-label="add note"
+          aria-label="Add note"
         >
           <FontAwesomeSvgIcon icon={faFilePen} />
         </IconButton>
       ) : (
         <Button
           onClick={() => setShowDialog(true)}
-          aria-label="add note"
           startIcon={<FontAwesomeSvgIcon icon={faFilePen} />}
           color="inherit"
         >

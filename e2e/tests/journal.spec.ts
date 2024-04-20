@@ -11,7 +11,7 @@ test.describe.serial("journal management", () => {
     const journalListPage = await homePage.signInWithTestUser();
 
     await journalListPage.verifyIsOnPage();
-    await journalListPage.verifyNotHasJournal(journalName);
+    await journalListPage.verifyHasNoJournal(journalName);
     await journalListPage.createNewJournal(journalName);
     await journalListPage.verifyHasJournal(journalName);
   });
@@ -37,7 +37,7 @@ test.describe.serial("journal management", () => {
 
     const journalListPage = await homePage.signInWithTestUser();
 
-    await journalListPage.verifyNotHasJournal(journalName);
+    await journalListPage.verifyHasNoJournal(journalName);
     await journalListPage.showArchivedJournals();
     await journalListPage.verifyHasJournal(journalName);
 
@@ -64,7 +64,7 @@ test.describe.serial("journal management", () => {
 
     await journalListPage.verifyIsOnPage();
 
-    await journalListPage.verifyNotHasJournal(journalName);
+    await journalListPage.verifyHasNoJournal(journalName);
     await journalListPage.showArchivedJournals();
     await journalListPage.verifyHasJournal(journalName);
 
@@ -73,6 +73,6 @@ test.describe.serial("journal management", () => {
     await journalPage.deleteJournal();
 
     await journalListPage.verifyIsOnPage();
-    await journalListPage.verifyNotHasJournal(journalName);
+    await journalListPage.verifyHasNoJournal(journalName);
   });
 });

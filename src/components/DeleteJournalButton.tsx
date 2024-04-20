@@ -43,9 +43,7 @@ const DeleteJournalDialogContent: React.FC<{
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
+        <Button onClick={closeDialog}>Cancel</Button>
         <Button variant="contained" color="error" onClick={handleDelete}>
           Confirm
         </Button>

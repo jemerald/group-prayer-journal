@@ -37,15 +37,8 @@ const ArchiveTargetDialogContent: React.FC<{
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
-        <Button
-          aria-label="archive target"
-          variant="contained"
-          color="warning"
-          onClick={handleArchive}
-        >
+        <Button onClick={closeDialog}>Cancel</Button>
+        <Button variant="contained" color="warning" onClick={handleArchive}>
           Archive
         </Button>
       </DialogActions>

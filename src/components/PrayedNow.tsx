@@ -1,16 +1,14 @@
 import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import Button from "@mui/material/Button";
-import type { Timeline } from "@prisma/client";
+import type { PrayerItem, Timeline } from "@prisma/client";
 import { isSameDay } from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 
 const PrayedNow: React.FC<{
-  itemId: string;
-}> = ({ itemId }) => {
-  const lastPrayed = trpc.timeline.lastPrayedForItem.useQuery({ itemId });
-
+  item: PrayerItem;
+}> = ({ item }) => {
   const utils = trpc.useUtils();
   const mutation = trpc.timeline.prayedNow.useMutation({
     onMutate(variable) {
@@ -32,39 +30,26 @@ const PrayedNow: React.FC<{
         },
         (oldData) => [tempTimelineItem, ...(oldData ?? [])]
       );
-      utils.timeline.lastPrayedForItem.setData(
-        { itemId: variable.itemId },
-        () => tempTimelineItem
-      );
     },
     onSuccess(data) {
       if (data.itemId) {
         utils.timeline.allByItemId.invalidate({ itemId: data.itemId });
-        utils.timeline.lastPrayedForItem.invalidate({ itemId: data.itemId });
       }
       utils.timeline.allByTargetId.invalidate({ targetId: data.targetId });
-      utils.timeline.lastPrayedForTarget.invalidate({
-        targetId: data.targetId,
-      });
       utils.item.allByTargetId.invalidate({
         targetId: data.targetId,
       });
     },
   });
-  if (lastPrayed.isLoading || lastPrayed.data === undefined) {
-    return null;
-  }
   const now = new Date();
-  const hasPrayedToday =
-    lastPrayed.data && isSameDay(lastPrayed.data.date, now);
+  const hasPrayedToday = item.lastPrayed && isSameDay(item.lastPrayed, now);
   const handlePrayedNow = () => {
-    mutation.mutate({ itemId });
+    mutation.mutate({ itemId: item.id });
   };
   return (
     <Button
       disabled={hasPrayedToday || mutation.isLoading}
       onClick={handlePrayedNow}
-      aria-label="prayed now"
       startIcon={<FontAwesomeSvgIcon icon={faPrayingHands} />}
     >
       Prayed now
