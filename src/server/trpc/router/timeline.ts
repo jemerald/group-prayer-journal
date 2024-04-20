@@ -92,6 +92,14 @@ export const timelineRouter = router({
         input.itemId
       );
 
+      await ctx.prisma.prayerItem.update({
+        where: {
+          id: input.itemId,
+        },
+        data: {
+          lastPrayed: new Date(),
+        },
+      });
       return await ctx.prisma.timeline.create({
         data: {
           ...input,

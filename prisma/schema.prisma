@@ -3,7 +3,6 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["orderByNulls"]
 }
 
 // The ERD generator doesn't work in Vercel pipeline
@@ -66,6 +65,7 @@ model PrayerItem {
   description      String
   priority         Int          @default(0)
   dateBegins       DateTime     @default(now())
+  lastPrayed       DateTime?
   dateAccomplished DateTime?
   target           PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
   timeline         Timeline[]

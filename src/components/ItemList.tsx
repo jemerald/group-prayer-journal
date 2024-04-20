@@ -27,6 +27,7 @@ import ItemAccomplished from "./ItemAccomplished";
 import ItemAddNote from "./ItemAddNote";
 import ItemTimeline from "./ItemTimeline";
 import PrayedNow from "./PrayedNow";
+import { SortOrder } from "./SortOrderSelection";
 
 const styles = {
   iconSmallScreen: { minWidth: 32 },
@@ -55,10 +56,6 @@ const PrayerListItem = ({
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const lastPrayedTimeline = trpc.timeline.lastPrayedForItem.useQuery({
-    itemId: item.id,
-  });
-
   const router = useRouter();
   const expandedItem = getExpandedItemFromQuery(router.query);
   const open = expandedItem.indexOf(item.id) >= 0;
@@ -74,12 +71,9 @@ const PrayerListItem = ({
     });
   };
 
-  let lastPrayed = "";
-  if (lastPrayedTimeline.data !== undefined) {
-    lastPrayed = lastPrayedTimeline.data
-      ? lastPrayedTimeline.data.date.toLocaleDateString()
-      : "never";
-  }
+  const lastPrayed = item.lastPrayed
+    ? item.lastPrayed.toLocaleDateString()
+    : "never";
 
   let secondaryText = "";
   if (item.dateAccomplished != null) {
@@ -150,9 +144,46 @@ const DraggablePrayerListItem: React.FC<{
   }
 };
 
+function prayerItemSorter(
+  sortOrder: Exclude<SortOrder, "priority">
+): (a: PrayerItem, b: PrayerItem) => number {
+  return (a, b) => {
+    // accomplished item alway sorted to the bottom by its date in descending order
+    if (a.dateAccomplished != null) {
+      if (b.dateAccomplished != null) {
+        return a.dateAccomplished.getTime() - b.dateAccomplished.getTime();
+      }
+      return 1;
+    } else if (b.dateAccomplished != null) {
+      return -1;
+    }
+
+    let prayedOrder = 0;
+    if (a.lastPrayed != null) {
+      if (b.lastPrayed != null) {
+        prayedOrder = a.lastPrayed.getTime() - b.lastPrayed.getTime();
+      } else {
+        prayedOrder = 1;
+      }
+    } else {
+      if (b.lastPrayed != null) {
+        prayedOrder = -1;
+      } else {
+        prayedOrder = a.dateBegins.getTime() - b.dateBegins.getTime();
+      }
+    }
+
+    if (sortOrder === "lastPrayedDesc") {
+      prayedOrder = -prayedOrder;
+    }
+    return prayedOrder;
+  };
+}
+
 const ItemList: React.FC<{
   targetId: string;
-}> = ({ targetId }) => {
+  sortOrder: SortOrder;
+}> = ({ targetId, sortOrder }) => {
   const items = trpc.item.allByTargetId.useQuery({ targetId });
   const itemIds = useMemo(() => items.data?.map((x) => x.id) ?? [], [items]);
 
@@ -228,23 +259,33 @@ const ItemList: React.FC<{
       </Alert>
     );
   }
+  if (sortOrder === "priority") {
+    return (
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="item-list">
+          {(provided) => (
+            <List {...provided.droppableProps} ref={provided.innerRef}>
+              {items.data.map((item, index) => (
+                <DraggablePrayerListItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                />
+              ))}
+              {provided.placeholder}
+            </List>
+          )}
+        </Droppable>
+      </DragDropContext>
+    );
+  }
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="item-list">
-        {(provided) => (
-          <List {...provided.droppableProps} ref={provided.innerRef}>
-            {items.data.map((item, index) => (
-              <DraggablePrayerListItem
-                key={item.id}
-                item={item}
-                index={index}
-              />
-            ))}
-            {provided.placeholder}
-          </List>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <List>
+      {items.data.sort(prayerItemSorter(sortOrder)).map((item) => (
+        <PrayerListItem key={item.id} item={item} />
+      ))}
+    </List>
   );
 };
 
