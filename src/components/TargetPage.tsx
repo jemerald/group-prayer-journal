@@ -10,7 +10,7 @@ import ItemList from "./ItemList";
 import NewItem from "./NewItem";
 import TargetPageHeader from "./TargetPageHeader";
 import TargetTimeline from "./TargetTimeline";
-import { SortOrder, SortOrderSelection } from "./SortOrderSelection";
+import { type SortOrder, SortOrderSelection } from "./SortOrderSelection";
 import Box from "@mui/material/Box";
 
 const tabs = {
