@@ -8,31 +8,41 @@ import {
 import { getRandomPhoto } from "../utils/randomPhoto";
 
 export const journalRouter = router({
-  all: protectedProcedure.query(({ ctx }) => {
-    if (!ctx.session.user.id) {
-      return [];
-    }
-    return ctx.prisma.prayerJournal.findMany({
-      where: {
-        OR: [
-          {
-            userId: ctx.session.user.id,
-          },
-          {
-            accesses: {
-              some: {
-                userId: ctx.session.user.id,
+  all: protectedProcedure
+    .input(
+      z.object({
+        includeArchived: z.boolean(),
+      })
+    )
+    .query(({ ctx, input: { includeArchived } }) => {
+      if (!ctx.session.user.id) {
+        return [];
+      }
+      let archivedAtCondition = {};
+      if (!includeArchived) {
+        archivedAtCondition = { archivedAt: null };
+      }
+      return ctx.prisma.prayerJournal.findMany({
+        where: {
+          OR: [
+            {
+              userId: ctx.session.user.id,
+            },
+            {
+              accesses: {
+                some: {
+                  userId: ctx.session.user.id,
+                },
               },
             },
-          },
-        ],
-        archivedAt: null,
-      },
-      include: {
-        cover: true,
-      },
-    });
-  }),
+          ],
+          ...archivedAtCondition,
+        },
+        include: {
+          cover: true,
+        },
+      });
+    }),
   byId: protectedProcedure
     .input(
       z.object({
@@ -159,6 +169,23 @@ export const journalRouter = router({
         },
         data: {
           archivedAt: new Date(),
+        },
+      });
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateJournalAccess(ctx.prisma, ctx.session, input.id);
+      return ctx.prisma.prayerJournal.delete({
+        where: {
+          id: input.id,
+          NOT: {
+            archivedAt: null,
+          },
         },
       });
     }),

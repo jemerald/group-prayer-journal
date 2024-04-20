@@ -22,6 +22,10 @@ export class JournalListPage {
     await expect(this.journal(name)).not.toBeVisible();
   }
 
+  async showArchivedJournals() {
+    await this.page.getByRole("button", { name: "Show archived" }).click();
+  }
+
   async createNewJournal(name: string) {
     await this.addButton.click();
     await expect(
@@ -36,11 +40,12 @@ export class JournalListPage {
 
   async selectJournal(name: string): Promise<JournalPage> {
     await this.journal(name).click();
+    await this.page.waitForURL((url) => url.pathname.startsWith("/journal/"));
     return new JournalPage(this.page, name);
   }
 
   private journal(name: string) {
-    return this.page.getByRole("heading", { name, exact: true });
+    return this.page.getByRole("heading", { name, exact: true }).first();
   }
 
   get addButton() {
