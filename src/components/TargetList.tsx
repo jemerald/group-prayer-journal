@@ -17,7 +17,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { reorderArray } from "../utils/reorderArray";
 
 import { trpc } from "../utils/trpc";
-import { SortOrder, SortOrderSelection } from "./SortOrderSelection";
+import { type SortOrder, SortOrderSelection } from "./SortOrderSelection";
 import Box from "@mui/material/Box";
 
 const TargetListItem: React.FC<{

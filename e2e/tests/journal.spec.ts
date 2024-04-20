@@ -1,8 +1,13 @@
 import { test } from "@playwright/test";
 import { HomePage } from "../pages/home";
+import { deleteJournal } from "../utils/db";
 
 test.describe.serial("journal management", () => {
   const journalName = "journal management test";
+
+  test.beforeAll("clean up olds journals", async () => {
+    await deleteJournal(journalName);
+  });
 
   test("should be able to create a new journal", async ({ page }) => {
     const homePage = new HomePage(page);

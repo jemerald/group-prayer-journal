@@ -36,6 +36,14 @@ export class JournalPage {
     await expect(this.target(name)).toBeVisible();
   }
 
+  async verifyHasTargets(names: string[]) {
+    const actualTargets = await this.targetList
+      .getByRole("link")
+      .locator(".MuiListItemText-primary")
+      .allTextContents();
+    expect(actualTargets).toEqual(names);
+  }
+
   async verifyHasNoTarget(name: string) {
     await expect(this.target(name)).not.toBeVisible();
   }
@@ -81,6 +89,7 @@ export class JournalPage {
       ).toBeVisible();
       await this.nameInput.fill(name);
       await this.confirmButton.click();
+      await this.verifyHasTarget(name);
     });
   }
 

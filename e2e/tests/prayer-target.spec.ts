@@ -5,19 +5,13 @@ import { deleteJournal, setupBlankJournal } from "../utils/db";
 test.describe.serial("prayer target", () => {
   const journalName = "prayer target test";
 
-  const login = async (page: Page) => {
+  const loginAndSelectJournal = async (page: Page) => {
     const homePage = new HomePage(page);
     await homePage.goto();
 
     const journalListPage = await homePage.signInWithTestUser();
 
     await journalListPage.verifyIsOnPage();
-
-    return journalListPage;
-  };
-
-  const loginAndSelectJournal = async (page: Page) => {
-    const journalListPage = await login(page);
 
     await journalListPage.verifyHasJournal(journalName);
 
@@ -32,11 +26,18 @@ test.describe.serial("prayer target", () => {
     await deleteJournal(journalName);
   });
 
-  test("can create new prayer target", async ({ page }) => {
+  const targetNames = ["target 001", "target 002", "target 003"];
+
+  test("can create new prayer targets", async ({ page }) => {
     const journalPage = await loginAndSelectJournal(page);
-    const target1 = "target 1";
-    await journalPage.verifyHasNoTarget(target1);
-    await journalPage.createTarget(target1);
-    await journalPage.verifyHasTarget(target1);
+
+    await journalPage.verifyHasNoTarget(targetNames[0]!);
+
+    for (const targetName of targetNames) {
+      await journalPage.createTarget(targetName);
+    }
+
+    // targets are sorted by descending creation time
+    await journalPage.verifyHasTargets(targetNames.reverse());
   });
 });
