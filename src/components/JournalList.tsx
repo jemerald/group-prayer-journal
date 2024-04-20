@@ -10,9 +10,10 @@ import Typography from "@mui/material/Typography";
 import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { JournalUsers } from "./JournalUsers";
+import { ArchiveDisplaySelection } from "./ArchiveDisplaySelection";
 
 const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
   ssr: false,
@@ -64,16 +65,27 @@ const JournalListItem: React.FC<{
 };
 
 const JournalList: React.FC = () => {
-  const journals = trpc.journal.all.useQuery();
+  const [showArchived, setShowArchived] = useState(false);
+  const handleShowArchivedToggle = () => {
+    setShowArchived((val) => !val);
+  };
+
+  const journals = trpc.journal.all.useQuery({ includeArchived: showArchived });
   if (journals.data?.length === 0) {
     return <Alert severity="info">You have not created any journal yet</Alert>;
   }
   return (
     <>
-      <Stack direction="row" gap={2}>
-        <Typography variant="h5">Prayer journals</Typography>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h5" sx={{ flexGrow: 1 }}>
+          Prayer journals
+        </Typography>
         {journals.isFetching ? <CircularProgress size={24} /> : null}
-      </Stack>
+        <ArchiveDisplaySelection
+          showArchived={showArchived}
+          onToggle={handleShowArchivedToggle}
+        />
+      </Box>
       <Grid container spacing={2}>
         {journals.isLoading || journals.data === undefined ? (
           <>
@@ -85,13 +97,31 @@ const JournalList: React.FC = () => {
             </Grid>
           </>
         ) : (
-          journals.data.map((journal) => (
-            <Grid item xs={12} sm={6} key={journal.id}>
-              <JournalListItem journal={journal} />
-            </Grid>
-          ))
+          journals.data
+            .filter((j) => j.archivedAt == null)
+            .map((journal) => (
+              <Grid item xs={12} sm={6} key={journal.id}>
+                <JournalListItem journal={journal} />
+              </Grid>
+            ))
         )}
       </Grid>
+      {showArchived && journals.data != null ? (
+        <>
+          <Typography variant="h5" sx={{ flexGrow: 1 }}>
+            Archived journals
+          </Typography>
+          <Grid container spacing={2}>
+            {journals.data
+              .filter((j) => j.archivedAt != null)
+              .map((journal) => (
+                <Grid item xs={12} sm={6} key={journal.id}>
+                  <JournalListItem journal={journal} />
+                </Grid>
+              ))}
+          </Grid>
+        </>
+      ) : null}
     </>
   );
 };

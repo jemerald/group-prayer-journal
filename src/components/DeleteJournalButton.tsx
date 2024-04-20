@@ -1,4 +1,4 @@
-import ArchiveIcon from "@mui/icons-material/Archive";
+import { faTrash } from "@fortawesome/free-solid-svg-icons/faTrash";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -10,36 +10,43 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
+import Alert from "@mui/material/Alert";
+import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import Typography from "@mui/material/Typography";
 
-const ArchiveJournalDialogContent: React.FC<{
+const DeleteJournalDialogContent: React.FC<{
   journalId: string;
   closeDialog: () => void;
 }> = ({ journalId, closeDialog }) => {
   const router = useRouter();
-  const mutation = trpc.journal.archive.useMutation({
-    onSuccess() {
+  const mutation = trpc.journal.delete.useMutation({
+    onSuccess(data) {
+      console.log("deleted", data);
       closeDialog();
       router.push("/");
     },
   });
-  const handleArchive = () => {
+  const handleDelete = () => {
     mutation.mutate({
       id: journalId,
     });
   };
   return (
     <>
-      <DialogTitle>Archive prayer journal</DialogTitle>
+      <DialogTitle>Are you sure that you want to delete?</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Archived journal would no longer be visible to anyone by default.
+          <Typography sx={{ mb: "1rem" }}>
+            All prayer history in this journal will be deleted.
+          </Typography>
+          <Alert severity="warning">This action cannot be undone.</Alert>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button aria-label="cancel" onClick={closeDialog}>
           Cancel
         </Button>
-        <Button variant="contained" color="warning" onClick={handleArchive}>
+        <Button variant="contained" color="error" onClick={handleDelete}>
           Confirm
         </Button>
       </DialogActions>
@@ -47,7 +54,7 @@ const ArchiveJournalDialogContent: React.FC<{
   );
 };
 
-export const ArchiveJournalButton: React.FC<{
+export const DeleteJournalButton: React.FC<{
   journalId: string;
 }> = ({ journalId }) => {
   const [showDialog, setShowDialog] = useState(false);
@@ -56,13 +63,13 @@ export const ArchiveJournalButton: React.FC<{
   };
   return (
     <>
-      <Tooltip title="Archive journal">
-        <IconButton onClick={() => setShowDialog(true)} color="warning">
-          <ArchiveIcon />
+      <Tooltip title="Delete journal">
+        <IconButton onClick={() => setShowDialog(true)} color="error">
+          <FontAwesomeSvgIcon icon={faTrash} />
         </IconButton>
       </Tooltip>
       <FullScreenDialog open={showDialog} onClose={handleClose}>
-        <ArchiveJournalDialogContent
+        <DeleteJournalDialogContent
           journalId={journalId}
           closeDialog={handleClose}
         />

@@ -24,18 +24,33 @@ export class JournalPage {
   }
 
   async archiveJournal() {
+    await expect(this.archiveButton).toBeVisible();
     await this.archiveButton.click();
     await expect(
       this.page.getByRole("heading", { name: "Archive prayer journal" })
     ).toBeVisible();
-    await this.confirmArchiveButton.click();
+    await this.confirmButton.click();
+  }
+
+  async deleteJournal() {
+    await this.deleteButton.click();
+    await expect(
+      this.page.getByRole("heading", {
+        name: "Are you sure that you want to delete?",
+      })
+    ).toBeVisible();
+    await this.confirmButton.click();
   }
 
   private get archiveButton() {
     return this.page.getByRole("button", { name: "Archive journal" });
   }
 
-  private get confirmArchiveButton() {
-    return this.page.getByRole("button", { name: "Archive" });
+  private get deleteButton() {
+    return this.page.getByRole("button", { name: "Delete journal" });
+  }
+
+  private get confirmButton() {
+    return this.page.getByRole("button", { name: "Confirm" });
   }
 }

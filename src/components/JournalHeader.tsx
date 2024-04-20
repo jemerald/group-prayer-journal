@@ -14,6 +14,7 @@ import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
 import JournalNameChange from "./JournalNameChange";
 import { JournalUsers } from "./JournalUsers";
 import { ShareJournalButton } from "./ShareJournalButton";
+import { DeleteJournalButton } from "./DeleteJournalButton";
 
 const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
   ssr: false,
@@ -95,7 +96,11 @@ export const JournalHeader: React.FC<{
                       <FontAwesomeSvgIcon icon={faPenToSquare} />
                     </IconButton>
                   </Tooltip>
-                  <ArchiveJournalButton journalId={journalId} />
+                  {journal.data.archivedAt == null ? (
+                    <ArchiveJournalButton journalId={journalId} />
+                  ) : (
+                    <DeleteJournalButton journalId={journalId} />
+                  )}
                 </>
               )}
             </Stack>
