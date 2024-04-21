@@ -1,6 +1,6 @@
 import { type Page, test } from "@playwright/test";
-import { HomePage } from "../pages/home";
-import { deleteJournal, setupBlankJournal } from "../utils/db";
+import { HomePage } from "./pages/home";
+import { deleteJournal, setupBlankJournal } from "./utils/db";
 
 test.describe.serial("prayer target", () => {
   const journalName = "prayer target test";

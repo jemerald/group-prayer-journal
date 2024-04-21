@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
-import { HomePage } from "../pages/home";
-import { deleteJournal } from "../utils/db";
+import { HomePage } from "./pages/home";
+import { deleteJournal } from "./utils/db";
 
 test.describe.serial("journal management", () => {
   const journalName = "journal management test";

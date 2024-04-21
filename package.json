@@ -7,7 +7,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "e2e": "NODE_ENV=development playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.8.0",
+    "@playwright/test": "^1.43.1",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",
     "@types/react-beautiful-dnd": "^13.1.8",
