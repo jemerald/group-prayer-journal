@@ -6,7 +6,6 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import dynamic from "next/dynamic";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { ArchiveJournalButton } from "./ArchiveJournalButton";
@@ -16,10 +15,7 @@ import { JournalUsers } from "./JournalUsers";
 import { ShareJournalButton } from "./ShareJournalButton";
 import { DeleteJournalButton } from "./DeleteJournalButton";
 import { UnarchiveJournalButton } from "./UnarchiveJournalButton";
-
-const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
-  ssr: false,
-});
+import JournalCoverPhoto from "./JournalCoverPhoto";
 
 export const JournalHeader: React.FC<{
   journalId: string;

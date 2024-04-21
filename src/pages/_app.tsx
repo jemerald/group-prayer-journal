@@ -18,6 +18,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <Head>
         <link rel="preconnect" href="https://lh3.googleusercontent.com" />
+        <link rel="preconnect" href="https://va.vercel-scripts.com" />
       </Head>
       <Layout>
         <Component {...pageProps} />
