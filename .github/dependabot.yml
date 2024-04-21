@@ -28,12 +28,6 @@ updates:
         patterns:
           - "@typescript-eslint/*"
 
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/e2e" # Location of package manifests
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 2
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

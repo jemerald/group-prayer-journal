@@ -1,5 +1,5 @@
 import { test } from "@playwright/test";
-import { HomePage } from "../pages/home";
+import { HomePage } from "./pages/home";
 
 test("should be able to sign in and sign out", async ({ page }) => {
   const homePage = new HomePage(page);
