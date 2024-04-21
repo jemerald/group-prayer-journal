@@ -29,6 +29,13 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "retain-on-failure",
   },
+  expect: process.env.CI
+    ? {
+        timeout: 8000,
+      }
+    : undefined,
+
+  globalSetup: require.resolve("./e2e/global-setup"),
 
   /* Configure projects for major browsers */
   projects: [
@@ -39,9 +46,12 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer:
+    process.env["BASE_URL"] == null
+      ? {
+          command: "npm run dev",
+          url: "http://localhost:3000",
+          reuseExistingServer: !process.env.CI,
+        }
+      : undefined,
 });

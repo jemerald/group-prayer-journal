@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql
+    command: "--port=3306"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_USER=gppj
+      - MYSQL_PASSWORD=pass
+      - MYSQL_DATABASE=localdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql-data:

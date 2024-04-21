@@ -1,10 +1,10 @@
-name: Playwright Tests
+name: End-to-end Test
 
 on:
   deployment_status:
 
 jobs:
-  test:
+  e2e-test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview'

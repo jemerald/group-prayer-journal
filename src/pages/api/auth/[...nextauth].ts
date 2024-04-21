@@ -19,24 +19,11 @@ const testCredentialProviders: Provider[] = env.TEST_USER_SECRET
         },
         async authorize(credentials) {
           if (credentials?.secret === env.TEST_USER_SECRET) {
-            let user = await prisma.user.findFirst({
+            return await prisma.user.findFirst({
               where: {
                 id: TestUserId,
               },
             });
-            if (user == null) {
-              user = {
-                id: TestUserId,
-                name: "Test User",
-                email: "test@local.host",
-                emailVerified: null,
-                image: null,
-              };
-              await prisma.user.create({
-                data: user,
-              });
-            }
-            return user;
           }
           return null;
         },
