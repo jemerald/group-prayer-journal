@@ -8,7 +8,7 @@ export async function getRandomPhoto(): Promise<{
   const accessKey = env.UNSPLASH_ACCESS_KEY;
   if (accessKey) {
     const resp = await fetch(
-      `https://api.unsplash.com/photos/random?topics=6sMVjTLSkeQ`, // with nature topic
+      `https://api.unsplash.com/photos/random?topics=6sMVjTLSkeQ&orientation=landscape&content_filter=high`, // with nature topic
       {
         headers: {
           Authorization: `Client-ID ${accessKey}`,
