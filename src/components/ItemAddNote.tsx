@@ -11,7 +11,7 @@ import type { PrayerItem, Timeline } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 import { FullScreenDialog } from "./FullScreenDialog";
 
 const ItemAddNoteDialogContent: React.FC<{
@@ -90,7 +90,7 @@ const ItemAddNoteDialogContent: React.FC<{
   );
 };
 
-const ItemAddNote: React.FC<{
+export const ItemAddNote: React.FC<{
   itemId: string;
 }> = ({ itemId }) => {
   const theme = useTheme();
@@ -130,5 +130,3 @@ const ItemAddNote: React.FC<{
     </>
   );
 };
-
-export default ItemAddNote;

@@ -1,7 +1,7 @@
 import Stack from "@mui/material/Stack";
 import { type NextPage } from "next";
-import JournalList from "../components/JournalList";
-import NewJournal from "../components/NewJournal";
+import { JournalList } from "../components/JournalList";
+import { NewJournal } from "../components/NewJournal";
 
 const Home: NextPage = () => {
   return (

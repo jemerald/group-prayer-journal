@@ -105,7 +105,7 @@ function prayerTargetSorter(
   };
 }
 
-const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
+export const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
   const [sortOrder, setSortOrder] = useState<SortOrder>("priority");
 
   const targets = trpc.target.allByJournalId.useQuery({ journalId });
@@ -223,5 +223,3 @@ const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
     </>
   );
 };
-
-export default TargetList;

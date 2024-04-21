@@ -2,7 +2,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
 
-const CustomThemeProvider: React.FC<React.PropsWithChildren> = ({
+export const CustomThemeProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -17,5 +17,3 @@ const CustomThemeProvider: React.FC<React.PropsWithChildren> = ({
   );
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
-
-export default CustomThemeProvider;

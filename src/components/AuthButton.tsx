@@ -9,7 +9,7 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import React from "react";
 import { UserAvatar } from "./UserAvatar";
 
-const AuthButton: React.FC = () => {
+export const AuthButton: React.FC = () => {
   const { data: session, status } = useSession();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -76,5 +76,3 @@ const AuthButton: React.FC = () => {
     </Button>
   );
 };
-
-export default AuthButton;

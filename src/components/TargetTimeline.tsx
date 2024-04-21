@@ -9,11 +9,11 @@ import Typography from "@mui/material/Typography";
 import { formatRelative } from "date-fns/formatRelative";
 import React from "react";
 import { trpc } from "../utils/trpc";
-import TargetAddNote from "./TargetAddNote";
-import TimelineIcon from "./TimelineIcon";
-import TimelineSkeleton from "./TimelineSkeleton";
+import { TargetAddNote } from "./TargetAddNote";
+import { TimelineIcon } from "./TimelineIcon";
+import { TimelineSkeleton } from "./TimelineSkeleton";
 
-const TargetTimeline: React.FC<{
+export const TargetTimeline: React.FC<{
   targetId: string;
 }> = ({ targetId }) => {
   const theme = useTheme();
@@ -63,5 +63,3 @@ const TargetTimeline: React.FC<{
     </Stack>
   );
 };
-
-export default TargetTimeline;

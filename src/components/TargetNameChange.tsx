@@ -6,9 +6,9 @@ import Tooltip from "@mui/material/Tooltip";
 import type { PrayerTarget } from "@prisma/client";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
-const TargetNameChange: React.FC<{
+export const TargetNameChange: React.FC<{
   target: PrayerTarget;
   onComplete: () => void;
 }> = ({ target, onComplete }) => {
@@ -68,5 +68,3 @@ const TargetNameChange: React.FC<{
     </>
   );
 };
-
-export default TargetNameChange;

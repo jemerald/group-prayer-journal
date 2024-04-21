@@ -22,11 +22,11 @@ import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { reorderArray } from "../utils/reorderArray";
 import { trpc } from "../utils/trpc";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
-import ItemAccomplished from "./ItemAccomplished";
-import ItemAddNote from "./ItemAddNote";
-import ItemTimeline from "./ItemTimeline";
-import PrayedNow from "./PrayedNow";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
+import { ItemAccomplished } from "./ItemAccomplished";
+import { ItemAddNote } from "./ItemAddNote";
+import { ItemTimeline } from "./ItemTimeline";
+import { PrayedNow } from "./PrayedNow";
 import type { SortOrder } from "./SortOrderSelection";
 
 const styles = {
@@ -180,7 +180,7 @@ function prayerItemSorter(
   };
 }
 
-const ItemList: React.FC<{
+export const ItemList: React.FC<{
   targetId: string;
   sortOrder: SortOrder;
 }> = ({ targetId, sortOrder }) => {
@@ -288,5 +288,3 @@ const ItemList: React.FC<{
     </List>
   );
 };
-
-export default ItemList;

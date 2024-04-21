@@ -11,7 +11,7 @@ import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
 import Alert from "@mui/material/Alert";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 import Typography from "@mui/material/Typography";
 
 const DeleteJournalDialogContent: React.FC<{

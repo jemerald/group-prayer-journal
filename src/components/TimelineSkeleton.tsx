@@ -6,7 +6,7 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import Skeleton from "@mui/material/Skeleton";
 import React from "react";
 
-const TimelineSkeleton: React.FC = () => (
+export const TimelineSkeleton: React.FC = () => (
   <>
     <TimelineItem>
       <TimelineSeparator>
@@ -41,5 +41,3 @@ const TimelineSkeleton: React.FC = () => (
     </TimelineItem>
   </>
 );
-
-export default TimelineSkeleton;

@@ -7,10 +7,10 @@ import Typography from "@mui/material/Typography";
 import { formatRelative } from "date-fns/formatRelative";
 import React from "react";
 import { trpc } from "../utils/trpc";
-import TimelineIcon from "./TimelineIcon";
-import TimelineSkeleton from "./TimelineSkeleton";
+import { TimelineIcon } from "./TimelineIcon";
+import { TimelineSkeleton } from "./TimelineSkeleton";
 
-const ItemTimeline: React.FC<{
+export const ItemTimeline: React.FC<{
   itemId: string;
 }> = ({ itemId }) => {
   const timeline = trpc.timeline.allByItemId.useQuery({ itemId });
@@ -51,5 +51,3 @@ const ItemTimeline: React.FC<{
     </Timeline>
   );
 };
-
-export default ItemTimeline;

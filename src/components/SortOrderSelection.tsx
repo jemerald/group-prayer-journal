@@ -3,7 +3,7 @@ import { faArrowUp19 } from "@fortawesome/free-solid-svg-icons/faArrowUp19";
 import { faSort } from "@fortawesome/free-solid-svg-icons/faSort";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 import { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
