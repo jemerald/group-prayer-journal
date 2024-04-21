@@ -27,7 +27,8 @@ const colorDataURL = (color: string) =>
 const JournalCoverPhoto: React.FC<{
   journal: PrayerJournal & { cover: PrayerJournalCover | null };
   isThumbnail?: boolean;
-}> = ({ journal, isThumbnail = false }) => {
+  priority?: boolean;
+}> = ({ journal, isThumbnail = false, priority }) => {
   //   const blurDataUrl = useNextBlurhash(
   //     journal.coverImageBlurHash ?? "LEHV6nWB2yk8pyo0adR*.7kCMdnj"
   //   );
@@ -36,6 +37,7 @@ const JournalCoverPhoto: React.FC<{
       <Image
         src={journal.cover.url}
         alt={journal.name}
+        priority={priority}
         placeholder="blur"
         blurDataURL={colorDataURL(journal.cover.color ?? "#000000")}
         fill

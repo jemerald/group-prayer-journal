@@ -8,22 +8,19 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { JournalUsers } from "./JournalUsers";
 import { ArchiveDisplaySelection } from "./ArchiveDisplaySelection";
-
-const JournalCoverPhoto = dynamic(() => import("./JournalCoverPhoto"), {
-  ssr: false,
-});
+import JournalCoverPhoto from "./JournalCoverPhoto";
 
 const JournalListItem: React.FC<{
   journal: PrayerJournal & {
     cover: PrayerJournalCover | null;
   };
-}> = ({ journal }) => {
+  photoPriority?: boolean;
+}> = ({ journal, photoPriority }) => {
   return (
     <Card>
       <CardActionArea
@@ -31,7 +28,11 @@ const JournalListItem: React.FC<{
         href={`/journal/${encodeURIComponent(journal.id)}`}
       >
         <Box sx={{ position: "relative", height: 250, overflow: "hidden" }}>
-          <JournalCoverPhoto journal={journal} isThumbnail />
+          <JournalCoverPhoto
+            journal={journal}
+            isThumbnail
+            priority={photoPriority}
+          />
           <Box
             sx={{
               position: "absolute",
@@ -96,9 +97,9 @@ const JournalList: React.FC = () => {
         ) : journals.data.some((j) => j.archivedAt == null) ? (
           journals.data
             .filter((j) => j.archivedAt == null)
-            .map((journal) => (
+            .map((journal, index) => (
               <Grid item xs={12} sm={6} key={journal.id}>
-                <JournalListItem journal={journal} />
+                <JournalListItem journal={journal} photoPriority={index < 2} />
               </Grid>
             ))
         ) : (
