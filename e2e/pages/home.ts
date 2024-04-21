@@ -1,5 +1,6 @@
 import { type Page, expect, test } from "@playwright/test";
 import { JournalListPage } from "./journal-list";
+import { TestUserName } from "../utils/db";
 
 const testUserSecret = process.env["TEST_USER_SECRET"] ?? "";
 
@@ -13,6 +14,9 @@ export class HomePage {
     await test.step("go to home page", async () => {
       await this.page.goto("/");
       await expect(this.page).toHaveTitle("Group Prayer Journal");
+      await expect(
+        this.page.getByRole("link", { name: "Group Prayer Journal" })
+      ).toBeVisible();
     });
   }
 
@@ -58,7 +62,7 @@ export class HomePage {
 
   async signOut() {
     await test.step("sign out", async () => {
-      const avatar = this.page.getByRole("button", { name: "Test User" });
+      const avatar = this.page.getByRole("button", { name: TestUserName });
       await expect(avatar).toBeVisible();
       await avatar.click();
 
