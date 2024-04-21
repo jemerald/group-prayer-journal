@@ -9,13 +9,13 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { ArchiveJournalButton } from "./ArchiveJournalButton";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
-import JournalNameChange from "./JournalNameChange";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
+import { JournalNameChange } from "./JournalNameChange";
 import { JournalUsers } from "./JournalUsers";
 import { ShareJournalButton } from "./ShareJournalButton";
 import { DeleteJournalButton } from "./DeleteJournalButton";
 import { UnarchiveJournalButton } from "./UnarchiveJournalButton";
-import JournalCoverPhoto from "./JournalCoverPhoto";
+import { JournalCoverPhoto } from "./JournalCoverPhoto";
 
 export const JournalHeader: React.FC<{
   journalId: string;

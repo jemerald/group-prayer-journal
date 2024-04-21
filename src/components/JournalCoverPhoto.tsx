@@ -24,7 +24,7 @@ const colorDataURL = (color: string) =>
     parseInt(color.substring(5, 7), 16)
   );
 
-const JournalCoverPhoto: React.FC<{
+export const JournalCoverPhoto: React.FC<{
   journal: PrayerJournal & { cover: PrayerJournalCover | null };
   isThumbnail?: boolean;
   priority?: boolean;
@@ -56,5 +56,3 @@ const JournalCoverPhoto: React.FC<{
     />
   );
 };
-
-export default JournalCoverPhoto;

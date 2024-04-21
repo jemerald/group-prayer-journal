@@ -66,7 +66,7 @@ const NewJournalDialogContent: React.FC<{ closeDialog: () => void }> = ({
   );
 };
 
-const NewJournal: React.FC = () => {
+export const NewJournal: React.FC = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   return (
     <>
@@ -97,5 +97,3 @@ const NewJournal: React.FC = () => {
     </>
   );
 };
-
-export default NewJournal;

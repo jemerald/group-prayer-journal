@@ -66,7 +66,7 @@ const NewTargetDialogContent: React.FC<{
   );
 };
 
-const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
+export const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   return (
     <>
@@ -98,5 +98,3 @@ const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
     </>
   );
 };
-
-export default NewTarget;

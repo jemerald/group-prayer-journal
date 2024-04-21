@@ -7,10 +7,10 @@ import Head from "next/head";
 import Link from "next/link";
 import { trpc } from "../utils/trpc";
 import { JournalHeader } from "./JournalHeader";
-import NewTarget from "./NewTarget";
-import TargetList from "./TargetList";
+import { NewTarget } from "./NewTarget";
+import { TargetList } from "./TargetList";
 
-const JournalPage: React.FC<{ journalId: string }> = ({ journalId }) => {
+export const JournalPage: React.FC<{ journalId: string }> = ({ journalId }) => {
   const journal = trpc.journal.byId.useQuery({ id: journalId });
   if (journal.data === null) {
     return <Alert severity="error">Journal not found</Alert>;
@@ -40,5 +40,3 @@ const JournalPage: React.FC<{ journalId: string }> = ({ journalId }) => {
     </>
   );
 };
-
-export default JournalPage;

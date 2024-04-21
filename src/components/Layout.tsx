@@ -7,10 +7,10 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import AuthButton from "./AuthButton";
-import CustomThemeProvider from "./CustomThemeProvider";
+import { AuthButton } from "./AuthButton";
+import { CustomThemeProvider } from "./CustomThemeProvider";
 
-const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { status } = useSession();
 
   return (
@@ -42,5 +42,3 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
     </>
   );
 };
-
-export default Layout;

@@ -3,7 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import Layout from "../components/Layout";
+import { Layout } from "../components/Layout";
 
 import { trpc } from "../utils/trpc";
 

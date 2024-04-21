@@ -5,9 +5,9 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import Tooltip from "@mui/material/Tooltip";
 import type { TimelineType } from "@prisma/client";
 import React from "react";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
-const TimelineIcon: React.FC<{
+export const TimelineIcon: React.FC<{
   type: TimelineType;
 }> = ({ type }) => {
   switch (type) {
@@ -49,5 +49,3 @@ const TimelineIcon: React.FC<{
       );
   }
 };
-
-export default TimelineIcon;

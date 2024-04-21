@@ -4,9 +4,9 @@ import type { PrayerItem, Timeline } from "@prisma/client";
 import { isSameDay } from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
-const PrayedNow: React.FC<{
+export const PrayedNow: React.FC<{
   item: PrayerItem;
 }> = ({ item }) => {
   const utils = trpc.useUtils();
@@ -56,5 +56,3 @@ const PrayedNow: React.FC<{
     </Button>
   );
 };
-
-export default PrayedNow;

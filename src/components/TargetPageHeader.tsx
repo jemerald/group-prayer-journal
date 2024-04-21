@@ -9,10 +9,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { ArchiveTargetButton } from "./ArchiveTargetButton";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
-import TargetNameChange from "./TargetNameChange";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
+import { TargetNameChange } from "./TargetNameChange";
 
-const TargetPageHeader: React.FC<{
+export const TargetPageHeader: React.FC<{
   targetId: string;
 }> = ({ targetId }) => {
   const target = trpc.target.byId.useQuery({ id: targetId });
@@ -72,5 +72,3 @@ const TargetPageHeader: React.FC<{
     </Stack>
   );
 };
-
-export default TargetPageHeader;

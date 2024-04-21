@@ -9,7 +9,7 @@ type FontAwesomeSvgIconProps = {
   color?: PropType<SvgIconProps, "color">;
 };
 
-const FontAwesomeSvgIcon = React.forwardRef<
+export const FontAwesomeSvgIcon = React.forwardRef<
   SVGSVGElement,
   FontAwesomeSvgIconProps
 >((props, ref) => {
@@ -39,5 +39,3 @@ const FontAwesomeSvgIcon = React.forwardRef<
   );
 });
 FontAwesomeSvgIcon.displayName = "FontAwesomeSvgIcon";
-
-export default FontAwesomeSvgIcon;

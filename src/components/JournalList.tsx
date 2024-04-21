@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { JournalUsers } from "./JournalUsers";
 import { ArchiveDisplaySelection } from "./ArchiveDisplaySelection";
-import JournalCoverPhoto from "./JournalCoverPhoto";
+import { JournalCoverPhoto } from "./JournalCoverPhoto";
 
 const JournalListItem: React.FC<{
   journal: PrayerJournal & {
@@ -65,7 +65,7 @@ const JournalListItem: React.FC<{
   );
 };
 
-const JournalList: React.FC = () => {
+export const JournalList: React.FC = () => {
   const [showArchived, setShowArchived] = useState(false);
   const handleShowArchivedToggle = () => {
     setShowArchived((val) => !val);
@@ -125,5 +125,3 @@ const JournalList: React.FC = () => {
     </>
   );
 };
-
-export default JournalList;

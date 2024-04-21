@@ -6,10 +6,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, type SyntheticEvent } from "react";
 import { trpc } from "../utils/trpc";
-import ItemList from "./ItemList";
-import NewItem from "./NewItem";
-import TargetPageHeader from "./TargetPageHeader";
-import TargetTimeline from "./TargetTimeline";
+import { ItemList } from "./ItemList";
+import { NewItem } from "./NewItem";
+import { TargetPageHeader } from "./TargetPageHeader";
+import { TargetTimeline } from "./TargetTimeline";
 import { type SortOrder, SortOrderSelection } from "./SortOrderSelection";
 import Box from "@mui/material/Box";
 
@@ -18,7 +18,7 @@ const tabs = {
   timeline: "Timeline",
 } as const;
 
-const TargetPage: React.FC<{ targetId: string }> = ({ targetId }) => {
+export const TargetPage: React.FC<{ targetId: string }> = ({ targetId }) => {
   const router = useRouter();
   let { tab } = router.query;
   if (typeof tab !== "string" || Object.keys(tabs).indexOf(tab) < 0) {
@@ -80,5 +80,3 @@ const TargetPage: React.FC<{ targetId: string }> = ({ targetId }) => {
     </>
   );
 };
-
-export default TargetPage;

@@ -6,9 +6,9 @@ import Tooltip from "@mui/material/Tooltip";
 import type { PrayerJournal } from "@prisma/client";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
-const JournalNameChange: React.FC<{
+export const JournalNameChange: React.FC<{
   journal: PrayerJournal;
   onComplete: () => void;
 }> = ({ journal, onComplete }) => {
@@ -68,5 +68,3 @@ const JournalNameChange: React.FC<{
     </>
   );
 };
-
-export default JournalNameChange;

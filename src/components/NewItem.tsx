@@ -186,7 +186,7 @@ const NewItemDialogContent: React.FC<{
   );
 };
 
-const NewItem: React.FC<{
+export const NewItem: React.FC<{
   targetId: string;
 }> = ({ targetId }) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -220,5 +220,3 @@ const NewItem: React.FC<{
     </>
   );
 };
-
-export default NewItem;

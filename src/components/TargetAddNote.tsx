@@ -9,7 +9,7 @@ import type { PrayerItem, Timeline } from "@prisma/client";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
-import FontAwesomeSvgIcon from "./FontAwesomeSvgIcon";
+import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 import { FullScreenDialog } from "./FullScreenDialog";
 
 const TargetAddNoteDialogContent: React.FC<{
@@ -85,7 +85,7 @@ const TargetAddNoteDialogContent: React.FC<{
   );
 };
 
-const TargetAddNote: React.FC<{
+export const TargetAddNote: React.FC<{
   targetId: string;
   sx?: SxProps<Theme>;
 }> = ({ targetId, sx }) => {
@@ -114,5 +114,3 @@ const TargetAddNote: React.FC<{
     </>
   );
 };
-
-export default TargetAddNote;
