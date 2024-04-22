@@ -122,14 +122,17 @@ const PrayerItemSuggestion: React.FC<{
   );
 };
 
-const NewItemDialogContent: React.FC<{
+const NewItemDialog: React.FC<{
   targetId: string;
+  open: boolean;
   closeDialog: () => void;
-}> = ({ targetId, closeDialog }) => {
+}> = ({ targetId, open, closeDialog }) => {
   const utils = trpc.useUtils();
   const mutation = trpc.item.create.useMutation({
     onSuccess(variable) {
       utils.item.allByTargetId.invalidate({ targetId: variable.targetId });
+      setDescription("");
+      closeDialog();
     },
   });
 
@@ -144,11 +147,22 @@ const NewItemDialogContent: React.FC<{
         targetId,
         description,
       });
-      closeDialog();
     }
   };
   return (
-    <>
+    <FullScreenDialog
+      maxWidth="sm"
+      fullWidth
+      open={open}
+      onClose={closeDialog}
+      PaperProps={{
+        component: "form",
+        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          handleCreate();
+        },
+      }}
+    >
       <DialogTitle>Create new prayer item</DialogTitle>
       <DialogContent
         sx={{
@@ -171,15 +185,11 @@ const NewItemDialogContent: React.FC<{
       </DialogContent>
       <DialogActions>
         <Button onClick={closeDialog}>Cancel</Button>
-        <Button
-          variant="contained"
-          disabled={!description}
-          onClick={handleCreate}
-        >
+        <Button type="submit" variant="contained" disabled={!description}>
           Confirm
         </Button>
       </DialogActions>
-    </>
+    </FullScreenDialog>
   );
 };
 
@@ -203,17 +213,11 @@ export const NewItem: React.FC<{
           <AddIcon />
         </Fab>
       </Tooltip>
-      <FullScreenDialog
-        maxWidth="sm"
-        fullWidth
+      <NewItemDialog
+        targetId={targetId}
         open={showCreateDialog}
-        onClose={() => setShowCreateDialog(false)}
-      >
-        <NewItemDialogContent
-          targetId={targetId}
-          closeDialog={() => setShowCreateDialog(false)}
-        />
-      </FullScreenDialog>
+        closeDialog={() => setShowCreateDialog(false)}
+      />
     </>
   );
 };

@@ -12,18 +12,21 @@ import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
 
-const NewTargetDialogContent: React.FC<{
+const NewTargetDialog: React.FC<{
   journalId: string;
+  open: boolean;
   closeDialog: () => void;
-}> = ({ journalId, closeDialog }) => {
+}> = ({ journalId, open, closeDialog }) => {
+  const [name, setName] = useState("");
+
   const utils = trpc.useUtils();
   const mutation = trpc.target.create.useMutation({
     onSuccess() {
       utils.target.allByJournalId.invalidate({ journalId });
+      setName("");
+      closeDialog();
     },
   });
-  const [name, setName] = useState("");
-
   const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
@@ -32,10 +35,21 @@ const NewTargetDialogContent: React.FC<{
       journalId,
       name,
     });
-    closeDialog();
   };
   return (
-    <>
+    <FullScreenDialog
+      maxWidth="sm"
+      fullWidth
+      open={open}
+      onClose={closeDialog}
+      PaperProps={{
+        component: "form",
+        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          handleCreate();
+        },
+      }}
+    >
       <DialogTitle>Create new prayer target</DialogTitle>
       <DialogContent
         sx={{
@@ -58,11 +72,11 @@ const NewTargetDialogContent: React.FC<{
       </DialogContent>
       <DialogActions>
         <Button onClick={closeDialog}>Cancel</Button>
-        <Button variant="contained" onClick={handleCreate}>
+        <Button type="submit" variant="contained">
           Confirm
         </Button>
       </DialogActions>
-    </>
+    </FullScreenDialog>
   );
 };
 
@@ -84,17 +98,11 @@ export const NewTarget: React.FC<{ journalId: string }> = ({ journalId }) => {
           <AddIcon />
         </Fab>
       </Tooltip>
-      <FullScreenDialog
-        maxWidth="sm"
-        fullWidth
+      <NewTargetDialog
+        journalId={journalId}
         open={showCreateDialog}
-        onClose={() => setShowCreateDialog(false)}
-      >
-        <NewTargetDialogContent
-          journalId={journalId}
-          closeDialog={() => setShowCreateDialog(false)}
-        />
-      </FullScreenDialog>
+        closeDialog={() => setShowCreateDialog(false)}
+      />
     </>
   );
 };

@@ -26,7 +26,7 @@ export class JournalListPage {
     });
   }
 
-  async createNewJournal(name: string) {
+  async createNewJournal(name: string, useEnterKey: boolean = false) {
     await test.step(`create journal ${name}`, async () => {
       await this.addButton.click();
       await expect(
@@ -36,7 +36,11 @@ export class JournalListPage {
       await expect(this.nameInput).toBeVisible();
       await this.nameInput.fill(name);
 
-      await this.createButton.click();
+      if (useEnterKey) {
+        await this.page.keyboard.press("Enter");
+      } else {
+        await this.confirmButton.click();
+      }
     });
   }
 
@@ -69,7 +73,7 @@ export class JournalListPage {
     return this.page.getByRole("textbox", { name: "Name" });
   }
 
-  get createButton() {
-    return this.page.getByRole("button", { name: "Create" });
+  get confirmButton() {
+    return this.page.getByRole("button", { name: "Confirm" });
   }
 }
