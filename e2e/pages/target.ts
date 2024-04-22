@@ -43,7 +43,7 @@ export class TargetPage {
     expect(actualTargets).toEqual(names);
   }
 
-  async createItem(name: string) {
+  async createItem(name: string, useEnterKey: boolean = false) {
     await test.step("create item", async () => {
       await this.createItemButton.click();
       await expect(
@@ -52,7 +52,12 @@ export class TargetPage {
         })
       ).toBeVisible();
       await this.descriptionInput.fill(name);
-      await this.confirmButton.click();
+
+      if (useEnterKey) {
+        await this.page.keyboard.press("Enter");
+      } else {
+        await this.confirmButton.click();
+      }
       await this.verifyHasItem(name);
     });
   }

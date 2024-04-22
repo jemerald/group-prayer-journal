@@ -5,19 +5,19 @@ export const TestUserName = "Test User 1";
 
 export async function setupTestUser() {
   try {
+    const testUser = {
+      name: TestUserName,
+      email: "test1@local.host",
+    };
     await prisma.user.upsert({
       where: {
         id: TestUserId,
       },
       create: {
         id: TestUserId,
-        name: TestUserName,
-        email: "test1.local.host",
+        ...testUser,
       },
-      update: {
-        name: TestUserName,
-        email: "test1.local.host",
-      },
+      update: testUser,
     });
   } catch (err) {
     console.log(err);

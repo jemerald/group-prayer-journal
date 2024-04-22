@@ -11,19 +11,21 @@ import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
 
-const ShareJournalDialogContent: React.FC<{
+const ShareJournalDialog: React.FC<{
   journalId: string;
+  open: boolean;
   closeDialog: () => void;
-}> = ({ journalId, closeDialog }) => {
+}> = ({ journalId, open, closeDialog }) => {
+  const [email, setEmail] = useState("");
+
   const utils = trpc.useUtils();
   const mutation = trpc.journal.shareWith.useMutation({
-    onSuccess() {
-      utils.journal.byId.invalidate({ id: journalId });
+    onSuccess(data) {
+      utils.journal.usersOfJournal.invalidate({ journalId: data.journalId });
+      setEmail("");
       closeDialog();
     },
   });
-  const [email, setEmail] = useState("");
-
   const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
@@ -34,7 +36,19 @@ const ShareJournalDialogContent: React.FC<{
     });
   };
   return (
-    <>
+    <FullScreenDialog
+      maxWidth="sm"
+      fullWidth
+      open={open}
+      onClose={closeDialog}
+      PaperProps={{
+        component: "form",
+        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          handleShare();
+        },
+      }}
+    >
       <DialogTitle>Share prayer journal with</DialogTitle>
       <DialogContent
         sx={{
@@ -61,15 +75,11 @@ const ShareJournalDialogContent: React.FC<{
         <Button aria-label="cancel" onClick={closeDialog}>
           Cancel
         </Button>
-        <Button
-          aria-label="share journal"
-          variant="contained"
-          onClick={handleShare}
-        >
+        <Button type="submit" aria-label="share journal" variant="contained">
           Share
         </Button>
       </DialogActions>
-    </>
+    </FullScreenDialog>
   );
 };
 
@@ -84,17 +94,11 @@ export const ShareJournalButton: React.FC<{ journalId: string }> = ({
           <ShareIcon />
         </IconButton>
       </Tooltip>
-      <FullScreenDialog
-        maxWidth="sm"
-        fullWidth
+      <ShareJournalDialog
+        journalId={journalId}
         open={showShareDialog}
-        onClose={() => setShowShareDialog(false)}
-      >
-        <ShareJournalDialogContent
-          journalId={journalId}
-          closeDialog={() => setShowShareDialog(false)}
-        />
-      </FullScreenDialog>
+        closeDialog={() => setShowShareDialog(false)}
+      />
     </>
   );
 };

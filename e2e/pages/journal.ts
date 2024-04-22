@@ -99,7 +99,7 @@ export class JournalPage {
     });
   }
 
-  async createTarget(name: string) {
+  async createTarget(name: string, useEnterKey: boolean = false) {
     await test.step("create target", async () => {
       await this.createTargetButton.click();
       await expect(
@@ -108,7 +108,11 @@ export class JournalPage {
         })
       ).toBeVisible();
       await this.nameInput.fill(name);
-      await this.confirmButton.click();
+      if (useEnterKey) {
+        await this.page.keyboard.press("Enter");
+      } else {
+        await this.confirmButton.click();
+      }
       await this.verifyHasTarget(name);
     });
   }
