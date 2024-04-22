@@ -12,8 +12,8 @@ import Typography from "@mui/material/Typography";
 import type { PrayerTarget } from "@prisma/client";
 import Link from "next/link";
 import React, { useCallback, useMemo, useState } from "react";
-import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import type { DraggableProvided, DropResult } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { reorderArray } from "../utils/reorderArray";
 
 import { trpc } from "../utils/trpc";
@@ -25,9 +25,17 @@ const TargetListItem: React.FC<{
   provided?: DraggableProvided;
 }> = ({ target, provided }) => {
   return (
-    <ListItem>
+    <ListItem
+      {...(provided != null
+        ? {
+            ref: provided.innerRef,
+            ...provided.draggableProps,
+            ...provided.dragHandleProps,
+          }
+        : null)}
+    >
       {provided != null ? (
-        <ListItemIcon ref={provided.innerRef} {...provided.dragHandleProps}>
+        <ListItemIcon>
           <MenuIcon />
         </ListItemIcon>
       ) : null}
@@ -53,18 +61,8 @@ const DraggableTargetListItem: React.FC<{
   index: number;
 }> = ({ target, index }) => {
   return (
-    <Draggable key={target.id} draggableId={target.id} index={index}>
-      {(provided) => (
-        <div
-          {...provided.draggableProps}
-          style={{
-            ...provided.draggableProps.style,
-            width: "100%",
-          }}
-        >
-          <TargetListItem target={target} provided={provided} />
-        </div>
-      )}
+    <Draggable draggableId={target.id} index={index}>
+      {(provided) => <TargetListItem target={target} provided={provided} />}
     </Draggable>
   );
 };

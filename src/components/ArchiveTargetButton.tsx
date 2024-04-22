@@ -39,7 +39,7 @@ const ArchiveTargetDialogContent: React.FC<{
       <DialogActions>
         <Button onClick={closeDialog}>Cancel</Button>
         <Button variant="contained" color="warning" onClick={handleArchive}>
-          Archive
+          Confirm
         </Button>
       </DialogActions>
     </>

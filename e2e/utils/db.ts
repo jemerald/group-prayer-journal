@@ -21,11 +21,13 @@ export async function setupTestUser() {
     });
   } catch (err) {
     console.log(err);
+    throw new Error("Failed to setup test user");
   }
 }
 
-export async function setupBlankJournal(
+export async function createJournal(
   name: string,
+  targetNames: string[] = [],
   userId: string = TestUserId
 ) {
   try {
@@ -35,14 +37,23 @@ export async function setupBlankJournal(
         name,
       },
     });
-    await prisma.prayerJournal.create({
+    const journal = await prisma.prayerJournal.create({
       data: {
         userId,
         name,
       },
     });
+    if (targetNames.length > 0) {
+      await prisma.prayerTarget.createMany({
+        data: targetNames.map((targetName) => ({
+          journalId: journal.id,
+          name: targetName,
+        })),
+      });
+    }
   } catch (err) {
     console.log(err);
+    throw new Error("Failed to setup journal");
   }
 }
 
@@ -56,5 +67,6 @@ export async function deleteJournal(name: string, userId: string = TestUserId) {
     });
   } catch (err) {
     console.log(err);
+    throw new Error("Failed to delete journal");
   }
 }

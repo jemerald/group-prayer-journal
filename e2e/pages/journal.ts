@@ -1,4 +1,6 @@
 import { type Page, expect, test } from "@playwright/test";
+import { TargetPage } from "./target";
+import { dragTo } from "./utils";
 
 export class JournalPage {
   private page: Page;
@@ -18,9 +20,7 @@ export class JournalPage {
 
   async verifyIsOnPage() {
     await test.step("verify is on journal page", async () => {
-      await expect(
-        this.page.getByRole("heading", { name: this.name })
-      ).toBeVisible();
+      await expect(this.pageHeader).toBeVisible();
       const nav = this.page.getByRole("navigation");
       await expect(nav).toBeVisible();
 
@@ -30,6 +30,10 @@ export class JournalPage {
         .allTextContents();
       expect(navListTextContents).toEqual(["Home", this.name]);
     });
+  }
+
+  async waitForFetchingComplete() {
+    await expect(this.page.getByRole("progressbar")).not.toBeVisible();
   }
 
   async verifyHasTarget(name: string) {
@@ -44,8 +48,24 @@ export class JournalPage {
     expect(actualTargets).toEqual(names);
   }
 
-  async verifyHasNoTarget(name: string) {
-    await expect(this.target(name)).not.toBeVisible();
+  async selectTarget(targetName: string): Promise<TargetPage> {
+    return await test.step(`select target ${targetName}`, async () => {
+      await this.target(targetName).click();
+      await Promise.all([
+        this.page.waitForURL((url) => url.pathname.startsWith("/target/")),
+        expect(this.pageHeader).not.toBeVisible(),
+      ]);
+
+      const targetPage = new TargetPage(this.page, this.name, targetName);
+      await targetPage.verifyIsOnPage();
+      return targetPage;
+    });
+  }
+
+  async reorderTarget(subjectName: string, toName: string) {
+    await test.step(`reorder target ${subjectName} to ${toName}`, async () => {
+      await dragTo(this.page, this.target(subjectName), this.target(toName));
+    });
   }
 
   async archiveJournal() {
@@ -91,6 +111,10 @@ export class JournalPage {
       await this.confirmButton.click();
       await this.verifyHasTarget(name);
     });
+  }
+
+  private get pageHeader() {
+    return this.page.getByRole("heading", { name: this.name });
   }
 
   private get homeLink() {
