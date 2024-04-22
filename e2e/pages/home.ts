@@ -76,6 +76,22 @@ export class HomePage {
     });
   }
 
+  async loginAndSelectJournal(journalName: string) {
+    await this.goto();
+
+    const journalListPage = await this.signInWithTestUser();
+
+    await journalListPage.verifyIsOnPage();
+
+    await journalListPage.verifyHasJournal(journalName);
+
+    return await journalListPage.selectJournal(journalName);
+  }
+
+  // async loginAndSelectTarget(journalName: string, targetName: string) {
+  //   const journalPage = await this.loginAndSelectJournal(journalName);
+  // }
+
   private get signInButton() {
     return this.page.getByRole("button", { name: "Sign in" });
   }

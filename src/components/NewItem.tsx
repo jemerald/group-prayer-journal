@@ -170,16 +170,13 @@ const NewItemDialogContent: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
-          Cancel
-        </Button>
+        <Button onClick={closeDialog}>Cancel</Button>
         <Button
-          aria-label="create prayer item"
           variant="contained"
           disabled={!description}
           onClick={handleCreate}
         >
-          Create
+          Confirm
         </Button>
       </DialogActions>
     </>
@@ -195,7 +192,7 @@ export const NewItem: React.FC<{
       <Tooltip title="Create new prayer item">
         <Fab
           color="primary"
-          aria-label="add"
+          aria-label="Create new prayer item"
           sx={{
             position: "fixed",
             bottom: 16,

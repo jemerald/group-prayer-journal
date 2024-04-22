@@ -18,8 +18,8 @@ import type { PrayerItem } from "@prisma/client";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 import React, { useCallback, useMemo } from "react";
-import type { DraggableProvided, DropResult } from "react-beautiful-dnd";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import type { DraggableProvided, DropResult } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { reorderArray } from "../utils/reorderArray";
 import { trpc } from "../utils/trpc";
 import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
@@ -84,13 +84,17 @@ const PrayerListItem = ({
 
   return (
     <>
-      <ListItem>
+      <ListItem
+        {...(provided != null
+          ? {
+              ref: provided.innerRef,
+              ...provided.draggableProps,
+              ...provided.dragHandleProps,
+            }
+          : null)}
+      >
         {provided != null ? (
-          <ListItemIcon
-            ref={provided.innerRef}
-            {...provided.dragHandleProps}
-            sx={sm ? styles.iconSmallScreen : undefined}
-          >
+          <ListItemIcon sx={sm ? styles.iconSmallScreen : undefined}>
             <MenuIcon />
           </ListItemIcon>
         ) : null}
@@ -126,17 +130,7 @@ const DraggablePrayerListItem: React.FC<{
   if (item.dateAccomplished == null) {
     return (
       <Draggable draggableId={item.id} index={index}>
-        {(provided) => (
-          <div
-            {...provided.draggableProps}
-            style={{
-              ...provided.draggableProps.style,
-              width: "100%",
-            }}
-          >
-            <PrayerListItem item={item} provided={provided} />
-          </div>
-        )}
+        {(provided) => <PrayerListItem item={item} provided={provided} />}
       </Draggable>
     );
   } else {
@@ -264,7 +258,11 @@ export const ItemList: React.FC<{
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="item-list">
           {(provided) => (
-            <List {...provided.droppableProps} ref={provided.innerRef}>
+            <List
+              aria-label="prayer items"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
               {items.data.map((item, index) => (
                 <DraggablePrayerListItem
                   key={item.id}
@@ -281,7 +279,7 @@ export const ItemList: React.FC<{
   }
 
   return (
-    <List>
+    <List aria-label="prayer items">
       {items.data.sort(prayerItemSorter(sortOrder)).map((item) => (
         <PrayerListItem key={item.id} item={item} />
       ))}
