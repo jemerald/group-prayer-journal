@@ -27,7 +27,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           GOOGLE_CLIENT_ID: dummy
           GOOGLE_CLIENT_SECRET: dummy
-          UNSPLASH_ACCESS_KEY: dummy
           NEXTAUTH_URL: http://localhost:3000
           NEXTAUTH_SECRET: dummy
       - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
