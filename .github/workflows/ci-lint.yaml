@@ -23,4 +23,3 @@ jobs:
           NEXTAUTH_URL: http://localhost:3000
           GOOGLE_CLIENT_ID: dummy
           GOOGLE_CLIENT_SECRET: dummy
-          UNSPLASH_ACCESS_KEY: dummy

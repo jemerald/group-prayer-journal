@@ -34,7 +34,6 @@ jobs:
         env:
           GOOGLE_CLIENT_ID: dummy
           GOOGLE_CLIENT_SECRET: dummy
-          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
           NEXTAUTH_URL: http://localhost:3000
 
       - name: Collect containers log
