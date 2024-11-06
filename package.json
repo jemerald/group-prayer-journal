@@ -36,7 +36,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "^11.2.1",
+    "@mermaid-js/mermaid-cli": "^11.4.0",
     "@playwright/test": "^1.48.2",
     "@types/node": "^22.8.0",
     "@types/react": "^18.3.12",
