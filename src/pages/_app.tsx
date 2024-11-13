@@ -9,6 +9,7 @@ import { trpc } from "../utils/trpc";
 
 import Head from "next/head";
 import "../styles/globals.css";
+import { env } from "../env/client.mjs";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -23,7 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Layout>
         <Component {...pageProps} />
       </Layout>
-      <Analytics />
+      {env.NEXT_PUBLIC_ENABLE_ANALYTICS ? <Analytics /> : null}
       <SpeedInsights />
     </SessionProvider>
   );
