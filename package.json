@@ -28,7 +28,7 @@
     "@vercel/analytics": "^1.4.0",
     "@vercel/speed-insights": "^1.0.13",
     "date-fns": "^4.1.0",
-    "next": "^14.2.12",
+    "next": "^15.1.7",
     "next-auth": "^4.24.10",
     "react": "18.3.1",
     "react-dom": "18.3.1",
