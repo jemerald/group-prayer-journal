@@ -237,7 +237,7 @@ export const ItemList: React.FC<{
     [itemIds, mutation, targetId]
   );
 
-  if (items.isLoading || items.data === undefined) {
+  if (items.isPending || items.data === undefined) {
     return (
       <Stack gap={2} sx={{ mt: 2 }}>
         <Skeleton variant="rectangular" height={72} />

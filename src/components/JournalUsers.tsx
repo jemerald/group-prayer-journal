@@ -14,7 +14,7 @@ export const JournalUsers: React.FC<{
   });
   return (
     <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
-      {journalUsers.isLoading || !journalUsers.data ? (
+      {journalUsers.isPending || !journalUsers.data ? (
         <>
           <Skeleton variant="circular" width={40} height={40} />
           <Skeleton

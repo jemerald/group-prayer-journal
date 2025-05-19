@@ -24,7 +24,7 @@ export const TargetPageHeader: React.FC<{
         <Link color="inherit" href="/">
           Home
         </Link>
-        {target.isLoading || !target.data
+        {target.isPending || !target.data
           ? [
               <Skeleton key="journal" width={50} />,
               <Skeleton key="target" width={50} />,
@@ -42,7 +42,7 @@ export const TargetPageHeader: React.FC<{
               </Typography>,
             ]}
       </Breadcrumbs>
-      {target.isLoading || !target.data ? (
+      {target.isPending || !target.data ? (
         <Skeleton variant="rectangular" height={42} />
       ) : (
         <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
