@@ -48,7 +48,7 @@ export const PrayedNow: React.FC<{
   };
   return (
     <Button
-      disabled={hasPrayedToday || mutation.isLoading}
+      disabled={hasPrayedToday || mutation.isPending}
       onClick={handlePrayedNow}
       startIcon={<FontAwesomeSvgIcon icon={faPrayingHands} />}
     >

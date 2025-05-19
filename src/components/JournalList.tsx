@@ -85,12 +85,12 @@ export const JournalList: React.FC = () => {
         />
       </Box>
       <Grid container spacing={2}>
-        {journals.isLoading || journals.data === undefined ? (
+        {journals.isPending || journals.data === undefined ? (
           <>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Skeleton variant="rectangular" height={250} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Skeleton variant="rectangular" height={250} />
             </Grid>
           </>
@@ -98,7 +98,7 @@ export const JournalList: React.FC = () => {
           journals.data
             .filter((j) => j.archivedAt == null)
             .map((journal, index) => (
-              <Grid item xs={12} sm={6} key={journal.id}>
+              <Grid size={{ xs: 12, sm: 6 }} key={journal.id}>
                 <JournalListItem journal={journal} photoPriority={index < 2} />
               </Grid>
             ))
@@ -115,7 +115,7 @@ export const JournalList: React.FC = () => {
             {journals.data
               .filter((j) => j.archivedAt != null)
               .map((journal) => (
-                <Grid item xs={12} sm={6} key={journal.id}>
+                <Grid size={{ xs: 12, sm: 6 }} key={journal.id}>
                   <JournalListItem journal={journal} />
                 </Grid>
               ))}

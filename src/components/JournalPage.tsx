@@ -25,7 +25,7 @@ export const JournalPage: React.FC<{ journalId: string }> = ({ journalId }) => {
           <Link color="inherit" href="/">
             Home
           </Link>
-          {journal.isLoading || journal.data === undefined ? (
+          {journal.isPending || journal.data === undefined ? (
             <Skeleton width={50} />
           ) : (
             <Typography color="text.primary">{journal.data.name}</Typography>

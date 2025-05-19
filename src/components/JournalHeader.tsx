@@ -39,7 +39,7 @@ export const JournalHeader: React.FC<{
 
   return (
     <Stack gap={2}>
-      {journal.isLoading || !journal.data ? (
+      {journal.isPending || !journal.data ? (
         <Skeleton variant="rectangular" height={200} />
       ) : (
         <Box
@@ -124,7 +124,7 @@ export const JournalHeader: React.FC<{
               <Tooltip title="Change cover image">
                 <IconButton
                   onClick={handleChangeCover}
-                  disabled={mutation.isLoading}
+                  disabled={mutation.isPending}
                 >
                   <CachedIcon color="inherit" />
                 </IconButton>

@@ -24,7 +24,7 @@ export const ItemTimeline: React.FC<{
         },
       }}
     >
-      {timeline.isLoading || timeline.data === undefined ? (
+      {timeline.isPending || timeline.data === undefined ? (
         <TimelineSkeleton />
       ) : (
         timeline.data.map((event, index) => (
