@@ -41,11 +41,13 @@ const ShareJournalDialog: React.FC<{
       fullWidth
       open={open}
       onClose={closeDialog}
-      PaperProps={{
-        component: "form",
-        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-          handleShare();
+      slotProps={{
+        paper: {
+          component: "form",
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            handleShare();
+          },
         },
       }}
     >

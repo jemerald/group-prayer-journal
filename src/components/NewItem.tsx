@@ -100,8 +100,10 @@ const PrayerItemSuggestion: React.FC<{
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "suggestion-button",
+        slotProps={{
+          list: {
+            "aria-labelledby": "suggestion-button",
+          },
         }}
       >
         {ProgressivePrayerItems.map((stage, index) => (
@@ -155,11 +157,13 @@ const NewItemDialog: React.FC<{
       fullWidth
       open={open}
       onClose={closeDialog}
-      PaperProps={{
-        component: "form",
-        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-          handleCreate();
+      slotProps={{
+        paper: {
+          component: "form",
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            handleCreate();
+          },
         },
       }}
     >

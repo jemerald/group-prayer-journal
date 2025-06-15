@@ -40,11 +40,13 @@ const NewJournalDialog: React.FC<{
       fullWidth
       open={open}
       onClose={closeDialog}
-      PaperProps={{
-        component: "form",
-        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-          handleCreate();
+      slotProps={{
+        paper: {
+          component: "form",
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            handleCreate();
+          },
         },
       }}
     >
