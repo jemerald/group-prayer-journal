@@ -36,8 +36,16 @@ const ArchiveJournalDialogContent: React.FC<{
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button variant="contained" color="warning" onClick={handleArchive}>
+        <Button onClick={closeDialog} disabled={mutation.isPending}>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="warning"
+          onClick={handleArchive}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Confirm
         </Button>
       </DialogActions>

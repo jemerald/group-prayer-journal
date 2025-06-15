@@ -184,8 +184,16 @@ const NewItemDialog: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button type="submit" variant="contained" disabled={!description}>
+        <Button onClick={closeDialog} disabled={mutation.isPending}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!description}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Confirm
         </Button>
       </DialogActions>

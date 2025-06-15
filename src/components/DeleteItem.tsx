@@ -38,8 +38,16 @@ const DeleteItemDialogContent: React.FC<{
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button variant="contained" onClick={handleDelete} color="error">
+        <Button onClick={closeDialog} disabled={mutation.isPending}>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleDelete}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Confirm
         </Button>
       </DialogActions>
