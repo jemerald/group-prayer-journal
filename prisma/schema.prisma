@@ -68,6 +68,7 @@ model PrayerItem {
   dateBegins       DateTime     @default(now())
   lastPrayed       DateTime?
   dateAccomplished DateTime?
+  dateDeleted      DateTime?
   target           PrayerTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
   timeline         Timeline[]
 
