@@ -19,7 +19,7 @@ export const TargetPageHeader: React.FC<{
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <Stack gap={2}>
+    <Stack useFlexGap spacing={{ xs: 2 }}>
       <Breadcrumbs aria-label="breadcrumb">
         <Link color="inherit" href="/">
           Home
@@ -45,7 +45,12 @@ export const TargetPageHeader: React.FC<{
       {target.isPending || !target.data ? (
         <Skeleton variant="rectangular" height={42} />
       ) : (
-        <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
+        <Stack
+          direction="row"
+          useFlexGap
+          spacing={{ xs: 2 }}
+          sx={{ alignItems: "center" }}
+        >
           {editMode ? (
             <TargetNameChange
               target={target.data}

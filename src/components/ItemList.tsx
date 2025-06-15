@@ -112,7 +112,7 @@ const PrayerListItem = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Box sx={sm ? styles.timelineSmallScreen : styles.timeline}>
           {item.dateAccomplished == null ? (
-            <Stack direction="row" gap={1}>
+            <Stack direction="row" useFlexGap spacing={{ xs: 1 }}>
               <PrayedNow item={item} />
               <ItemAddNote itemId={item.id} />
               <ItemAccomplished itemId={item.id} />
@@ -241,7 +241,7 @@ export const ItemList: React.FC<{
 
   if (items.isPending || items.data === undefined) {
     return (
-      <Stack gap={2} sx={{ mt: 2 }}>
+      <Stack useFlexGap spacing={{ xs: 2 }} sx={{ mt: 2 }}>
         <Skeleton variant="rectangular" height={72} />
         <Skeleton variant="rectangular" height={72} />
       </Stack>

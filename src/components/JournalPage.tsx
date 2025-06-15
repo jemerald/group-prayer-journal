@@ -20,7 +20,7 @@ export const JournalPage: React.FC<{ journalId: string }> = ({ journalId }) => {
       <Head>
         <title>{journal.data?.name ?? ""} | Group Prayer Journal</title>
       </Head>
-      <Stack gap={2}>
+      <Stack useFlexGap spacing={{ xs: 2 }}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" href="/">
             Home
