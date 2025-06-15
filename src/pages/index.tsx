@@ -5,7 +5,7 @@ import { NewJournal } from "../components/NewJournal";
 
 const Home: NextPage = () => {
   return (
-    <Stack gap={2}>
+    <Stack useFlexGap spacing={{ xs: 2 }}>
       <JournalList />
       <NewJournal />
     </Stack>

@@ -53,7 +53,7 @@ export const AuthButton: React.FC = () => {
           onClose={handleCloseUserMenu}
         >
           <MenuItem onClick={handleSignOut}>
-            <Typography textAlign="center">Sign out</Typography>
+            <Typography sx={{ textAlign: "center" }}>Sign out</Typography>
           </MenuItem>
         </Menu>
       </Box>

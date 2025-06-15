@@ -186,7 +186,7 @@ export const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
         <SortOrderSelection order={sortOrder} onChange={setSortOrder} />
       </Box>
       {targets.isPending || targets.data === undefined ? (
-        <Stack gap={2} sx={{ mt: 2 }}>
+        <Stack useFlexGap spacing={{ xs: 2 }} sx={{ mt: 2 }}>
           <Skeleton variant="rectangular" height={72} />
           <Skeleton variant="rectangular" height={72} />
         </Stack>

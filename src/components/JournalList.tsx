@@ -45,11 +45,10 @@ const JournalListItem: React.FC<{
                   : "linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%)",
             }}
           >
-            <Stack gap={1}>
+            <Stack useFlexGap spacing={{ xs: 1 }}>
               <Typography
                 variant="h4"
-                overflow="hidden"
-                textOverflow="ellipsis"
+                sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
               >
                 {journal.name}
               </Typography>

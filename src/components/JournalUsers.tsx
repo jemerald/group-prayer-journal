@@ -13,7 +13,12 @@ export const JournalUsers: React.FC<{
     journalId: journalId,
   });
   return (
-    <Stack direction="row" gap={2} sx={{ alignItems: "center" }}>
+    <Stack
+      direction="row"
+      useFlexGap
+      spacing={{ xs: 2 }}
+      sx={{ alignItems: "center" }}
+    >
       {journalUsers.isPending || !journalUsers.data ? (
         <>
           <Skeleton variant="circular" width={40} height={40} />

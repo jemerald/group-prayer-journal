@@ -38,7 +38,7 @@ export const JournalHeader: React.FC<{
   };
 
   return (
-    <Stack gap={2}>
+    <Stack useFlexGap spacing={{ xs: 2 }}>
       {journal.isPending || !journal.data ? (
         <Skeleton variant="rectangular" height={200} />
       ) : (
@@ -65,7 +65,8 @@ export const JournalHeader: React.FC<{
           >
             <Stack
               direction="row"
-              gap={2}
+              useFlexGap
+              spacing={{ xs: 2 }}
               sx={{
                 alignItems: "center",
               }}
@@ -79,9 +80,11 @@ export const JournalHeader: React.FC<{
                 <>
                   <Typography
                     variant="h4"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                    sx={{ flexGrow: 1 }}
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      flexGrow: 1,
+                    }}
                   >
                     {journal.data.name}
                   </Typography>
@@ -135,7 +138,8 @@ export const JournalHeader: React.FC<{
       )}
       <Stack
         direction="row"
-        gap={2}
+        useFlexGap
+        spacing={{ xs: 2 }}
         sx={{
           alignItems: "center",
         }}
