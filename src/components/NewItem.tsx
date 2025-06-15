@@ -4,7 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
+import ListSubheader from "@mui/material/ListSubheader";
 import Fab from "@mui/material/Fab";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,7 +15,6 @@ import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
 import { FullScreenDialog } from "./FullScreenDialog";
-import { ListItem, Typography } from "@mui/material";
 
 const ProgressivePrayerItems = [
   {
@@ -80,7 +79,9 @@ const PrayerItemSuggestion: React.FC<{
   };
   const handleClose = (description: string) => {
     setAnchorEl(null);
-    onSelect(description);
+    if (typeof description === "string") {
+      onSelect(description);
+    }
   };
   return (
     <>
@@ -106,19 +107,14 @@ const PrayerItemSuggestion: React.FC<{
           },
         }}
       >
-        {ProgressivePrayerItems.map((stage, index) => (
-          <>
-            {index !== 0 ? <Divider /> : null}
-            <ListItem>
-              <Typography variant="caption">{stage.stage}</Typography>
-            </ListItem>
-            {stage.items.map((item) => (
-              <MenuItem key={item} onClick={() => handleClose(item)}>
-                {item}
-              </MenuItem>
-            ))}
-          </>
-        ))}
+        {ProgressivePrayerItems.flatMap((stage) => [
+          <ListSubheader key={stage.stage}>{stage.stage}</ListSubheader>,
+          ...stage.items.map((item) => (
+            <MenuItem key={item} onClick={() => handleClose(item)}>
+              {item}
+            </MenuItem>
+          )),
+        ])}
       </Menu>
     </>
   );
