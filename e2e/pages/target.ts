@@ -62,6 +62,28 @@ export class TargetPage {
     });
   }
 
+  async deleteItem(name: string) {
+    await test.step(`delete item ${name}`, async () => {
+      const item = this.item(name);
+      await expect(item).toBeVisible();
+      await item.click();
+      const deleteItemButton = this.page.getByRole("button", {
+        name: "Delete item",
+      });
+      await expect(deleteItemButton).toBeVisible();
+      await deleteItemButton.click();
+
+      const confirmDialogHeading = this.page.getByRole("heading", {
+        name: "Delete prayer item",
+      });
+      await expect(confirmDialogHeading).toBeVisible();
+      await this.confirmButton.click();
+
+      await expect(confirmDialogHeading).not.toBeVisible();
+      await expect(item).not.toBeVisible();
+    });
+  }
+
   async reorderItem(subjectName: string, toName: string) {
     await test.step(`reorder item ${subjectName} to ${toName}`, async () => {
       await dragTo(this.page, this.item(subjectName), this.item(toName));
