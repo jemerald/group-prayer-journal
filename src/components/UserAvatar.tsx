@@ -11,8 +11,10 @@ export const UserAvatar: React.FC<{ user: User; tooltipPrefix?: string }> = ({
     <Avatar
       alt={user.name || undefined}
       src={user.image || undefined}
-      imgProps={{
-        referrerPolicy: "no-referrer",
+      slotProps={{
+        img: {
+          referrerPolicy: "no-referrer",
+        },
       }}
     />
   </Tooltip>
