@@ -28,6 +28,7 @@ import { ItemAddNote } from "./ItemAddNote";
 import { ItemTimeline } from "./ItemTimeline";
 import { PrayedNow } from "./PrayedNow";
 import type { SortOrder } from "./SortOrderSelection";
+import { DeleteItem } from "./DeleteItem";
 
 const styles = {
   iconSmallScreen: { minWidth: 32 },
@@ -115,6 +116,7 @@ const PrayerListItem = ({
               <PrayedNow item={item} />
               <ItemAddNote itemId={item.id} />
               <ItemAccomplished itemId={item.id} />
+              <DeleteItem itemId={item.id} />
             </Stack>
           ) : null}
           <ItemTimeline itemId={item.id} />

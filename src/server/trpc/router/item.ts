@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { validateTargetAccess } from "../utils/accessChecker";
+import {
+  validateItemAccess,
+  validateTargetAccess,
+} from "../utils/accessChecker";
 
 export const itemRouter = router({
   allByTargetId: protectedProcedure
@@ -14,6 +17,7 @@ export const itemRouter = router({
       return ctx.prisma.prayerItem.findMany({
         where: {
           targetId: input.targetId,
+          dateDeleted: null,
         },
         orderBy: [
           {
@@ -43,6 +47,23 @@ export const itemRouter = router({
       return ctx.prisma.prayerItem.create({
         data: {
           ...input,
+        },
+      });
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await validateItemAccess(ctx.prisma, ctx.session, input.id);
+      return await ctx.prisma.prayerItem.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          dateDeleted: new Date(),
         },
       });
     }),
