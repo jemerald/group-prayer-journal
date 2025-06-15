@@ -21,13 +21,13 @@ const DeleteItemDialogContent: React.FC<{
   const mutation = trpc.item.delete.useMutation({
     onSuccess(data) {
       utils.item.allByTargetId.invalidate({ targetId: data.targetId });
+      closeDialog();
     },
   });
   const handleDelete = () => {
     mutation.mutate({
       id: itemId,
     });
-    closeDialog();
   };
   return (
     <>
