@@ -88,8 +88,15 @@ const ItemAccomplishedDialogContent: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button variant="contained" onClick={handleAccomplished}>
+        <Button onClick={closeDialog} disabled={mutation.isPending}>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleAccomplished}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Save
         </Button>
       </DialogActions>

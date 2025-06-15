@@ -72,10 +72,20 @@ const ShareJournalDialog: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
+        <Button
+          aria-label="cancel"
+          onClick={closeDialog}
+          disabled={mutation.isPending}
+        >
           Cancel
         </Button>
-        <Button type="submit" aria-label="share journal" variant="contained">
+        <Button
+          type="submit"
+          aria-label="share journal"
+          variant="contained"
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Share
         </Button>
       </DialogActions>

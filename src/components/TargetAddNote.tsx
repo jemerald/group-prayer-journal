@@ -76,8 +76,15 @@ const TargetAddNoteDialogContent: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button variant="contained" onClick={handleAddNote}>
+        <Button onClick={closeDialog} disabled={mutation.isPending}>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleAddNote}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Save
         </Button>
       </DialogActions>

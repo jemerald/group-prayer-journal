@@ -69,10 +69,20 @@ const NewJournalDialog: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button aria-label="cancel" onClick={closeDialog}>
+        <Button
+          aria-label="cancel"
+          onClick={closeDialog}
+          disabled={mutation.isPending}
+        >
           Cancel
         </Button>
-        <Button type="submit" variant="contained">
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!name}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Confirm
         </Button>
       </DialogActions>

@@ -71,8 +71,16 @@ const NewTargetDialog: React.FC<{
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button type="submit" variant="contained">
+        <Button onClick={closeDialog} disabled={mutation.isPending}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!name}
+          loading={mutation.isPending}
+          loadingPosition="start"
+        >
           Confirm
         </Button>
       </DialogActions>
