@@ -42,4 +42,16 @@ test.describe.serial("prayer item", () => {
 
     await targetPage.verifyHasItems([itemNames[1], itemNames[2], itemNames[0]]);
   });
+
+  test("can delete prayer items", async ({ page }) => {
+    const homePage = new HomePage(page);
+    const journalPage = await homePage.loginAndSelectJournal(journalName);
+    const targetPage = await journalPage.selectTarget(targetName);
+
+    await targetPage.verifyHasItems([itemNames[1], itemNames[2], itemNames[0]]);
+
+    await targetPage.deleteItem(itemNames[1]);
+
+    await targetPage.verifyHasItems([itemNames[2], itemNames[0]]);
+  });
 });
