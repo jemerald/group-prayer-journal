@@ -4,14 +4,18 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/system/Container";
 import { useSession } from "next-auth/react";
+import { useIsFetching } from "@tanstack/react-query";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import { AuthButton } from "./AuthButton";
 import { CustomThemeProvider } from "./CustomThemeProvider";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stack from "@mui/material/Stack";
 
 export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { status } = useSession();
+  const isFetching = useIsFetching();
 
   return (
     <>
@@ -29,7 +33,15 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
                 Group Prayer Journal
               </Typography>
             </Link>
-            <AuthButton />
+            <Stack
+              direction="row"
+              useFlexGap
+              spacing={2}
+              sx={{ alignItems: "center" }}
+            >
+              {isFetching ? <CircularProgress size={24} /> : null}
+              <AuthButton />
+            </Stack>
           </Toolbar>
         </AppBar>
         <Container maxWidth="md" sx={{ mt: 2 }}>

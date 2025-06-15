@@ -2,7 +2,6 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
-import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
@@ -77,7 +76,6 @@ export const JournalList: React.FC = () => {
         <Typography variant="h5" sx={{ flexGrow: 1 }}>
           Prayer journals
         </Typography>
-        {journals.isFetching ? <CircularProgress size={24} /> : null}
         <ArchiveDisplaySelection
           showArchived={showArchived}
           onToggle={handleShowArchivedToggle}

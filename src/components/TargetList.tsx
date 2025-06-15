@@ -1,6 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -182,7 +181,6 @@ export const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
         <Typography variant="h5" sx={{ flexGrow: 1 }}>
           Prayer targets
         </Typography>
-        {targets.isFetching ? <CircularProgress size={24} /> : null}
         <SortOrderSelection order={sortOrder} onChange={setSortOrder} />
       </Box>
       {targets.isPending || targets.data === undefined ? (
