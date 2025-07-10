@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^11.6.0",
-    "@playwright/test": "^1.53.2",
+    "@playwright/test": "^1.54.0",
     "@types/node": "^22.15.30",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
