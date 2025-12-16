@@ -33,7 +33,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "superjson": "^2.2.3",
-    "zod": "^4.2.0"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^11.6.0",
