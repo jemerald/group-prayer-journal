@@ -156,7 +156,7 @@ const NewItemDialog: React.FC<{
       slotProps={{
         paper: {
           component: "form",
-          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+          onSubmit: (event: React.SubmitEvent<HTMLFormElement>) => {
             event.preventDefault();
             handleCreate();
           },

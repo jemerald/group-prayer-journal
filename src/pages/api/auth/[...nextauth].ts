@@ -6,30 +6,30 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { env } from "../../../env/server.mjs";
 import { prisma } from "../../../server/db/client";
-import type { Provider } from "next-auth/providers";
 
 const TestUserId = "test-user-1";
 
-const testCredentialProviders: Provider[] = env.TEST_USER_SECRET
-  ? [
-      CredentialsProvider({
-        name: "Test user secret",
-        credentials: {
-          secret: { label: "Test user secret", type: "password" },
-        },
-        async authorize(credentials) {
-          if (credentials?.secret === env.TEST_USER_SECRET) {
-            return await prisma.user.findFirst({
-              where: {
-                id: TestUserId,
-              },
-            });
-          }
-          return null;
-        },
-      }),
-    ]
-  : [];
+const testCredentialProviders: ReturnType<typeof CredentialsProvider>[] =
+  env.TEST_USER_SECRET
+    ? [
+        CredentialsProvider({
+          name: "Test user secret",
+          credentials: {
+            secret: { label: "Test user secret", type: "password" },
+          },
+          async authorize(credentials) {
+            if (credentials?.secret === env.TEST_USER_SECRET) {
+              return await prisma.user.findFirst({
+                where: {
+                  id: TestUserId,
+                },
+              });
+            }
+            return null;
+          },
+        }),
+      ]
+    : [];
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
