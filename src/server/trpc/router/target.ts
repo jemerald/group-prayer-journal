@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "../../../generated/prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
@@ -30,7 +30,7 @@ export const targetRouter = router({
     .input(
       z.object({
         journalId: z.string(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
@@ -40,7 +40,7 @@ export const targetRouter = router({
     .input(
       z.object({
         id: z.string(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const target = await ctx.prisma.prayerTarget.findUnique({
@@ -64,7 +64,7 @@ export const targetRouter = router({
       z.object({
         journalId: z.string(),
         name: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
@@ -80,7 +80,7 @@ export const targetRouter = router({
       z.object({
         id: z.string(),
         name: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       await validateTargetAccess(ctx.prisma, ctx.session, input.id);
@@ -97,7 +97,7 @@ export const targetRouter = router({
     .input(
       z.object({
         id: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const target = await ctx.prisma.prayerTarget.findUnique({
@@ -124,7 +124,7 @@ export const targetRouter = router({
       z.object({
         journalId: z.string(),
         idsInPriorityOrder: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       await validateJournalAccess(ctx.prisma, ctx.session, input.journalId);
@@ -133,7 +133,7 @@ export const targetRouter = router({
           ...acc,
           [id]: input.idsInPriorityOrder.length - index,
         }),
-        {} as Record<string, number>
+        {} as Record<string, number>,
       );
       const targets = await ctx.prisma.prayerTarget.findMany({
         where: {
@@ -154,7 +154,7 @@ export const targetRouter = router({
           } else {
             return target;
           }
-        })
+        }),
       );
     }),
 });
