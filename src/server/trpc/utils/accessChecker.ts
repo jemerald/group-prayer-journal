@@ -1,11 +1,11 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "../../../generated/prisma/client";
 import { TRPCError } from "@trpc/server";
 import type { Session } from "next-auth";
 
 export async function hasAccessToJournal(
   prisma: PrismaClient,
   session: Session,
-  journalId: string
+  journalId: string,
 ) {
   const journal = await prisma.prayerJournal.findFirst({
     where: {
@@ -25,7 +25,7 @@ export async function hasAccessToJournal(
 export async function validateJournalAccess(
   prisma: PrismaClient,
   session: Session,
-  journalId: string
+  journalId: string,
 ) {
   if (!(await hasAccessToJournal(prisma, session, journalId))) {
     throw new TRPCError({ code: "FORBIDDEN" });
@@ -35,7 +35,7 @@ export async function validateJournalAccess(
 export async function validateTargetAccess(
   prisma: PrismaClient,
   session: Session,
-  targetId: string
+  targetId: string,
 ) {
   const target = await prisma.prayerTarget.findUnique({
     where: {
@@ -53,7 +53,7 @@ export async function validateTargetAccess(
 export async function validateItemAccess(
   prisma: PrismaClient,
   session: Session,
-  itemId: string
+  itemId: string,
 ) {
   const item = await prisma.prayerItem.findUnique({
     where: {
