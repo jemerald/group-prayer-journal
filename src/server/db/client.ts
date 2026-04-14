@@ -8,17 +8,18 @@ declare global {
 }
 
 const connectionUrl = new URL(env.DATABASE_URL);
-// console.log("Connecting to database with URL:", env.DATABASE_URL);
 const options = {
   host: connectionUrl.hostname,
   port: Number(connectionUrl.port) || 3306,
   user: connectionUrl.username,
-  password: connectionUrl.password,
   database: connectionUrl.pathname.slice(1),
   ssl: connectionUrl.searchParams.get("ssl-mode") === "REQUIRED",
 };
-// console.log("Connecting to database with options:", options);
-const adapter = new PrismaMariaDb(options);
+console.log("Connecting to database with options:", options);
+const adapter = new PrismaMariaDb({
+  ...options,
+  password: connectionUrl.password,
+});
 export const prisma =
   global.prisma ||
   new PrismaClient({
