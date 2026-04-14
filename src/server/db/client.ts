@@ -15,7 +15,7 @@ const options = {
   user: connectionUrl.username,
   password: connectionUrl.password,
   database: connectionUrl.pathname.slice(1),
-  ssl: true,
+  ssl: connectionUrl.searchParams.get("ssl-mode") === "REQUIRED",
 };
 // console.log("Connecting to database with options:", options);
 const adapter = new PrismaMariaDb(options);

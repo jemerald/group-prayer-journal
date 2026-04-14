@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack",
-    "generate": "prisma generate",
+    "prisma-generate": "prisma generate && tsx fixPrismaGenerated.ts",
     "lint": "eslint .",
     "start": "next start",
     "e2e": "NODE_ENV=development playwright test"
@@ -46,13 +46,10 @@
     "eslint-config-next": "16.2.3",
     "prisma": "^7.7.0",
     "prisma-erd-generator": "^2.4.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "ct3aMetadata": {
     "initVersion": "6.10.2"
-  },
-  "overrides": {
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3"
   }
 }
