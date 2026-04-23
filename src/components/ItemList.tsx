@@ -14,7 +14,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import type { PrayerItem } from "@prisma/client";
+import type { PrayerItemModel } from "../generated/prisma/models";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 import React, { useCallback, useMemo } from "react";
@@ -51,7 +51,7 @@ const PrayerListItem = ({
   item,
   provided,
 }: {
-  item: PrayerItem;
+  item: PrayerItemModel;
   provided?: DraggableProvided;
 }) => {
   const theme = useTheme();
@@ -126,7 +126,7 @@ const PrayerListItem = ({
   );
 };
 const DraggablePrayerListItem: React.FC<{
-  item: PrayerItem;
+  item: PrayerItemModel;
   index: number;
 }> = ({ item, index }) => {
   if (item.dateAccomplished == null) {
@@ -141,8 +141,8 @@ const DraggablePrayerListItem: React.FC<{
 };
 
 function prayerItemSorter(
-  sortOrder: Exclude<SortOrder, "priority">
-): (a: PrayerItem, b: PrayerItem) => number {
+  sortOrder: Exclude<SortOrder, "priority">,
+): (a: PrayerItemModel, b: PrayerItemModel) => number {
   return (a, b) => {
     // accomplished item alway sorted to the bottom by its date in descending order
     if (a.dateAccomplished != null) {
@@ -206,7 +206,7 @@ export const ItemList: React.FC<{
             );
           });
           return temp;
-        }
+        },
       );
     },
     onSuccess(data, variable) {
@@ -232,11 +232,11 @@ export const ItemList: React.FC<{
         idsInPriorityOrder: reorderArray(
           itemIds,
           result.source.index,
-          result.destination.index
+          result.destination.index,
         ),
       });
     },
-    [itemIds, mutation, targetId]
+    [itemIds, mutation, targetId],
   );
 
   if (items.isPending || items.data === undefined) {

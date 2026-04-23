@@ -1,4 +1,7 @@
-import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
+import type {
+  PrayerJournalModel,
+  PrayerJournalCoverModel,
+} from "../generated/prisma/models";
 import Image from "next/image";
 import React from "react";
 
@@ -21,11 +24,11 @@ const colorDataURL = (color: string) =>
   rgbDataURL(
     parseInt(color.substring(1, 3), 16),
     parseInt(color.substring(3, 5), 16),
-    parseInt(color.substring(5, 7), 16)
+    parseInt(color.substring(5, 7), 16),
   );
 
 export const JournalCoverPhoto: React.FC<{
-  journal: PrayerJournal & { cover: PrayerJournalCover | null };
+  journal: PrayerJournalModel & { cover: PrayerJournalCoverModel | null };
   isThumbnail?: boolean;
   priority?: boolean;
 }> = ({ journal, isThumbnail = false, priority }) => {

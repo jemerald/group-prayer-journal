@@ -3,7 +3,7 @@ import { faFile } from "@fortawesome/free-solid-svg-icons/faFile";
 import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import TimelineDot from "@mui/lab/TimelineDot";
 import Tooltip from "@mui/material/Tooltip";
-import type { TimelineType } from "@prisma/client";
+import type { TimelineType } from "../generated/prisma/enums";
 import React from "react";
 import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 

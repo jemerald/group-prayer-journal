@@ -6,7 +6,10 @@ import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import type { PrayerJournal, PrayerJournalCover } from "@prisma/client";
+import type {
+  PrayerJournalModel,
+  PrayerJournalCoverModel,
+} from "../generated/prisma/models";
 import Link from "next/link";
 import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
@@ -15,8 +18,8 @@ import { ArchiveDisplaySelection } from "./ArchiveDisplaySelection";
 import { JournalCoverPhoto } from "./JournalCoverPhoto";
 
 const JournalListItem: React.FC<{
-  journal: PrayerJournal & {
-    cover: PrayerJournalCover | null;
+  journal: PrayerJournalModel & {
+    cover: PrayerJournalCoverModel | null;
   };
   photoPriority?: boolean;
 }> = ({ journal, photoPriority }) => {

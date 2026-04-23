@@ -7,7 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import type { PrayerItem, Timeline } from "@prisma/client";
+import type {
+  PrayerItemModel,
+  TimelineModel,
+} from "../generated/prisma/models";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
@@ -23,8 +26,8 @@ const ItemAddNoteDialogContent: React.FC<{
     onMutate(variable) {
       // perform optimistic update
       utils.timeline.allByItemId.cancel({ itemId: variable.itemId });
-      const tempTimelineItem: Timeline & {
-        item: PrayerItem | null;
+      const tempTimelineItem: TimelineModel & {
+        item: PrayerItemModel | null;
       } = {
         id: "dummy",
         targetId: "dummy",
@@ -38,7 +41,7 @@ const ItemAddNoteDialogContent: React.FC<{
         {
           itemId: variable.itemId,
         },
-        (oldData) => [tempTimelineItem, ...(oldData ?? [])]
+        (oldData) => [tempTimelineItem, ...(oldData ?? [])],
       );
     },
     onSuccess(data) {

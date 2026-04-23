@@ -3,13 +3,13 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import type { PrayerTarget } from "@prisma/client";
+import type { PrayerTargetModel } from "../generated/prisma/models";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
 export const TargetNameChange: React.FC<{
-  target: PrayerTarget;
+  target: PrayerTargetModel;
   onComplete: () => void;
 }> = ({ target, onComplete }) => {
   const [name, setName] = useState(target.name);
@@ -31,7 +31,7 @@ export const TargetNameChange: React.FC<{
                 ...oldData,
                 name: variable.name,
               }
-            : oldData
+            : oldData,
       );
     },
     onSuccess(data, variable) {
