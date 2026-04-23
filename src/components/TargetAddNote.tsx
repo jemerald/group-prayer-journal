@@ -5,7 +5,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import type { SxProps, Theme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import type { PrayerItem, Timeline } from "@prisma/client";
+import type {
+  PrayerItemModel,
+  TimelineModel,
+} from "../generated/prisma/models";
 import React, { useState } from "react";
 
 import { trpc } from "../utils/trpc";
@@ -21,8 +24,8 @@ const TargetAddNoteDialogContent: React.FC<{
     onMutate(variable) {
       // perform optimistic update
       utils.timeline.allByTargetId.cancel({ targetId: variable.targetId });
-      const tempTimelineItem: Timeline & {
-        item: PrayerItem | null;
+      const tempTimelineItem: TimelineModel & {
+        item: PrayerItemModel | null;
       } = {
         id: "dummy",
         targetId: variable.targetId,
@@ -36,7 +39,7 @@ const TargetAddNoteDialogContent: React.FC<{
         {
           targetId: variable.targetId,
         },
-        (oldData) => [tempTimelineItem, ...(oldData ?? [])]
+        (oldData) => [tempTimelineItem, ...(oldData ?? [])],
       );
     },
     onSuccess(_data, variable) {

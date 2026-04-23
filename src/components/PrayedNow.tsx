@@ -1,13 +1,16 @@
 import { faPrayingHands } from "@fortawesome/free-solid-svg-icons/faPrayingHands";
 import Button from "@mui/material/Button";
-import type { PrayerItem, Timeline } from "@prisma/client";
+import type {
+  PrayerItemModel,
+  TimelineModel,
+} from "../generated/prisma/models";
 import { isSameDay } from "date-fns/isSameDay";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
 export const PrayedNow: React.FC<{
-  item: PrayerItem;
+  item: PrayerItemModel;
 }> = ({ item }) => {
   const utils = trpc.useUtils();
   const mutation = trpc.timeline.prayedNow.useMutation({
@@ -16,7 +19,7 @@ export const PrayedNow: React.FC<{
       utils.timeline.allByItemId.cancel({
         itemId: variable.itemId,
       });
-      const tempTimelineItem: Timeline = {
+      const tempTimelineItem: TimelineModel = {
         id: "dummy",
         itemId: variable.itemId,
         targetId: "dummy",
@@ -28,7 +31,7 @@ export const PrayedNow: React.FC<{
         {
           itemId: variable.itemId,
         },
-        (oldData) => [tempTimelineItem, ...(oldData ?? [])]
+        (oldData) => [tempTimelineItem, ...(oldData ?? [])],
       );
     },
     onSuccess(data) {

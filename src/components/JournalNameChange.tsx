@@ -3,13 +3,13 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import type { PrayerJournal } from "@prisma/client";
+import type { PrayerJournalModel } from "../generated/prisma/models";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { FontAwesomeSvgIcon } from "./FontAwesomeSvgIcon";
 
 export const JournalNameChange: React.FC<{
-  journal: PrayerJournal;
+  journal: PrayerJournalModel;
   onComplete: () => void;
 }> = ({ journal, onComplete }) => {
   const [name, setName] = useState(journal.name);
@@ -31,7 +31,7 @@ export const JournalNameChange: React.FC<{
                 ...oldData,
                 name: variable.name,
               }
-            : oldData
+            : oldData,
       );
     },
     onSuccess(data, variable) {

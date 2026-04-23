@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import type { PrayerTarget } from "@prisma/client";
+import type { PrayerTargetModel } from "../generated/prisma/models";
 import Link from "next/link";
 import React, { useCallback, useMemo, useState } from "react";
 import type { DraggableProvided, DropResult } from "@hello-pangea/dnd";
@@ -20,7 +20,7 @@ import { type SortOrder, SortOrderSelection } from "./SortOrderSelection";
 import Box from "@mui/material/Box";
 
 const TargetListItem: React.FC<{
-  target: PrayerTarget;
+  target: PrayerTargetModel;
   provided?: DraggableProvided;
 }> = ({ target, provided }) => {
   return (
@@ -56,7 +56,7 @@ const TargetListItem: React.FC<{
 };
 
 const DraggableTargetListItem: React.FC<{
-  target: PrayerTarget;
+  target: PrayerTargetModel;
   index: number;
 }> = ({ target, index }) => {
   return (
@@ -67,8 +67,8 @@ const DraggableTargetListItem: React.FC<{
 };
 
 function prayerTargetSorter(
-  sortOrder: Exclude<SortOrder, "priority">
-): (a: PrayerTarget, b: PrayerTarget) => number {
+  sortOrder: Exclude<SortOrder, "priority">,
+): (a: PrayerTargetModel, b: PrayerTargetModel) => number {
   return (a, b) => {
     // accomplished item alway sorted to the bottom by its date in descending order
     if (a.archivedAt != null) {
@@ -108,7 +108,7 @@ export const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
   const targets = trpc.target.allByJournalId.useQuery({ journalId });
   const targetIds = useMemo(
     () => targets.data?.map((x) => x.id) ?? [],
-    [targets]
+    [targets],
   );
 
   const utils = trpc.useUtils();
@@ -134,7 +134,7 @@ export const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
             );
           });
           return temp;
-        }
+        },
       );
     },
     onSuccess(data, variable) {
@@ -160,11 +160,11 @@ export const TargetList: React.FC<{ journalId: string }> = ({ journalId }) => {
         idsInPriorityOrder: reorderArray(
           targetIds,
           result.source.index,
-          result.destination.index
+          result.destination.index,
         ),
       });
     },
-    [journalId, mutation, targetIds]
+    [journalId, mutation, targetIds],
   );
 
   if (targets.data?.length === 0) {
