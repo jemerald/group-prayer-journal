@@ -43,7 +43,7 @@
     "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",
     "eslint": "^10.4.0",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.2.7",
     "prisma": "^7.8.0",
     "prisma-erd-generator": "^2.4.3",
     "tsx": "^4.22.3",
